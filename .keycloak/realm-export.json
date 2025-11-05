@@ -403,7 +403,17 @@
       ]
     }
   },
-  "groups": [],
+  "groups": [
+    {
+      "id": "f9d8a6bc-20d5-4942-b99e-8b2aa97537a3",
+      "name": "test-group",
+      "path": "/test-group",
+      "subGroups": [],
+      "attributes": {},
+      "realmRoles": [],
+      "clientRoles": {}
+    }
+  ],
   "defaultRole": {
     "id": "8727c89d-727b-48fd-802a-645e571787b7",
     "name": "default-roles-test-realm",
