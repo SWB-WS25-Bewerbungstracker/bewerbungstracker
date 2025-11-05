@@ -1,3 +1,24 @@
+/* Definiere Variablen für die Textfarbe */
+:root {
+  --text-color: black; /* Standardfarbe für Light Mode */
+}
+/* Darkmode */
+ @media (prefers-color-scheme: dark) {
+  :root {
+    --text-color: white; /* Farbe für Dark Mode */
+  }
+}
+/*Hover-Textfarbe*/
+:root {
+  --text-color-on-hover: #b3b3b3; /* Standardfarbe für Light Mode */
+}
+/* Darkmode */
+ @media (prefers-color-scheme: dark) {
+  :root {
+    --text-color-on-hover: #bebebe ; /* Farbe für Dark Mode */
+  }
+}
+
 /* Stil für die Navigationsbar*/
 .navbar {
   display: inline-flex;
@@ -10,7 +31,7 @@
 
 /* Stil für den Namen der App */
 .navbar-brand a {
-  color: black;
+  /*color: var(--text-color);*/
   font-size: 36px; /* Schriftgröße */
   font-weight: 700; /* Schriftdicke */
 }
@@ -31,7 +52,7 @@
 
 /* Stile für die Links innerhalb der Tabs */
 .navbar-tabs li a {
-  color: black;
+  /*color: var(--text-color);*/
   font-size: 24px; /* Schriftgröße */
   font-weight: 400; /* Schriftdicke */
 }
@@ -43,6 +64,6 @@
 
 /* Stil für den aktiven Link */
 .navbar-tabs li.active a {
-  color: black; /* Schwarze Farbe für den aktiven Link */
+  color: var(--text-color); /* Schwarze Farbe für den aktiven Link */
   font-weight: 700; /* Schriftdicke */
 }

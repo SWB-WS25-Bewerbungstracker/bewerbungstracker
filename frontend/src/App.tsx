@@ -35,7 +35,6 @@ function App() {
 
 export default App
 */
-
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
@@ -43,10 +42,14 @@ import Termine from "./pages/Termine";
 import Bewerbungen from "./pages/Bewerbungen";
 import Dokumente from "./pages/Dokumente";
 import Einstellungen from "./pages/Einstellungen";
+import Login from "./pages/Login";
+
+import { CssBaseline} from "@mui/material";
 
 function App() {
   return (
-    <>
+    <> 
+      <CssBaseline />
       <Navbar />
       <div className="content">
         <Routes>
@@ -55,6 +58,7 @@ function App() {
           <Route path="/bewerbungen" element={<Bewerbungen />} />
           <Route path="/dokumente" element={<Dokumente />} />
           <Route path="/einstellungen" element={<Einstellungen />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
     </>
