@@ -46,7 +46,7 @@ services:
       interval: 15s
       timeout: 2s
       retries: 15
-    command: ["start-dev", "--http-port", "7080", "--https-port", "7443", "import-realm", "import-path=/opt/keycloak/data/import"]
+    command: ["start-dev", "--http-port", "7080", "--https-port", "7443", "--import-realm", "--import-path=/opt/keycloak/data/import"]
     ports:
       - "7080:7080"
       - "7443:7443"
