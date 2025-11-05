@@ -34,19 +34,19 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HEALTH_ENABLED: "true"
       KC_LOG_LEVEL: info
-      KC_DB: db
+    #  KC_DB: postgres
 
       # Import from GitHub
 
       KC_IMPORT: /opt/keycloak/data/import
-      KC_FEATURES: docker, token-exchange
+      KC_FEATURES: docker #, token-exchange
 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7080/health/ready"]
       interval: 15s
       timeout: 2s
       retries: 15
-    command: ["start-dev", "--http-port", "7080", "--https-port", "7443", "--import-realm", "--import-path=/opt/keycloak/data/import"]
+    command: ["start-dev", "--http-port", "7080", "--https-port", "7443", "--import-realm"] #, "--import-path=/opt/keycloak/data/import"]
     ports:
       - "7080:7080"
       - "7443:7443"
@@ -54,8 +54,8 @@ services:
       - local_network
     volumes:
       - ./keycloak/realms:/opt/keacloak/data/import:ro
-    depends_on:
-      - db
+    #depends_on:
+    #  - db
 networks:
   local_network:
     driver: bridge
