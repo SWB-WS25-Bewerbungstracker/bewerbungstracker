@@ -55,7 +55,7 @@ services:
     volumes:
       - ./keycloak/realms:/opt/keacloak/data/import:ro
     depends_on:
-      - pgdata
+      - db
 networks:
   local_network:
     driver: bridge
