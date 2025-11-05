@@ -20,7 +20,7 @@ const pages = [
     {name: 'Dokumente', path: '/dokumente'}
 ];
 const settings = [
-  { name: 'Profil', path: '/profile' },
+  { name: 'Profil', path: '/profil' },
   { name: 'Einstellungen', path: '/einstellungen' }
 ];
 
@@ -53,19 +53,18 @@ function ResponsiveAppBar() {
     // - Weiterleitung zur Login-Seite
     navigate('/login');     
     console.log('User logged out');
-    // Beispiel: window.location.href = '/login'; // Weiterleitung zu einer Login-Seite
   };
 
   return (
-    <AppBar position="sticky">
+    <AppBar position="sticky" sx={{ boxShadow: 'none' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
+            component={Link}  
+            to="/home"  
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -79,7 +78,7 @@ function ResponsiveAppBar() {
             LOGO
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none', boxShadow: 'none' } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -104,7 +103,7 @@ function ResponsiveAppBar() {
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
+              sx={{ display: { xs: 'block', md: 'none', boxShadow: 'none'} }}
             >
               {pages.map((page) => (
                 <MenuItem key={page.name} onClick={handleCloseNavMenu}>
@@ -115,7 +114,7 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 , boxShadow: 'none'}} />
           <Typography
             variant="h5"
             noWrap
@@ -130,6 +129,7 @@ function ResponsiveAppBar() {
               letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
+              boxShadow: 'none'
             }}
           >
             LOGO
@@ -141,7 +141,7 @@ function ResponsiveAppBar() {
                 component={Link}
                 to={page.path}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: 'white', display: 'block' , boxShadow: 'none'}}
               >
                 {page.name}
               </Button>
