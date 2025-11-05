@@ -1,0 +1,48 @@
+/* Stil für die Navigationsbar*/
+.navbar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  padding: 32px 48px;
+  border-bottom: 1px solid #b3b3b3;
+}
+
+/* Stil für den Namen der App */
+.navbar-brand a {
+  color: black;
+  font-size: 36px; /* Schriftgröße */
+  font-weight: 700; /* Schriftdicke */
+}
+
+/* Stil für den Namen der App im Hover Zustand */
+.navbar-brand a:hover {
+  color: #595a5a; /* Eine graue Farbe bei Hover */
+}
+
+/* Stile für die Listenelemente (Tabs) */
+.navbar-tabs {
+  display: inline-flex;
+  align-items:last center;
+  list-style-type: none; /* Keine Aufzählungszeichen obwohl Listenelement*/
+  justify-content: space-evenly; /* Abstand zwischen den Tabs = gap */
+  gap: 16px ;
+}
+
+/* Stile für die Links innerhalb der Tabs */
+.navbar-tabs li a {
+  color: black;
+  font-size: 24px; /* Schriftgröße */
+  font-weight: 400; /* Schriftdicke */
+}
+
+/* Stil für Links im Hover-Zustand */
+.navbar-tabs li a:hover {
+  color: #595a5a; /* Eine graue Farbe bei Hover */
+}
+
+/* Stil für den aktiven Link */
+.navbar-tabs li.active a {
+  color: black; /* Schwarze Farbe für den aktiven Link */
+  font-weight: 700; /* Schriftdicke */
+}
