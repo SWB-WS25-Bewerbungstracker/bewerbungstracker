@@ -21,14 +21,21 @@ const ActionAreaCard: React.FC<ActionAreaCardProps> = ({ title, image, date, lin
 
   
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ 
+      maxWidth: '100%', // macht die Karte flexibel
+      flex: 1, // lässt die Karte flexibel wachsen
+      boxSizing: 'border-box', // sorgt dafür, dass Padding und Border nicht die Breite überschreiten
+      marginBottom: 2, // fügt Abstand nach unten hinzu
+      display: 'flex', // Flexbox aktivieren
+      flexDirection: 'column', // Inhalte vertikal anordnen
+       }}>
         <Link to={link }style={{ textDecoration: 'none' }}>
             <CardActionArea>
                 <CardMedia
-                component="img"
-                height="140"
-                image={image}
-                alt="Image"
+                  component="img"
+                  height="140"
+                  image={image}
+                  alt={title}
                 />
                 <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
@@ -40,7 +47,6 @@ const ActionAreaCard: React.FC<ActionAreaCardProps> = ({ title, image, date, lin
                 </CardContent>
             </CardActionArea>
         </Link>
-      
     </Card>
   );
 }
