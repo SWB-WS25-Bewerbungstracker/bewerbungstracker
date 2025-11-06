@@ -45,6 +45,7 @@ import Dokumente from "./pages/Dokumente";
 import Einstellungen from "./pages/Einstellungen";
 import Login from "./pages/Login";
 import Profil from "./pages/Profil";
+import Firmenansicht from "./pages/Firmenansicht";
 
 import { CssBaseline} from "@mui/material";
 
@@ -62,6 +63,7 @@ function App() {
           <Route path="/einstellungen" element={<Einstellungen />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profil" element={<Profil />} />
+          <Route path="/firmenansicht" element={<Firmenansicht />} />
         </Routes>
       </div>
     </>
