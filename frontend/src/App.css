@@ -1,0 +1,280 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline:none;
+}
+
+/* Vollständige Höhe für html und body */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+html{
+    font-size: 62.5%;
+}
+/* Flexbox zum Zentrieren des Inhalts */
+body {
+  margin: 0;
+  display: flex; /* Verwende Flexbox */
+  flex-direction: column; /* Gesamte Seite ausfüllen */
+  justify-content: top; /* Vertikale Zentrierung */
+  align-items: center, center; /* Horizontale Zentrierung */
+  min-width: 100%; /* Die volle Breite einnehmen */
+  min-height: 100vh; /* Die volle Höhe des Viewports einnehmen */
+  background-color: var(--background-color); /* Hintergrundfarbe bleibt gleich */
+  color: var(--text-color); /* Textfarbe je nach Modus */
+}
+
+/* Container für den Inhalt */
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 48px;  
+}
+
+
+/* Light Mode Farben */
+:root {
+  --background-color: white;  /* Heller Hintergrund */
+  --text-color: black;  /* Dunkler Text */
+  --link-color: black;  /* Standard-Link-Farbe */
+  --link-hover-color: #000046;
+  --button-background:  lightblue;  /* Button Hintergrund */
+  --button-hover-background: #65b0ff;  /* Button Hover Hintergrund */
+
+
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--text-color);
+  background-color: var(--background-color);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark Mode Farben */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: rgb(32, 32, 32);  /* Dunkler Hintergrund */
+    --text-color: white;  /* Heller Text */
+    --link-color: white;  /* Link-Farbe im Dunkelmodus */
+    --link-hover-color: light-blue; 
+    --button-background: #00394d;  /* Button Hintergrund im Dunkelmodus */
+    --button-hover-background: #002546;  /* Button Hover Hintergrund im Dunkelmodus */
+  }
+}
+
+a {
+  font-weight: 500;
+  color: var(--link-color);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--link-hover-color);
+}
+
+h1 {
+  font-size: 3em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 16px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--button-background);
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: var(--button-hover-background);
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/*-----------------------TERMINE/KALENDER------------------------------*/
+.calendarMainOut{
+    width: 100%;
+    height: 100vh;
+    background-color: #2c3552;
+    display: grid;
+    place-items: center;
+    perspective: 100rem;
+}
+
+
+.calendarMainIn{
+    width: 60%;
+    height: 90vmin;
+    aspect-ratio: 3 / 2;
+    background-color: #65b0ff;
+    padding: 3rem;
+    border-radius: 3rem;
+    border: 2px solid black ;
+    column-gap: 3rem;
+    position: relative;
+    display: flex;
+    overflow:hidden;
+}
+
+/*.calendarMainIn::after{ *****sollte mal schatten werden?*****
+    content: '';
+    position: absolute;
+    bottom: -12rem;
+    left: 50%;
+    transform: translate(-50%) rotateX(50deg);
+    width: 90%;
+    height: 16rem;
+    background-color: black;
+    border-radius: 20rem;
+    filter: blur(4rem);
+}*/
+
+.calendar{
+    width: 50%;
+}
+
+.heading{
+    font-family: "Droid Sans Mono";
+    font-size: clamp(4rem, 3.8cqi, 7rem);
+    color: white;
+    padding-left: 1.2rem;
+}
+
+.navigator-date{
+    display: flex;
+    align-items: center;
+    column-gap: 1rem;
+    margin: 3.5rem 0;
+}
+
+.navigator-date h2{
+    font-size: clamp(1.5rem, 1.5cqi, 2.5rem);
+    color: white;
+    padding-left: 1.3rem;
+}
+
+.button-date{
+    display: flex;
+    column-gap: 1rem;
+    margin-left: auto;
+    color: white;
+}
+
+.button-date i{
+    width: 3.5rem;
+    height: 3.5rem;
+    background-color: grey;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    color: #65b0ff;
+    cursor: pointer;
+}
+
+.weekdays{
+    width: 100%;
+    display: flex;
+    margin: 3rem 0;
+}
+
+.weekdays span{
+    width: calc(100%/7);
+    font-size: clamp(1rem, 0.8cqi, 1.3rem);
+    font-weight: bold;
+    text-transform: uppercase;
+    color:forestgreen;
+    letter-spacing: 0.1rem;
+    display: flex;
+    justify-content: center;
+    cursor: auto;
+}
+
+.days{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.days span{
+    font-size: clamp(1.2rem, 1cqi, 1.6rem);
+    width: calc(100%/7);
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    text-shadow: 0 .5rem 1rem rgba(0, 0, 0, 0.2);
+}
+
+.currentDay {
+    background-color: deeppink;
+    border-radius: 20%;
+    box-shadow: 0 0 1rem 0.3rem rgba(255, 105, 180, 0.7);
+}
+
+
+
+/*  Animation aufrufen mit: animation: pulseShadow 1s infinite ease-in-out;
+@keyframes pulseShadow {
+    0% {
+        box-shadow: 0 0 0.8rem 0.3rem rgba(255, 105, 180, 0.6);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 1.5rem 0.6rem rgba(255, 105, 180, 0.9);
+        transform: scale(1.05);
+    }
+    100% {
+        box-shadow: 0 0 0.8rem 0.3rem rgba(255, 105, 180, 0.6);
+        transform: scale(1);
+    }
+}*/
+
+.calendarEvents{
+    width: 60%;
+    height: 100%;
+    padding: 3rem 0;
+}
+
+.calendarEventPopup{
+    display: none;
+}
+
+.calendarEvent{
+    width: 100%;
+    height: 7rem;
+    background-color: lightgray;
+    border-radius: 2rem;
+    align-items: center;
+    display: flex;
+    padding: 1.5rem 0;
+    margin-bottom: 1rem; /*abstand nach unten zum nächsten element*/
+}
+
+.eventDateWrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20%;
+
+}
+/*----------------------Kalender Ende-----------------------------------*/
