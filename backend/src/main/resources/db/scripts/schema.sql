@@ -18,7 +18,8 @@ Schema for Bewerbungstracker database
 
 
 -- Table for company and user addresses
-CREATE TABLE address (
+CREATE TABLE IF NOT EXISTS address
+(
     AddressID SERIAL PRIMARY KEY,
     Street TEXT NOT NULL,
     StreetNo TEXT NOT NULL,
@@ -29,7 +30,8 @@ CREATE TABLE address (
 
 
 -- Table for contacts of input applications
-CREATE TABLE contact (
+CREATE TABLE IF NOT EXISTS contact
+(
     ContactID SERIAL PRIMARY KEY,
     ContactFName TEXT NOT NULL,
     ContactLName TEXT NOT NULL,
@@ -39,7 +41,8 @@ CREATE TABLE contact (
 
 
 -- Table for Bewerbungstracker web-app users
-CREATE TABLE username (
+CREATE TABLE IF NOT EXISTS appuser
+(
     UserID SERIAL PRIMARY KEY,
     UserFName TEXT NOT NULL,
     UserLName TEXT NOT NULL,
@@ -50,10 +53,11 @@ CREATE TABLE username (
 
 
 -- Table for companies of input applications
-CREATE TABLE company (
+CREATE TABLE IF NOT EXISTS company
+(
     CompanyID SERIAL PRIMARY KEY,
     CompanyName TEXT NOT NULL,
-    Size INTEGER,
+    EmpCount INTEGER,
     Logo TEXT,
 -- Foreign key to link to address
     CompanyAddress INTEGER REFERENCES address
@@ -61,7 +65,8 @@ CREATE TABLE company (
 
 
 -- Table for applications input by users
-CREATE TABLE joboffer (
+CREATE TABLE IF NOT EXISTS joboffer
+(
     JobofferID SERIAL PRIMARY KEY,
     Jobtitle TEXT NOT NULL,
     Description TEXT,
@@ -78,12 +83,13 @@ CREATE TABLE joboffer (
 -- Foreign keys to link to related contact, company and user
     Contact INTEGER REFERENCES contact,
     Company INTEGER REFERENCES company,
-    AppUser INTEGER REFERENCES username
+    AppUser INTEGER REFERENCES appuser
 );
 
 
 -- Table for application related documents uploaded by users
-CREATE TABLE document (
+CREATE TABLE IF NOT EXISTS document
+(
     DocumentID SERIAL PRIMARY KEY,
     Filename TEXT NOT NULL,
     Filetype TEXT NOT NULL,
@@ -95,7 +101,8 @@ CREATE TABLE document (
 
 
 -- Table for appointments related to applications
-CREATE TABLE appointment (
+CREATE TABLE IF NOT EXISTS appointment
+(
     AppointmentID SERIAL PRIMARY KEY,
     AppointmentDate TIMESTAMP NOT NULL,
     AppointmentName TEXT NOT NULL,

@@ -1,19 +1,19 @@
 /*
 Sample date for Bewerbungstracker database
     Samples for tables:
-      - Address
-      - Contact
-      - Username
-      - Company
-      - Application
-      - Document
-      - Appointment
+        - Address
+        - Contact
+        - Username
+        - Company
+        - Application
+        - Document
+        - Appointment
 
-  Created: 2025-11-08
-  Author: Lara Hippenstiel
+    Created: 2025-11-08
+    Author: Lara Hippenstiel
 
-  Last Edit: 2025-11-09
-  Author: Lara Hippenstiel
+    Last Edit: 2025-11-09
+    Author: Lara Hippenstiel
 */
 
 
@@ -36,7 +36,8 @@ VALUES
     (14, 'Buchholzallee', '8/2', 'Lüdenscheid', '74593', ''),
     (15, 'Schmiedtring', '25', 'Sigmaringen', '33797', ''),
     (16, 'Ellen-Hertrampf-Weg', '21', 'Hoyerswerda', '61325', ''),
-    (17, 'Horace-Johann-Street', '12', 'Beeskow', '97724', 'Großbritannien');
+    (17, 'Horace-Johann-Street', '12', 'Beeskow', '97724', 'Großbritannien')
+ON CONFLICT DO NOTHING;
 
 
 -- Add sample contacts
@@ -59,21 +60,23 @@ VALUES
     (15, 'Herbie', 'Dietz', '', ''),
     (16, 'Leander', 'Kuhl', 'leander.kuhl@example.org', ''),
     (17, 'Abel', 'Schwital', '', ''),
-    (18, 'Alessa', 'Heidrich', 'a.heidrich@example.com', '(07212) 66536');
+    (18, 'Alessa', 'Heidrich', 'a.heidrich@example.com', '(07212) 66536')
+ON CONFLICT DO NOTHING;
 
 
 -- Add sample usernames
-INSERT INTO username (userID, userFName, userLName, userEmail, userAddress)
+INSERT INTO appuser (userID, userFName, userLName, userEmail, userAddress)
 VALUES
     (1, 'Alisa', 'Rogner', 'a.rogner@example.net', 1),
     (2, 'Orania', 'Müller', 'om39456@example.com', 2),
     (3, 'Tycho', 'Ullrich', 'tycho.u@example.net', 3),
     (4, 'Belinda', 'Gertz', 'belinda64@example.net', 4),
-    (5, 'Henrike', 'Briemer', 'henrike.briemer@example.com', 5);
+    (5, 'Henrike', 'Briemer', 'henrike.briemer@example.com', 5)
+ON CONFLICT DO NOTHING;
 
 
 -- Add sample companies
-INSERT INTO company (CompanyID, CompanyName, Size, Logo, CompanyAddress)
+INSERT INTO company (CompanyID, CompanyName, EmpCount, Logo, CompanyAddress)
 VALUES
     (1, 'Schäfer KG', 662799367, '', 6),
     (2, 'Junk AG', 21, '/8fb17a4dfc36c020015fbc76458492bf.jpg', 7),
@@ -86,7 +89,8 @@ VALUES
     (9, 'Zieme-Mertz', 326053, '/22365fa442ea3958d4679b88976781c8.jpg', 14),
     (10, 'Stiedemann-Kiehn', 194058, '/6e3bee88e2c91c225e9d53494a69f667.jpg', 15),
     (11, 'Bechtelar-Bauch', 284962, '/1d5b610776db9b1229baafd7db6cd16a.jpg', 16),
-    (12, 'Mills and Sons', 242198, '/aa07c94807a4094ad52761c5fc401b05.jpg', 17);
+    (12, 'Mills and Sons', 242198, '/aa07c94807a4094ad52761c5fc401b05.jpg', 17)
+ON CONFLICT DO NOTHING;
 
 
 -- Add sample applications
@@ -113,7 +117,12 @@ VALUES
     (19, 'Aut repellendus sit magni quos consequatur perspiciatis ut.', 'Doloremque placeat aut ipsum atque ipsum laboriosam cupiditate odit. Beatae rerum recusandae vero voluptates qui dolor veniam consequatur. Natus ea qui sed deleniti.', 2, 722950353, 1, 'Et odit consequatur nobis optio non. Et et aliquam sed omnis neque delectus. Expedita hic aut nemo molestiae eius laboriosam. Qui earum accusamus molestias.', 15, 9, 5),
     (20, 'Molestiae eum quo ut.', 'Quis nemo cupiditate consequatur exercitationem veniam dignissimos. Quam quod rem illo eos ipsam et assumenda praesentium. Natus ducimus odio dicta quo in repudiandae sit.', 8, 429669708, 2, '', 16, 10, 5),
     (21, 'Sit fugiat voluptatibus fuga deserunt eum.', 'Odio asperiores expedita delectus molestiae tempora aliquam dolore. Sit sunt perferendis consequatur incidunt odit. Dicta nihil neque fugit qui neque. Dolores ratione et quibusdam voluptas enim consectetur et.', 9, 833563615, 3, 'Numquam repellendus ut et odit est. Consequatur deserunt aliquid animi eaque. Ut qui molestias illum facere iusto asperiores cupiditate. Assumenda tempore consequatur esse et aliquid architecto non.', 17, 11, 5),
-    (22, 'Architecto iusto et minima excepturi id placeat atque.', 'Et modi corrupti fugit impedit consequatur. Ullam modi et et. Quam eligendi adipisci hic aut nesciunt optio saepe. Quos debitis illum perferendis fuga in aspernatur.', 6, 9, 5, 'Quo quis vero aliquam quidem quis architecto accusantium. Molestiae porro qui deleniti exercitationem et officia occaecati ullam. Architecto distinctio dolore non voluptas nemo ut eos.', 18, 12, 5);
+    (22, 'Architecto iusto et minima excepturi id placeat atque.',
+     'Et modi corrupti fugit impedit consequatur. Ullam modi et et. Quam eligendi adipisci hic aut nesciunt optio saepe. Quos debitis illum perferendis fuga in aspernatur.',
+     6, 9, 5,
+     'Quo quis vero aliquam quidem quis architecto accusantium. Molestiae porro qui deleniti exercitationem et officia occaecati ullam. Architecto distinctio dolore non voluptas nemo ut eos.',
+     18, 12, 5)
+ON CONFLICT DO NOTHING;
 
 
 -- Add sample documents
@@ -129,7 +138,8 @@ VALUES
     (8, 'architecto', 'application/vnd.wap.wmlc', 'consectetur', 10),
     (9, 'est', 'application/x-mie', 'sed', 13),
     (10, 'commodi', 'image/x-portable-bitmap', 'et', 18),
-    (11, 'et', 'text/x-opml', 'quidem', 20);
+    (11, 'et', 'text/x-opml', 'quidem', 20)
+ON CONFLICT DO NOTHING;
 
 
 -- Add sample appointments
@@ -146,4 +156,5 @@ VALUES
     (9, '2026-01-15 08:30:00', 'sed', 19),
     (10, '2026-01-20 10:20:00', 'vel', 20),
     (11, '2026-01-24 16:10:00', 'suscipit', 20),
-    (12, '2026-01-30 15:00:00', 'dolorum', 21);
+    (12, '2026-01-30 15:00:00', 'dolorum', 21)
+ON CONFLICT DO NOTHING;
