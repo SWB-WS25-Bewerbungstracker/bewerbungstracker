@@ -14,11 +14,13 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link, useNavigate } from 'react-router-dom';  
 
+// Tabs und Links dazu
 const pages = [
     {name: 'Termine', path: '/termine'},
     {name: 'Bewerbungen', path: '/bewerbungen'},
     {name: 'Dokumente', path: '/dokumente'}
 ];
+// Optionen bei Clicken auf Profilbild und Links dazu
 const settings = [
   { name: 'Profil', path: '/profil' },
   { name: 'Einstellungen', path: '/einstellungen' }

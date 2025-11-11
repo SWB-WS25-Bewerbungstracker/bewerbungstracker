@@ -1,3 +1,5 @@
+// https://mui.com/material-ui/react-grid/
+// https://mui.com/material-ui/api/grid/
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import ActionAreaCard from './ActionAreaCard';
@@ -36,26 +38,27 @@ const exampleCardData = [
 export default function CardGrid() {
   return (
     <Box sx={{ 
-      width: '100%', 
-      boxSizing: 'border-box', // Stellt sicher, dass Padding innerhalb der Breite der Box berücksichtigt wird
-      padding: 2}}> {/* Padding für den Container */}
+      width: '100%', // volle Bildschirmbreite
+      boxSizing: 'border-box', // Padding bei der Berechnung der Gesamtbreite berücksichtigen
+      padding: 2 // Padding für den ganzen Container außenrum
+      }}> 
       <Grid 
-      container 
-      display={'flex'}        
-      sx={{ display: 'flex', flexWrap: 'wrap'}} // Flexbox-Layout 
+      container // Grid-Container in dem die einzelnen Grid-Items sich befinden   
+      sx={{ display: 'flex', flexWrap: 'wrap'}} // Flexbox-Layout damit die Zeile der Karten umbricht, wenn der Platz nicht ausreicht (wrap)
       >
         {/* Grid-Element für Karten */}
           {exampleCardData.map((data, index) => (
             <Grid 
-            key={index}
-            size={{ xs: 12, sm: 6, md: 4 }}
-            padding={1}>
-                <ActionAreaCard
-                key={index}
-                title={data.name}
-                image={data.logo}
-                date={data.date}
-                link="/firmenansicht"
+            key={index} // Schlüssel für jedes Grid-Element
+            size={{ xs: 12, sm: 6, md: 4 }} // Größe des Grids je nach Bildschirmgröße
+            padding={1} // Padding für jedes einzelne Grid-Element
+            >
+                <ActionAreaCard // eine Komponente, die eine Karte darstellt
+                key={index} // Schlüssel für jede Karte
+                title={data.name} // Titel der Karte
+                image={data.logo} // Bild-URL für die Karte
+                date={data.date} // Datum für die Beschreibung in der Karte
+                link="/firmenansicht" // Link, der mit der Karte verbunden ist
               />
             </Grid>
           ))}
