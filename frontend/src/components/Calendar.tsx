@@ -1,11 +1,12 @@
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// https://mui.com/x/react-date-pickers/date-calendar/#basic-usage
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
-export default function BasicDateCalendar() {
+export default function CalendarAllDates() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DateCalendar />
+      <DateCalendar showDaysOutsideCurrentMonth fixedWeekNumber={6} />
     </LocalizationProvider>
   );
 }

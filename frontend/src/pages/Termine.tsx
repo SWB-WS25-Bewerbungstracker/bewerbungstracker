@@ -1,3 +1,4 @@
+/*
 import '../App.css'
 const Termine: React.FC = () => {
     return (
@@ -94,4 +95,17 @@ const Termine: React.FC = () => {
 };
 
 export default Termine;
+*/
 
+import CalendarAllDates from '../components/Calendar'; // Importiere die Kalender-Komponente
+
+const Termine: React.FC = () => {
+  return (
+    <div>
+      <h2>Termine</h2>
+      <CalendarAllDates />
+    </div>
+  );
+};
+
+export default Termine;
