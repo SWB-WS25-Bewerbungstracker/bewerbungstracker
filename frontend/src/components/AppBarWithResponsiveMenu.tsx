@@ -56,7 +56,9 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="sticky" sx={{ boxShadow: 'none' }}>
+    <AppBar position="sticky" sx={{ 
+      //boxShadow: 'none' 
+      }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -78,7 +80,13 @@ function ResponsiveAppBar() {
             BEWERBUNGSTRACKER
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none', boxShadow: 'none' } }}>
+          <Box sx={{ 
+            flexGrow: 1, 
+            display: { 
+              xs: 'flex', 
+              md: 'none', 
+              //boxShadow: 'none' 
+              } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -103,7 +111,11 @@ function ResponsiveAppBar() {
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none', boxShadow: 'none'} }}
+              sx={{ display: { 
+                xs: 'block', 
+                md: 'none', 
+                //boxShadow: 'none'
+              } }}
             >
               {pages.map((page) => (
                 <MenuItem key={page.name} onClick={handleCloseNavMenu}>
@@ -114,7 +126,11 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 , boxShadow: 'none'}} />
+          <AdbIcon sx={{ 
+            display: { xs: 'flex', md: 'none' }, 
+            mr: 1 , 
+            //boxShadow: 'none'
+            }} />
           <Typography
             variant="h5"
             noWrap
@@ -129,7 +145,7 @@ function ResponsiveAppBar() {
               letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
-              boxShadow: 'none'
+              //boxShadow: 'none'
             }}
           >
             BEWERBUNGSTRACKER

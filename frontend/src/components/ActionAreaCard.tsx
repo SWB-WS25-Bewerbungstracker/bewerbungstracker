@@ -6,6 +6,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns'; // Zum Formatieren von Date-Objekten
 
+// Damit variable Werte verwendet werden können
 interface ActionAreaCardProps {
   title: string;
   image: string;
@@ -22,11 +23,9 @@ const ActionAreaCard: React.FC<ActionAreaCardProps> = ({ title, image, date, lin
   
   return (
     <Card sx={{ 
-      maxWidth: '100%', // macht die Karte flexibel
-      flex: 1, // lässt die Karte flexibel wachsen
+      maxWidth: '100%', // macht die Karte flexibel groß (je nach Bildschirm)
       boxSizing: 'border-box', // sorgt dafür, dass Padding und Border nicht die Breite überschreiten
-      marginBottom: 2, // fügt Abstand nach unten hinzu
-      display: 'flex', // Flexbox aktivieren
+      //display: 'flex', // Flexbox aktivieren
       flexDirection: 'column', // Inhalte vertikal anordnen
        }}>
         <Link to={link }style={{ textDecoration: 'none' }}>
@@ -42,7 +41,7 @@ const ActionAreaCard: React.FC<ActionAreaCardProps> = ({ title, image, date, lin
                     {title}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Nächster Termin: {formattedDate}
+                    Nächster Termin: {formattedDate} 
                 </Typography>
                 </CardContent>
             </CardActionArea>
