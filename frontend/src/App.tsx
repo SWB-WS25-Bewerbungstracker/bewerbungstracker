@@ -14,7 +14,7 @@ import { CssBaseline} from "@mui/material"; // aktuell nicht mehr verwendet, da 
 function App() {
   return (
     <> 
-      {/* <CssBaseline /> */} 
+      <CssBaseline />
       <ResponsiveAppBar/>
       <div className="content">
         <Routes>

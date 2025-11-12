@@ -3,9 +3,7 @@ package com.bewerbungstracker.controller;
 
 import com.bewerbungstracker.service.CompanyDataService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,9 +12,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CompanyDataController {
     private final CompanyDataService companyDataService;
-
+    // https://spring.io/guides/gs/rest-service-cors#global-cors-configuration
+    // Um Zugriff von anderem Port zu erlauben
+    @CrossOrigin(origins = "http://localhost:5173/")
     @GetMapping("/names")
-    public List<String> names() {
+    public List<String> names(@RequestParam(required = false, defaultValue = "World") String name) {
         return companyDataService.getCompanyNames();
     }
 }

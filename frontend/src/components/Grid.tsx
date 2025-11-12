@@ -3,39 +3,15 @@
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import ActionAreaCard from './ActionAreaCard';
+import { type ActionAreaCardProps } from './ActionAreaCard';
 
-// Beispiel-Daten
-const exampleCardData = [
-  {
-    name: 'FirmaName 1',
-    logo: '',
-    date: new Date('2025.01.01'),  // Beispiel für Date-Objekt
-  },
-  {
-    name: 'FirmaName 2',
-    logo: '',
-    date: '2025.01.01 12:00',  // Beispiel für bereits formatierten String
-  },
-  {
-    name: 'FirmaName 3',
-    logo: '',
-    date: 'yyyy-mm-dd hh:mm',
-  },
-  {
-    name: 'FirmaName 4',
-    logo: '',
-    date: 'yyyy-mm-dd hh:mm',
-  },
-  {
-    name: 'FirmaName 5',
-    logo: '',
-    date: 'yyyy-mm-dd hh:mm',
-  },
-  // Weitere Karten können hier hinzugefügt werden...
-];
+// Props, die CardGrid erwartet = Array von "CardData"-Objekten
+interface CardGridProps {
+  data: ActionAreaCardProps[];
+}
 
 // Haupt-Komponente, die das Grid enthält
-export default function CardGrid() {
+export default function CardGrid({ data }: CardGridProps) {
   return (
     <Box sx={{ 
       width: '100%', // volle Bildschirmbreite
@@ -47,7 +23,8 @@ export default function CardGrid() {
       sx={{ display: 'flex', flexWrap: 'wrap'}} // Flexbox-Layout damit die Zeile der Karten umbricht, wenn der Platz nicht ausreicht (wrap)
       >
         {/* Grid-Element für Karten */}
-          {exampleCardData.map((data, index) => (
+        {/* Durchlaufen des übergebenen Daten-Array und erstellen der Karten */}
+          {data.map((item, index) => (
             <Grid 
             key={index} // Schlüssel für jedes Grid-Element
             size={{ xs: 12, sm: 6, md: 4 }} // Größe des Grids je nach Bildschirmgröße
@@ -55,10 +32,10 @@ export default function CardGrid() {
             >
                 <ActionAreaCard // eine Komponente, die eine Karte darstellt
                 key={index} // Schlüssel für jede Karte
-                title={data.name} // Titel der Karte
-                image={data.logo} // Bild-URL für die Karte
-                date={data.date} // Datum für die Beschreibung in der Karte
-                link="/firmenansicht" // Link, der mit der Karte verbunden ist
+                title={item.title} // Titel der Karte
+                image={item.image} // Bild-URL für die Karte
+                description={item.description} // Datum für die Beschreibung in der Karte
+                link={item.link} // Link, der mit der Karte verbunden ist
               />
             </Grid>
           ))}
