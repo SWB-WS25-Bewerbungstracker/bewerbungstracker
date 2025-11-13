@@ -2,7 +2,6 @@ package com.bewerbungstracker.service;
 
 import com.bewerbungstracker.entity.CompanyData;
 import com.bewerbungstracker.repository.CompanyDataRepository;
-import com.bewerbungstracker.repository.TestDataRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
