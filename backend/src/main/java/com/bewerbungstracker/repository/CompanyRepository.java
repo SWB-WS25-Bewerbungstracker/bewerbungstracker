@@ -1,6 +1,6 @@
 package com.bewerbungstracker.repository;
 
-import com.bewerbungstracker.entity.CompanyData;
+import com.bewerbungstracker.entity.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CompanyDataRepository extends JpaRepository<CompanyData, Integer> {}
+public interface CompanyRepository extends JpaRepository<Company, Integer> {}
