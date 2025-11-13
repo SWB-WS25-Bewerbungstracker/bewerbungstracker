@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 
 const rows = [
     { id: 1, FirmaName: 'Mercedes-Benz AG', Termin: 'Jjksdnf', Datum: 14 },
