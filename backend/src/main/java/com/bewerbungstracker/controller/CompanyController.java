@@ -18,15 +18,13 @@ import java.util.List;
 public class CompanyController {
     private final CompanyService companyService;
 
-    /*
-     * Retrieves the names of all companies
-     */
+    //Stellt Namen aller Firmen bereit
     @GetMapping("/names")
     public List<String> names() {
         return companyService.getCompanyNames();
     }
 
-    //GET Zugriff auf companies (ID+name)
+    //Stellt Firmendaten bereit
     @GetMapping()
     public List<CompanyDTO> companies() {
         return companyService.getCompany();

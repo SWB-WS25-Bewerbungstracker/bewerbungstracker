@@ -2,7 +2,6 @@ package com.bewerbungstracker.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 @Table(name="company")
 @Entity
 @Data

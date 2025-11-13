@@ -14,10 +14,12 @@ import java.util.stream.Collectors;
 public class CompanyService {
     private final CompanyRepository companyRepository;
 
+    //Gibt die Namen aller Firmen aus der Datenbank zurück
     public List<String> getCompanyNames() {
         return companyRepository.findAll().stream().map(Company::getCompanyname).collect(Collectors.toList());
     }
 
+    //Gibt Liste aller Firmen in der Datenbak als DTO zurück
     public List<CompanyDTO> getCompany() {
         return companyRepository.findAll().stream().map(c -> new CompanyDTO(
                 c.getId(),
