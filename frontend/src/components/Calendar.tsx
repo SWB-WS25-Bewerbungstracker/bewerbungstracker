@@ -3,14 +3,23 @@
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-
-import 'dayjs/locale/de';
+import { Box } from '@mui/material';
 
 export default function CalendarAllDates() {
-  return (
-      <div>
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
-          <DateCalendar showDaysOutsideCurrentMonth fixedWeekNumber={6} />
+    return (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Box sx={{ width: '100%', height: '100%', background:'' }}>
+                <DateCalendar
+                    showDaysOutsideCurrentMonth
+                    fixedWeekNumber={6}
+                    sx={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '',
+                        borderRadius: '8px',  //ecken abrunden
+                    }}
+                />
+            </Box>
         </LocalizationProvider>
-      </div>);
+    );
 }
