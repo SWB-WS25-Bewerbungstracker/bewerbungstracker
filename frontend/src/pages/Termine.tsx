@@ -98,14 +98,34 @@ export default Termine;
 */
 
 import CalendarAllDates from '../components/Calendar'; // Importiere die Kalender-Komponente
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Rabbit from '../components/TerminList'; //die TerminListe
 
 const Termine: React.FC = () => {
-  return (
-    <div>
-      <h2>Termine</h2>
-      <CalendarAllDates />
-    </div>
-  );
+    return (
+        <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            backgroundColor: '',
+            borderRadius: '8px',
+        }}>
+            <div style={{
+                width: '40%',
+                flex: '40%',        // flex-grow, flex-shrink
+                minWidth: '300px',
+            }}>
+                <CalendarAllDates/>
+            </div>
+            <div style={{
+                width: '60%',
+                flex: '60%',
+            }}>
+                <Rabbit/>
+            </div>
+        </div>
+    );
 };
+
 
 export default Termine;
