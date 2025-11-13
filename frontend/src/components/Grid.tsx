@@ -12,6 +12,7 @@ interface CardGridProps {
 
 // Haupt-Komponente, die das Grid enthält
 export default function CardGrid({ data }: CardGridProps) {
+  console.log('Daten an CardGrid:', data); // Debugging
   return (
     <Box sx={{ 
       width: '100%', // volle Bildschirmbreite
@@ -30,12 +31,12 @@ export default function CardGrid({ data }: CardGridProps) {
             size={{ xs: 12, sm: 6, md: 4 }} // Größe des Grids je nach Bildschirmgröße
             padding={1} // Padding für jedes einzelne Grid-Element
             >
-                <ActionAreaCard // eine Komponente, die eine Karte darstellt
-                key={index} // Schlüssel für jede Karte
-                title={item.title} // Titel der Karte
-                image={item.image} // Bild-URL für die Karte
-                description={item.description} // Datum für die Beschreibung in der Karte
-                link={item.link} // Link, der mit der Karte verbunden ist
+              <ActionAreaCard // eine Komponente, die eine Karte darstellt
+              key={index} // Schlüssel für jede Karte
+              title={item.title} // Titel der Karte
+              image={item.image} // Bild-URL für die Karte
+              description={item.description} // Datum für die Beschreibung in der Karte
+              link={item.link} // Link, der mit der Karte verbunden ist
               />
             </Grid>
           ))}
