@@ -1,3 +1,4 @@
+// https://mui.com/material-ui/react-card/
 // https://mui.com/material-ui/api/card-action-area/
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -6,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import { Link } from 'react-router-dom';
 import { format, parse } from 'date-fns'; // Zum Formatieren von Date-Objekten
+
 
 // KI: Funktion, die alle unterstützten Formate an Datum-Strings parst
 const parseDateFromString = (str: string): Date | null => {
@@ -28,7 +30,6 @@ const parseDateFromString = (str: string): Date | null => {
   }
   return null; // Wenn kein Format übereinstimmt
 };
-
 
 // Damit variable Werte (Props) verwendet werden können
 export interface ActionAreaCardProps {
@@ -58,31 +59,44 @@ export default function ActionAreaCard({ title, image = ' ', description = ' ', 
     <Card sx={{ 
       maxWidth: '100%', // macht die Karte flexibel groß (je nach Containergröße)
       boxSizing: 'border-box', // sorgt dafür, dass Padding und Border nicht die Gesamtbreite überschreiten
-      //display: 'flex', // Flexbox aktivieren
       flexDirection: 'column', // Inhalte vertikal anordnen
+      height: '100%',
        }}>
-        {/* Link-Komponente von react-router-dom, um auf eine andere Seite zu navigieren, wenn die Karte angeklickt wird */}
-        <Link to={link } style={{ textDecoration: 'none' }}> 
-            <CardActionArea>
-                 {/* Bild der Karte */}
-                <CardMedia
-                  component="img"
-                  height="140" // Bildhöhe
-                  image={image} // Bild-URL
-                  alt={title} // Alt-Text für das Bild
-                />
-                <CardContent>
-                  {/* Titel der Karte */}
-                  <Typography gutterBottom variant="h5" component="div">
-                      {title}
-                  </Typography>
-                   {/* Datum, das formatiert in der Beschreibung angezeigt wird */}
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      {description} 
-                  </Typography>
-                </CardContent>
-            </CardActionArea>
-        </Link>
+        {/* Interaktionsbereich der Karte */}
+        <CardActionArea sx={{ height: '100%'}}>
+          {/* Link-Komponente von react-router-dom, um auf eine andere Seite zu navigieren, wenn die Karte angeklickt wird */}
+          <Link to={link } style={{ textDecoration: 'none' }}> 
+            {/* Bild der Karte */}
+            <CardMedia
+              component="img"
+              height="140" // Bildhöhe
+              image={image} // Bild-URL
+              alt={title} // Alt-Text für das Bild
+            />
+            {/* Textbereich der Karte */}
+            <CardContent
+              sx={{ 
+                display: 'flex', 
+                height: '100%',
+                flexDirection: 'column', // Inhalte vertikal anordnen
+                boxSizing: 'border-box', 
+              }}>
+              {/* Titel der Karte */}
+              <Typography gutterBottom variant="h5" component="div">
+                {title}
+              </Typography>
+              {/* Beschreibung */}
+              <Typography variant="body2" 
+                sx={{ 
+                  color: 'text.secondary', 
+                  position: 'absolute',  // Text soll mit kleinem Abstand am unteren Kartenende stehen
+                  bottom: 10 
+                }}>
+                {description} 
+              </Typography>
+            </CardContent>
+          </Link>
+        </CardActionArea>
     </Card>
   );
 }
