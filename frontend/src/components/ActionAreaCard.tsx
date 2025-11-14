@@ -8,7 +8,6 @@ import CardActionArea from '@mui/material/CardActionArea';
 import { Link } from 'react-router-dom';
 import { format, parse } from 'date-fns'; // Zum Formatieren von Date-Objekten
 
-
 // KI: Funktion, die alle unterstützten Formate an Datum-Strings parst
 const parseDateFromString = (str: string): Date | null => {
   const formats = [
