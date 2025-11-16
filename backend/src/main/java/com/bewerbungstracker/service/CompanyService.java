@@ -1,8 +1,8 @@
 package com.bewerbungstracker.service;
 
+import com.bewerbungstracker.dto.CompanyDTO;
 import com.bewerbungstracker.entity.Company;
 import com.bewerbungstracker.repository.CompanyRepository;
-import com.bewerbungstracker.dto.CompanyDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +25,10 @@ public class CompanyService {
                 c.getId(),
                 c.getCompanyname())
         ).collect(Collectors.toList());
+    }
+
+    public Company getCompanyById(Integer id) {
+        return companyRepository.getCompanyById(id);
     }
 }
 

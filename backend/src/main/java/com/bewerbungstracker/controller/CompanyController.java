@@ -2,6 +2,7 @@ package com.bewerbungstracker.controller;
 
 
 import com.bewerbungstracker.dto.CompanyDTO;
+import com.bewerbungstracker.entity.Company;
 import com.bewerbungstracker.service.CompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +29,10 @@ public class CompanyController {
     @GetMapping()
     public List<CompanyDTO> companies() {
         return companyService.getCompany();
+    }
+
+    @GetMapping("/{id}")
+    public Company companyById(@PathVariable Integer id) {
+        return companyService.getCompanyById(id);
     }
 }
