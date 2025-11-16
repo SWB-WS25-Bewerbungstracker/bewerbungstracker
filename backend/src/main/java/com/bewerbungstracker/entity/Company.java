@@ -2,12 +2,14 @@ package com.bewerbungstracker.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
 @Table(name="company")
 @Entity
 @Data
 public class Company {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "companyid")
     private Integer id;
 
     @Column
@@ -19,6 +21,7 @@ public class Company {
     @Column
     private String logo;
 
-    @Column
-    private Integer companyaddress;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "companyaddress")
+    private Address address;
 }
