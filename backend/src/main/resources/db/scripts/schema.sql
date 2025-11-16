@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS address
     StreetNo TEXT NOT NULL,
     City TEXT NOT NULL,
     ZIP TEXT NOT NULL,
-    Country TEXT NOT NULL
+    Country TEXT
 );
 
 
