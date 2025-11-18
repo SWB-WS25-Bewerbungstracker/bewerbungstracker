@@ -14,6 +14,7 @@ import java.util.List;
 public class JobofferController {
     private final JobofferService jobofferService;
 
+    @GetMapping
     public List<JobofferDetails> getAllJoboffers() {
         return jobofferService.getAllJoboffers();
     }
