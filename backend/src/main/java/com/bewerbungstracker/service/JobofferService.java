@@ -19,6 +19,19 @@ public class JobofferService {
     private final CompanyService companyService;
     private final AppointmentService appointmentService;
 
+    public JobofferDetails getAllJoboffers() {
+        List <Joboffer> joboffer = jobofferRepository.getAllJoboffers();
+        List <JobofferDetails> joboffersForCards;
+        for (int i=0; i<joboffer.size(); i++)
+        {
+            List<Appointment> appointments = appointmentService.getAppointmentsByJobofferId(joboffer.get(i).getId());
+            System.out.println(appointments);
+            LocalDateTime earliestAppt = appointmentService.getEarliestAppointment(appointments);
+            joboffersForCards.set(i, joboffer.getId(), joboffer.getJobtitle(), joboffer.getCompany().getCompanyname(), earliestAppt);
+        }
+        return JobofferDetails;
+    }
+
     public JobofferDetails getJobofferDetails(Integer offerid) {
         Joboffer joboffer = jobofferRepository.getJobofferById(offerid);
 
