@@ -17,12 +17,12 @@ export default axios.create({
 */
 
 // Die Interface für die Daten, die von der Axios Anfrage zurückkommen sollten
-interface CompanyData {
+interface JobofferData {
   id: number;
   title: string;
   image?: string;
-  description?: string;
-  link?: string;
+  description_1?: string;
+  description_2?: string;
 }
 
 const Bewerbungen: React.FC = () => {
@@ -30,7 +30,7 @@ const Bewerbungen: React.FC = () => {
   // An früherem KI-Bsp orientiert
   // useState-Hooks
   // const [variableName, setMethodName] = useState<type>(initialState); // Element, dass das enthält, wird neu geladen, wenn sich die variable ändert
-  const [companies, setCompanies] = useState<CompanyData[]>([]); // Hält die Unternehmensdaten, die von der API abgerufen werden
+  const [joboffer, setJoboffer] = useState<JobofferData[]>([]); // Hält die Unternehmensdaten, die von der API abgerufen werden
   const [loading, setLoading] = useState<boolean>(true); // Zustand, der anzeigt, ob die Daten noch geladen werden
   const [error, setError] = useState<string | null>(null); // Fehlerbeschreibung
     
@@ -40,20 +40,22 @@ const Bewerbungen: React.FC = () => {
     // Axios GET-Anfrage an das Backend senden
     axios
       // GET an Endpunkt mit Authentifizierungs-Cookie (wichtig: erst in http://localhost:8080/ einloggen)
-      .get('http://localhost:8080/companies', {withCredentials: true}) 
+      .get('http://localhost:8080/joboffer', {withCredentials: true}) 
       // Verarbeiten der Antwort vom Backend
       .then((response) => {
         console.log('Antwort vom Server:', response.data); // Debugging
         // Umwandlung der Unternehmensnamen in das benötigte Format (durgehen des JSON Arrays und Zuweisen der Daten)
-        const transformedData = response.data.map((company: { id: number; companyname: string }) => {
-          console.log('ID:', company.id, 'Name:', company.companyname); // Debugging
+        const transformedData = response.data.map((joboffer: { jobofferid: number; joboffername:string, companyname: string, nextapptdate: string}) => {
+          console.log('ID:', joboffer.jobofferid, 'Name:', joboffer.joboffername, 'Company:', joboffer.companyname, 'Next Apointment:', joboffer.nextapptdate); // Debugging
           return { // Zuweisung der Daten 
-            id: company.id,
-            title: company.companyname,
+            id: joboffer.jobofferid,
+            title: joboffer.joboffername,
+            description_1: joboffer.companyname,
+            description_2: joboffer.nextapptdate
           };
         });
         // Speichern der Daten in eine Konstante außerhalb des Axios Blocks, damit diese danach an CardGrid übergeben werden kann
-        setCompanies(transformedData); 
+        setJoboffer(transformedData); 
         // Ladezustand beenden
         setLoading(false);
       })
@@ -87,7 +89,7 @@ const Bewerbungen: React.FC = () => {
     <div>
       <h2>Bewerbungen</h2>
       <p>Leiste mit Buttons und Filter/Suchfunktionen muss noch eingefügt werden.</p>
-      <CardGrid data={companies}/>
+      <CardGrid data={joboffer}/>
     </div>
   );
 };

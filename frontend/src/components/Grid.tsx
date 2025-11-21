@@ -33,10 +33,11 @@ export default function CardGrid({ data }: CardGridProps) {
             >
               <ActionAreaCard // eine Komponente, die eine Karte darstellt
               key={index} // Schlüssel für jede Karte
+              id={item.id}
               title={item.title} // Titel der Karte
               image={item.image} // Bild-URL für die Karte
-              description={item.description} // Datum für die Beschreibung in der Karte
-              link={item.link} // Link, der mit der Karte verbunden ist
+              description_1={item.description_1} // Datum für die Beschreibung in der Karte
+              description_2={item.description_2} // Datum für die Beschreibung in der Karte
               />
             </Grid>
           ))}

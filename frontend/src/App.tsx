@@ -7,7 +7,7 @@ import Dokumente from "./pages/Dokumente";
 import Einstellungen from "./pages/Einstellungen";
 import Login from "./pages/Login";
 import Profil from "./pages/Profil";
-import Firmenansicht from "./pages/Stellenansicht";
+import Stellenansicht from "./pages/Stellenansicht";
 
 import { CssBaseline} from "@mui/material"; // aktuell nicht mehr verwendet, da es den Dark Mode blockiert hat
 
@@ -25,7 +25,7 @@ function App() {
           <Route path="/einstellungen" element={<Einstellungen />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profil" element={<Profil />} />
-          <Route path="/firmenansicht" element={<Firmenansicht />} />
+          <Route path="/stellenansicht/:id" element={<Stellenansicht />} />
         </Routes>
       </div>
     </>

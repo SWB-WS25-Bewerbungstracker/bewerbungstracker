@@ -8,6 +8,9 @@ import CardActionArea from '@mui/material/CardActionArea';
 import { Link } from 'react-router-dom';
 import { format, parse } from 'date-fns'; // Zum Formatieren von Date-Objekten
 
+import BusinessIcon from '@mui/icons-material/Business';
+import { SvgIcon } from '@mui/material';
+
 // KI: Funktion, die alle unterstützten Formate an Datum-Strings parst
 const parseDateFromString = (str: string): Date | null => {
   const formats = [
@@ -32,24 +35,26 @@ const parseDateFromString = (str: string): Date | null => {
 
 // Damit variable Werte (Props) verwendet werden können
 export interface ActionAreaCardProps {
+  id: string | number; // Id der Karte
   title: string; // Titel der Karte
+  description_1?: string; // Beschreibung, die entweder ein Date-Objekt oder ein String sein kann
+  description_2?: Date | string; // Beschreibung, die entweder ein Date-Objekt oder ein String sein kann
   image?: string; // URL des Bildes
-  description?: Date | string; // Beschreibung, die entweder ein Date-Objekt oder ein String sein kann
-  link?: string; // Der Link, auf den beim Klicken auf die Karte navigiert wird
+  //link?: string; // Der Link, auf den beim Klicken auf die Karte navigiert wird
 }
 
 // Die eigentliche ActionAreaCard-Komponente, die die Props erhält und eine Karte rendert
-export default function ActionAreaCard({ title, image = ' ', description = ' ', link = './home' }: ActionAreaCardProps) {
+export default function ActionAreaCard({ id, title, image, description_1 = ' ', description_2 = ' '}: ActionAreaCardProps) {
   
   // Überprüfen, ob die Beschreibung ein Date-Objekt ist und formatieren, wenn ja
-  if (description instanceof Date) {
-     description = 'Nächster Termin: ' + format(description, 'dd-MM-yyyy HH:mm')
+  if (description_2 instanceof Date) {
+     description_2 = 'Nächster Termin: ' + format(description_2, 'dd-MM-yyyy HH:mm')
   } 
   // KI: Überprüfen, ob die Beschreibung ein String im Date-Format ist und formatieren, wenn ja
-  else if (typeof description === 'string') {
-    const parsedDate = parseDateFromString(description);
+  else if (typeof description_2 === 'string') {
+    const parsedDate = parseDateFromString(description_2);
     if (parsedDate) {
-      description = 'Nächster Termin: ' + format(parsedDate, 'dd-MM-yyyy HH:mm');
+      description_2 = 'Nächster Termin: ' + format(parsedDate, 'dd-MM-yyyy HH:mm');
     }
   }
   
@@ -63,15 +68,24 @@ export default function ActionAreaCard({ title, image = ' ', description = ' ', 
        }}>
         {/* Interaktionsbereich der Karte */}
         <CardActionArea sx={{ height: '100%'}}>
-          {/* Link-Komponente von react-router-dom, um auf eine andere Seite zu navigieren, wenn die Karte angeklickt wird */}
-          <Link to={link } style={{ textDecoration: 'none' }}> 
+          {/* Link-Komponente von react-router-dom, um auf eine andere Seite zu navigieren, wenn die Karte angeklickt wird.
+              Dort soll der Id für eine gezielte Get-Anfage zum jeweiligen Inhalt verewndet werden -> id mitgeben */}
+          <Link to={`/stellenansicht/${id}`} style={{ textDecoration: 'none' }}> 
             {/* Bild der Karte */}
-            <CardMedia
-              component="img"
-              height="140" // Bildhöhe
-              image={image} // Bild-URL
-              alt={title} // Alt-Text für das Bild
-            />
+            {/* Wenn ein Bild übergeben wurde, soll das angezeigt werden, ansonsten ein Icon (an KI) */}
+            {image ? (
+              <CardMedia
+                component="img"
+                height="140"
+                image={image}
+                alt={title}
+              />
+            ) : (
+              <CardContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '140px' }}>
+                <SvgIcon component={BusinessIcon} sx={{ fontSize: '100px', color: 'grey.500' }} />
+              </CardContent>
+            ) 
+            }
             {/* Textbereich der Karte */}
             <CardContent
               sx={{ 
@@ -81,18 +95,40 @@ export default function ActionAreaCard({ title, image = ' ', description = ' ', 
                 boxSizing: 'border-box', 
               }}>
               {/* Titel der Karte */}
-              <Typography gutterBottom variant="h5" component="div">
+              <Typography gutterBottom variant="h5" component="div" sx={{paddingBottom: '24px'}}>
                 {title}
               </Typography>
               {/* Beschreibung */}
-              <Typography variant="body2" 
-                sx={{ 
-                  color: 'text.secondary', 
+              <div style={{
+                  flexDirection: 'column',
+                  justifyContent: 'flex-end',
                   position: 'absolute',  // Text soll mit kleinem Abstand am unteren Kartenende stehen
-                  bottom: 10 
+                  bottom: 10, 
+                  marginTop: 'auto'
                 }}>
-                {description} 
-              </Typography>
+                <Typography variant="body1" 
+                  sx={{ 
+                    color: 'text.primary', 
+                    //flexDirection: 'column',
+                    //justifyContent: 'flex-end',
+                    //position: 'absolute',  // Text soll mit kleinem Abstand am unteren Kartenende stehen
+                    //bottom: 10 
+                  }}>
+                  {description_1} 
+                  
+                </Typography>
+                <Typography variant="body2" 
+                  sx={{ 
+                    color: 'text.secondary', 
+                    //flexDirection: 'column',
+                    //justifyContent: 'flex-end',
+                    //position: 'absolute',  
+                    //bottom: 10,
+                    textAlign: 'end' // Text soll rechtsbündig sein !FUNKTIONIERT NOCH NICHT!
+                  }}>
+                  {description_2}
+                </Typography>
+              </div>
             </CardContent>
           </Link>
         </CardActionArea>
