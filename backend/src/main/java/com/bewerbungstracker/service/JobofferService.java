@@ -1,6 +1,8 @@
 package com.bewerbungstracker.service;
 
+import com.bewerbungstracker.dto.AppointmentCleanView;
 import com.bewerbungstracker.dto.JobofferDetails;
+import com.bewerbungstracker.dto.SingleJobofferDetails;
 import com.bewerbungstracker.entity.Appointment;
 import com.bewerbungstracker.entity.Joboffer;
 import com.bewerbungstracker.repository.JobofferRepository;
@@ -8,7 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,14 +18,13 @@ import java.util.List;
 @Transactional
 public class JobofferService {
     private final JobofferRepository jobofferRepository;
-    private final CompanyService companyService;
     private final AppointmentService appointmentService;
 
     public List<JobofferDetails> getAllJoboffers() {
         return jobofferRepository.getAllJoboffers();
     }
 
-    public JobofferDetails getJobofferDetails(Integer offerid) {
+    public SingleJobofferDetails getJobofferDetails(Integer offerid) {
         Joboffer joboffer = jobofferRepository.getJobofferById(offerid);
 
         if (joboffer == null) {
@@ -31,10 +32,13 @@ public class JobofferService {
         }
 
         List<Appointment> appointments = appointmentService.getAppointmentsByJobofferId(offerid);
-        System.out.println(appointments);
-        LocalDateTime earliestAppt = appointmentService.getEarliestAppointment(appointments);
 
-        return new JobofferDetails(joboffer.getId(), joboffer.getJobtitle(), joboffer.getCompany().getCompanyname(), earliestAppt);
+        List<AppointmentCleanView> appointmentCleanViews = new ArrayList<>();
+        for (Appointment appointment : appointments) {
+            appointmentCleanViews.add(new AppointmentCleanView(appointment));
+        }
+
+        return new SingleJobofferDetails(joboffer, appointmentCleanViews);
     }
 
 

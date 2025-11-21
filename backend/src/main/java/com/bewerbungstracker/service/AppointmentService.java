@@ -5,7 +5,7 @@ import com.bewerbungstracker.repository.AppointmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -17,8 +17,10 @@ public class AppointmentService {
         return appointmentRepository.getAppointmentsByJobofferId(id);
     }
 
-    public LocalDateTime getEarliestAppointment(List<Appointment> appointments) {
-        return appointments.stream().map(Appointment::getAppointmentdate)
-                .min(LocalDateTime::compareTo).orElse(null);
+    public Appointment getEarliestAppointment(List<Appointment> appointments) {
+        return appointments.stream()
+                .filter(a -> a.getAppointmentdate() != null)
+                .min(Comparator.comparing(Appointment::getAppointmentdate))
+                .orElse(null);
     }
 }
