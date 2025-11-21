@@ -1,5 +1,6 @@
 package com.bewerbungstracker.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -11,5 +12,6 @@ public class JobofferDetails {
     private Integer jobofferid;
     private String joboffername;
     private String companyname;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime nextapptdate;
 }
