@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:16
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: testdb
+      POSTGRES_USER: testU
+      POSTGRES_PASSWORD: pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: ./backend
+    container_name: spring-app
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/testdb
+      SPRING_DATASOURCE_USERNAME: testU
+      SPRING_DATASOURCE_PASSWORD: pass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+  authentication:
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: keycloak
+    environment:
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 7080
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
+
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+
+      KC_HEALTH_ENABLED: "true"
+      KC_LOG_LEVEL: info
+
+      KC_IMPORT_FORCE: "true"
+      KC_IMPORT: /opt/keycloak/data/import
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7080/health/ready"]
+      interval: 15s
+      timeout: 2s
+      retries: 15
+      
+    command: ["start-dev", "--http-port", "7080", "--https-port", "7443", "--import-realm"]
+    ports:
+      - "7080:7080"
+      - "7443:7443"
+    networks:
+      - local_network
+    volumes:
+      - ./.keycloak/realms:/opt/keycloak/data/import:ro
+networks:
+  local_network:
+    driver: bridge
+
+volumes:
+  pgdata:
