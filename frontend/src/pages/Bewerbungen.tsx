@@ -40,7 +40,7 @@ const Bewerbungen: React.FC = () => {
     // Axios GET-Anfrage an das Backend senden
     axios
       // GET an Endpunkt mit Authentifizierungs-Cookie (wichtig: erst in http://localhost:8080/ einloggen)
-      .get('http://localhost:8080/joboffer', {withCredentials: true}) 
+      .get('http://localhost:8080/joboffer')
       // Verarbeiten der Antwort vom Backend
       .then((response) => {
         console.log('Antwort vom Server:', response.data); // Debugging

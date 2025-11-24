@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 // https://spring.io/guides/gs/rest-service-cors#global-cors-configuration
 // Um Zugriff von anderem Port zu erlauben
-@CrossOrigin(origins = "http://localhost:5173/", allowCredentials="true")
 @RequestMapping("/companies")
 @RequiredArgsConstructor
 public class CompanyController {
