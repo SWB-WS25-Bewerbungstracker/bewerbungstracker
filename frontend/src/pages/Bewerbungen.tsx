@@ -1,4 +1,5 @@
 import CardGrid from "../components/Grid";
+import TestButtonGroup from "../components/TestButtonGroup"
 
 import { useEffect, useState } from "react"; 
 // useState: für den internen Zustand der Komponente (Unternehmensliste)
@@ -88,7 +89,12 @@ const Bewerbungen: React.FC = () => {
   return (
     <div>
       <h2>Bewerbungen</h2>
-      <p>Leiste mit Buttons und Filter/Suchfunktionen muss noch eingefügt werden.</p>
+      <p>
+          <TestButtonGroup buttons={[
+              { label: "Löschen", onClick: () => console.log("A") },
+              { label: "Hinzufügen", onClick: () => console.log("B")}
+          ]}/>
+          Leiste mit Buttons und Filter/Suchfunktionen muss noch eingefügt werden.</p>
       <CardGrid data={joboffer}/>
     </div>
   );
