@@ -66,8 +66,8 @@ function ResponsiveAppBar() {
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
-            component={Link}  
-            to="/home"  
+            component={Link}
+            to="/home"
             noWrap
             sx={{
               mr: 2,
