@@ -6,58 +6,21 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import { Link } from 'react-router-dom';
-import { format, parse } from 'date-fns'; // Zum Formatieren von Date-Objekten
-
 import BusinessIcon from '@mui/icons-material/Business';
 import { SvgIcon } from '@mui/material';
-
-// KI: Funktion, die alle unterstützten Formate an Datum-Strings parst
-const parseDateFromString = (str: string): Date | null => {
-  const formats = [
-    'dd-MM-yyyy', 
-    'dd.MM.yyyy', 
-    'dd-MM-yyyy HH:mm', 
-    'dd.MM.yyyy HH:mm', 
-    'yyyy-MM-dd', 
-    'yyyy.MM.dd', 
-    'yyyy-MM-dd HH:mm', 
-    'yyyy.MM.dd HH:mm', 
-  ];
-  // Überprüfen, ob einer der Formate passt
-  for (let formatStr of formats) {
-    const parsedDate = parse(str, formatStr, new Date());
-    if (!isNaN(parsedDate.getTime())) {
-      return parsedDate; // Rückgabe des Datums, wenn es gültig ist
-    }
-  }
-  return null; // Wenn kein Format übereinstimmt
-};
 
 // Damit variable Werte (Props) verwendet werden können
 export interface ActionAreaCardProps {
   id: string | number; // Id der Karte
   title: string; // Titel der Karte
   description_1?: string; // Beschreibung, die entweder ein Date-Objekt oder ein String sein kann
-  description_2?: Date | string; // Beschreibung, die entweder ein Date-Objekt oder ein String sein kann
+  description_2?: string; // Beschreibung, die entweder ein Date-Objekt oder ein String sein kann
   image?: string; // URL des Bildes
-  //link?: string; // Der Link, auf den beim Klicken auf die Karte navigiert wird
 }
 
 // Die eigentliche ActionAreaCard-Komponente, die die Props erhält und eine Karte rendert
-export default function ActionAreaCard({ id, title, image, description_1 = ' ', description_2 = ' '}: ActionAreaCardProps) {
-  
-  // Überprüfen, ob die Beschreibung ein Date-Objekt ist und formatieren, wenn ja
-  if (description_2 instanceof Date) {
-     description_2 = 'Nächster Termin: ' + format(description_2, 'dd-MM-yyyy HH:mm')
-  } 
-  // KI: Überprüfen, ob die Beschreibung ein String im Date-Format ist und formatieren, wenn ja
-  else if (typeof description_2 === 'string') {
-    const parsedDate = parseDateFromString(description_2);
-    if (parsedDate) {
-      description_2 = 'Nächster Termin: ' + format(parsedDate, 'dd-MM-yyyy HH:mm');
-    }
-  }
-  
+export default function ActionAreaCard({ id, title, image, description_1 = '', description_2 = ''}: ActionAreaCardProps) {
+
   // Card Component
   return (
     <Card sx={{ 
@@ -72,7 +35,7 @@ export default function ActionAreaCard({ id, title, image, description_1 = ' ', 
               Dort soll der Id für eine gezielte Get-Anfage zum jeweiligen Inhalt verewndet werden -> id mitgeben */}
           <Link to={`/stellenansicht/${id}`} style={{ textDecoration: 'none' }}> 
             {/* Bild der Karte */}
-            {/* Wenn ein Bild übergeben wurde, soll das angezeigt werden, ansonsten ein Icon (an KI) */}
+            {/* Wenn ein Bild übergeben wurde, soll das angezeigt werden, ansonsten ein Icon (an KI Vorschlag angelehnt) */}
             {image ? (
               <CardMedia
                 component="img"
@@ -109,24 +72,16 @@ export default function ActionAreaCard({ id, title, image, description_1 = ' ', 
                 <Typography variant="body1" 
                   sx={{ 
                     color: 'text.primary', 
-                    //flexDirection: 'column',
-                    //justifyContent: 'flex-end',
-                    //position: 'absolute',  // Text soll mit kleinem Abstand am unteren Kartenende stehen
-                    //bottom: 10 
                   }}>
-                  {description_1} 
+                  {/*Damit Leerzeilen ausgegeben werden, wenn nichts übergeben wurde */}
+                  {description_1.trim() === '' ? <br /> : description_1}
                   
                 </Typography>
                 <Typography variant="body2" 
                   sx={{ 
-                    color: 'text.secondary', 
-                    //flexDirection: 'column',
-                    //justifyContent: 'flex-end',
-                    //position: 'absolute',  
-                    //bottom: 10,
-                    textAlign: 'end' // Text soll rechtsbündig sein !FUNKTIONIERT NOCH NICHT!
+                    color: 'text.secondary'
                   }}>
-                  {description_2}
+                   {description_2.trim() === '' ? <br /> : description_2} 
                 </Typography>
               </div>
             </CardContent>
