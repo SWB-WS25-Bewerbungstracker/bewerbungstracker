@@ -7,15 +7,27 @@ import { useEffect, useState } from "react";
 import axios from "axios"; 
 // axios: Bibliothek, um HTTP-Requests (GET, POST, PUT, DELETE …) zu machen
 
-// Softwarearchitektur Bsp
-/*
-export default axios.create({
-  baseURL: "http://localhost:82[your-unique-numer]/api-[your-hs-esslingen-user-name]/item-management/v1",
-  headers: {
-    "Content-type": "application/json"
+// Funktion, um ein Datum in einen String umzuwandeln (an KI Bsp orientiert)
+function parseDatePassed (isoDate:string) {
+  if (isoDate) {
+    const date = new Date(isoDate);
+    const dayPart = date.toLocaleDateString("de-DE", {
+      weekday: "long",
+    });
+    const datePart = date.toLocaleDateString("de-DE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    });
+    const timePart = date.toLocaleTimeString("de-DE", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+    return (`Nächster Termin: am ${dayPart} den ${datePart} um ${timePart} Uhr`)
+  } else {
+    return ('')
   }
-});
-*/
+}
 
 // Die Interface für die Daten, die von der Axios Anfrage zurückkommen sollten
 interface JobofferData {
@@ -52,7 +64,7 @@ const Bewerbungen: React.FC = () => {
             id: joboffer.jobofferid,
             title: joboffer.joboffername,
             description_1: joboffer.companyname,
-            description_2: joboffer.nextapptdate
+            description_2: parseDatePassed(joboffer.nextapptdate)            
           };
         });
         // Speichern der Daten in eine Konstante außerhalb des Axios Blocks, damit diese danach an CardGrid übergeben werden kann
