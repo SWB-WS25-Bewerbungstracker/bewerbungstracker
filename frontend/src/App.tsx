@@ -8,6 +8,7 @@ import Einstellungen from "./pages/Einstellungen";
 import Login from "./pages/Login";
 import Profil from "./pages/Profil";
 import Stellenansicht from "./pages/Stellenansicht";
+import FormularBewerbungHinzufuegen from "./pages/FormularBewerbung";
 
 import { CssBaseline} from "@mui/material"; // aktuell nicht mehr verwendet, da es den Dark Mode blockiert hat
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/profil" element={<Profil />} />
           <Route path="/stellenansicht/:id" element={<Stellenansicht />} />
+          <Route path="/formular" element={<FormularBewerbungHinzufuegen />} />
         </Routes>
       </div>
     </>

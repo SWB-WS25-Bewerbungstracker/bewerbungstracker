@@ -81,12 +81,11 @@ const Bewerbungen: React.FC = () => {
   return (
     <div>
       <h2>Bewerbungen</h2>
-      <p>
-          <TestButtonGroup buttons={[
-              { label: "Löschen", onClick: () => console.log("A") },
-              { label: "Hinzufügen", onClick: () => console.log("B")}
-          ]}/>
-          Leiste mit Buttons und Filter/Suchfunktionen muss noch eingefügt werden.</p>
+        <TestButtonGroup buttons={[
+            { label: "Löschen", onClick: () => {deleteButtonClicked()} },
+            { label: "Hinzufügen", onClick: () => {addButtonClicked()}}
+        ]}/>
+        <p> Leiste mit Buttons und Filter/Suchfunktionen muss noch eingefügt werden.</p>
       <CardGrid data={joboffer}/>
     </div>
   );
@@ -116,3 +115,16 @@ function parseDatePassed (isoDate:string) {
     return ('')
   }
 }
+
+// Funktion, die beim Click auf den Löschen Button ausgeführt wird
+const deleteButtonClicked = () => {
+    console.log('Löschen-Button wurde geklickt!');
+  };
+
+// Funktion, die beim Click auf den Hinzufügen Button ausgeführt wird
+const addButtonClicked  = () => {
+    console.log('Hinzufügen-Button wurde geklickt!');
+    window.open('/formular'); // Zum öffnen in einer anderen Seite
+    //window.location.replace('/home'); // Zum öffnen auf dieser Seite
+  }; 
+
