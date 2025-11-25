@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 // useState: für den internen Zustand der Komponente (Unternehmensliste)
 // useEffect: führt Code nach dem Rendern aus (z. B. Daten vom Backend laden)
 import axios from "axios"; 
+import { parseDatePassed } from "../functions/parseDateFromIso";
 // axios: Bibliothek, um HTTP-Requests (GET, POST, PUT, DELETE …) zu machen
 
 //-------------------------------------Interface----------------------------------------------
@@ -44,7 +45,7 @@ const Bewerbungen: React.FC = () => {
             id: joboffer.jobofferid,
             title: joboffer.joboffername,
             description_1: joboffer.companyname,
-            description_2: parseDatePassed(joboffer.nextapptdate)            
+            description_2: parseDateToString(joboffer.nextapptdate)            
           };
         });
         // Speichern der Daten in eine Konstante außerhalb des Axios Blocks, damit diese danach an CardGrid übergeben werden kann
@@ -85,7 +86,7 @@ const Bewerbungen: React.FC = () => {
             { label: "Löschen", onClick: () => {deleteButtonClicked()} },
             { label: "Hinzufügen", onClick: () => {addButtonClicked()}}
         ]}/>
-        <p> Leiste mit Buttons und Filter/Suchfunktionen muss noch eingefügt werden.</p>
+        <p> Leiste mit Filter/Suchfunktionen muss noch eingefügt werden.</p>
       <CardGrid data={joboffer}/>
     </div>
   );
@@ -95,6 +96,7 @@ export default Bewerbungen;
 
 //-------------------------------------Hilfsfunktionen----------------------------------------------
 // Funktion, um ein Datum in einen String umzuwandeln (an KI Bsp orientiert)
+/*
 function parseDatePassed (isoDate:string) {
   if (isoDate) {
     const date = new Date(isoDate);
@@ -113,6 +115,24 @@ function parseDatePassed (isoDate:string) {
     return (`Nächster Termin: am ${dayPart} den ${datePart} um ${timePart} Uhr`)
   } else {
     return ('')
+  }
+}
+  */
+
+function parseDateToString (passedDate?: string) : string | undefined{
+  // Versuchen, die Rückgabewerte der parseDatePassed-Funktion zu entpacken, falls dieser existiert
+  if (passedDate){
+    const result = parseDatePassed(passedDate); 
+    // Überprüfen, ob das Ergebnis ein Array ist und es entpacken
+    if (result && result.length === 3) {
+      const [dayPart, datePart, timePart] = result;
+
+      // Wenn alle Teile vorhanden sind, erstelle den Terminstring
+      return `Nächster Termin: am ${dayPart} den ${datePart} um ${timePart} Uhr`;
+    } else {
+      // Wenn das Ergebnis nicht gültig ist, gib einen leeren String zurück
+      return '';
+    }
   }
 }
 
