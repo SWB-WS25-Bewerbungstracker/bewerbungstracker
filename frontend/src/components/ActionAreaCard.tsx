@@ -58,7 +58,7 @@ export default function ActionAreaCard({ id, title, image, description_1 = '', d
                 boxSizing: 'border-box', 
               }}>
               {/* Titel der Karte */}
-              <Typography gutterBottom variant="h5" component="div" sx={{paddingBottom: '24px'}}>
+              <Typography gutterBottom variant="h6" component="div" sx={{paddingBottom: '24px'}}>
                 {title}
               </Typography>
               {/* Beschreibung */}
@@ -69,7 +69,7 @@ export default function ActionAreaCard({ id, title, image, description_1 = '', d
                   bottom: 10, 
                   marginTop: 'auto'
                 }}>
-                <Typography variant="body1" 
+                <Typography variant="subtitle1" 
                   sx={{ 
                     color: 'text.primary', 
                   }}>
@@ -77,7 +77,7 @@ export default function ActionAreaCard({ id, title, image, description_1 = '', d
                   {description_1.trim() === '' ? <br /> : description_1}
                   
                 </Typography>
-                <Typography variant="body2" 
+                <Typography variant="body1" 
                   sx={{ 
                     color: 'text.secondary'
                   }}>
