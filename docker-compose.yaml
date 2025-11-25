@@ -37,12 +37,7 @@ services:
       KC_HEALTH_ENABLED: "true"
       KC_LOG_LEVEL: info
 
-    #  KC_DB: postgres
       KC_IMPORT_FORCE: "true"
-
-      # Import from GitHub
-
-    #  KC_IMPORT: .keycloak/realms/
       KC_IMPORT: /opt/keycloak/data/import
 
 
@@ -59,8 +54,6 @@ services:
       - local_network
     volumes:
       - ./.keycloak/realms:/opt/keycloak/data/import:ro
-    #depends_on:
-    #  - db
 networks:
   local_network:
     driver: bridge
