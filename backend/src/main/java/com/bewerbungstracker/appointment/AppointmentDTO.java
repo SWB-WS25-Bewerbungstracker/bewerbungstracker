@@ -14,4 +14,10 @@ public class AppointmentDTO {
     LocalDateTime appointmentdate;
 
     String appointmentname;
+
+    Integer jobofferID;
+
+    String joboffername;
+
+    String companyname;
 }

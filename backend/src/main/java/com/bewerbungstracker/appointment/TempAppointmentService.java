@@ -11,5 +11,8 @@ import java.util.List;
 public class TempAppointmentService {
     private final TempApptRepository appointmentRepository;
 
-    public List<AppointmentDTO> getAllAppointments() {return appointmentRepository.getAppointments();}
+    public List<AppointmentDTO> getAllAppointments() {
+        return appointmentRepository.getAppointments();
+    }
+
 }

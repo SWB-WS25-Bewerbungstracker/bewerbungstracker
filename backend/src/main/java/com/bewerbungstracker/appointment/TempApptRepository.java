@@ -8,6 +8,16 @@ import java.util.List;
 
 public interface TempApptRepository extends JpaRepository<Appointment, Integer> {
 
-    @Query("SELECT appt.id, appt.appointmentdate, appt.appointmentname FROM Appointment appt")
+    @Query("""
+        SELECT new com.bewerbungstracker.appointment.AppointmentDTO(
+            appt.id,
+            appt.appointmentdate, 
+            appt.appointmentname, 
+            appt.joboffer.id, 
+            appt.joboffer.jobtitle, 
+            appt.joboffer.company.companyname)
+        FROM Appointment appt
+        """)
+
     List<AppointmentDTO> getAppointments();
 }
