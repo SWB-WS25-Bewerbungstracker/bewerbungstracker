@@ -1,8 +1,13 @@
+// Keycloak
 import { Routes, Route } from "react-router-dom";
 import { ReactKeycloakProvider } from "@react-keycloak/web";
 import keycloak from "./keycloak";
+import PrivateRoute from "./helper/PrivateRoute";
 
+// Komponenten
 import ResponsiveAppBar from "./components/AppBarWithResponsiveMenu";
+
+// Seiten
 import Home from "./pages/Home";
 import Termine from "./pages/Termine";
 import Bewerbungen from "./pages/Bewerbungen";
@@ -11,22 +16,24 @@ import Einstellungen from "./pages/Einstellungen";
 import Login from "./pages/Login";
 import Profil from "./pages/Profil";
 import Stellenansicht from "./pages/Stellenansicht";
-import PrivateRoute from "./helper/PrivateRoute";
 import FormularBewerbungHinzufuegen from "./pages/FormularBewerbung";
 
+// Theme
 import { CssBaseline} from "@mui/material"; // aktuell nicht mehr verwendet, da es den Dark Mode blockiert hat
+import { ThemeProvider } from '@mui/material/styles';
+import brandedTheme from './theme/theme';  // Custom MUI Theme
+import './theme/theme.css' // Theme Änderungen, die sich nicht in MUI Theme integrieren lassen
 
 function App() {
   return (
-    <> 
+    <ThemeProvider theme={brandedTheme}> {/* ThemeProvider einbinden */}
       <CssBaseline />
       <ResponsiveAppBar/>
       <div className="content">
         <ReactKeycloakProvider authClient={keycloak}>
         <Routes>
           <Route path="/login" element={<Login />} />
-
-          <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
+          <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
           <Route path="/termine" element={<PrivateRoute><Termine /></PrivateRoute>} />
           <Route path="/bewerbungen" element={<PrivateRoute><Bewerbungen /></PrivateRoute>} />
           <Route path="/dokumente" element={<PrivateRoute><Dokumente /></PrivateRoute>} />
@@ -39,7 +46,7 @@ function App() {
         </Routes>
         </ReactKeycloakProvider>
       </div>
-    </>
+    </ThemeProvider> 
   );
 }
 
