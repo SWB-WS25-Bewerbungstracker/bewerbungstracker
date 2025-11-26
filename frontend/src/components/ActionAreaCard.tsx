@@ -25,9 +25,11 @@ export default function ActionAreaCard({ id, title, image, description_1 = '', d
   return (
     <Card sx={{ 
       maxWidth: '100%', // macht die Karte flexibel groß (je nach Containergröße)
+      height: '100%',
+      display: 'flex',
       boxSizing: 'border-box', // sorgt dafür, dass Padding und Border nicht die Gesamtbreite überschreiten
       flexDirection: 'column', // Inhalte vertikal anordnen
-      height: '100%',
+      justifyContent: 'space-between',
        }}>
         {/* Interaktionsbereich der Karte */}
         <CardActionArea sx={{ height: '100%'}}>
@@ -53,21 +55,23 @@ export default function ActionAreaCard({ id, title, image, description_1 = '', d
             <CardContent
               sx={{ 
                 display: 'flex', 
-                height: '100%',
                 flexDirection: 'column', // Inhalte vertikal anordnen
-                boxSizing: 'border-box', 
+                boxSizing: 'border-box',
+                justifyContent: 'space-between' 
+                
               }}>
               {/* Titel der Karte */}
-              <Typography gutterBottom variant="h6" component="div" sx={{paddingBottom: '24px'}}>
+              <Typography gutterBottom variant="h6" component="div" sx={{}}>
                 {title}
               </Typography>
+              
               {/* Beschreibung */}
               <div style={{
-                  flexDirection: 'column',
-                  justifyContent: 'flex-end',
-                  position: 'absolute',  // Text soll mit kleinem Abstand am unteren Kartenende stehen
-                  bottom: 10, 
-                  marginTop: 'auto'
+                  //display: 'flex', 
+                  //flexDirection: 'column',
+                  //justifyContent: 'flex-end',
+                  //position: 'absolute', // Text soll mit kleinem Abstand am unteren Kartenende stehen
+                  //bottom: 10,  
                 }}>
                 <Typography variant="subtitle1" 
                   sx={{ 
