@@ -5,47 +5,42 @@ import { Autocomplete, Box, Container, InputAdornment, Stack, TextField, Typogra
 import { useState } from "react";
 import TestButtonGroup from "./TestButtonGroup";
 import axios from "axios";
+import { useCompanyData} from "../functions/getAllCompaniesAndId";
 
 /* Vllt Später für gloables Axios Setup?
-axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "http://localhost:8080";
 axios.defaults.headers.post["Content-Type"] = "application/json";
  */
 
-// Liste aller Firmen
-const listeAllerFirmen = [
-    'a', 
-    'b',
-    'c',
-    'd',
-    'e',
-    'f',
-]
-
 export default function AddApplicationForm() {
 
-    // Konstrukt, in dem die Daten gespeichert werden und welches nachher ans Backend gesendet wird
-    const [formData, setFormData] = useState({
-        jobofferName: "",
-        companyName: "",
-        jobofferDescription: "",
-        appointmentDate: "",
-        appointmentTime: "",
-        addressStreet: "",
-        addressStreetNumber: "",
-        addressPostcode: "",
-        addressCity: "",
-        distanceLength: "",
-        distanceTime: "",
-        contactName: "",
-        contactEmail: "",
-        contactPhoneNumber: "",
-        salaryMinimum: "",
-        salaryMaximum: "",
-        perks: "",
-        numberOfEmployees: "",
-        personalNotes: "",
+    // Verwendung des Custom Hooks, um die Firmen- und Ladezustandsdaten zu holen
+    const { listOfCompanies, loading } = useCompanyData();
 
-    });
+    // Konstrukt, in dem die Daten gespeichert werden und welches nachher ans Backend gesendet wird
+    const [formData, setFormData] = useState({ 
+        // Default Werte
+        jobofferName: '',
+        companyId: '',
+        companyName: '',
+        jobofferDescription: '',
+        appointmentDate: '',
+        appointmentTime: '',
+        addressStreet: '',
+        addressStreetNumber: '',
+        addressPostcode: '',
+        addressCity: '',
+        distanceLength: '',
+        distanceTime: '',
+        contactName: '',
+        contactEmail: '',
+        contactPhoneNumber: '',
+        salaryMinimum: '',
+        salaryMaximum: '',
+        perks: '',
+        numberOfEmployees: '',
+        personalNotes: '',
+    });;
 
     // Wird bei jeder Änderung in einem TextField aufgerufen (an KI Bsp orientiert)
     const handleChange = (e: { target: { name: string; value: unknown; }; }) => {
@@ -141,16 +136,36 @@ export default function AddApplicationForm() {
                 <Typography>
                     Welches Unternehmen hat die Stelle ausgeschrieben?
                 </Typography>
+                 {loading ? (
+                    <TextField sx={{ m: 1, width: '98%' }} label="Lade Firmen..." variant="outlined" disabled />
+                ) : (
                 <Autocomplete
                     // Darstellung Autocomplete
-                    freeSolo // Benutzer Input ist nicht auf die vorgegebenen Möglichkeiten beschränkt
+                    freeSolo // Benutzer kann eigene Eingaben machen
                     id="CompanyName"
-                    options={listeAllerFirmen} // Vorgeschlagene Unternehmen
+                    // KI Fehlerverbesserung --------
+                    // Dropdown Auswahl (Liste an Unternehmen)
+                    options={listOfCompanies.map((company) => company.name)} // Nur die Namen der Unternehmen anzeigen
+                    //getOptionLabel={(option) => option} // Einfach nur den Namen anzeigen
+                    //value={formData.companyName || ""} // Wenn es einen Wert gibt, zeige ihn an, sonst leer
+                    onChange={(_event, newValue) => {
+                        // Wenn der Benutzer einen Namen auswählt
+                        const selectedName = newValue || ""; // Entweder den ausgewählten Wert nehmen oder sonst leer lassen
+                        // Finde das Unternehmen anhand des eingegebenen Namens (um Id wieder zu bekommen für Zuweisung)
+                        const selectedCompany = listOfCompanies.find(c => c.name === selectedName);
+                        // Zuweisen der Daten
+                        setFormData(prev => ({
+                            ...prev,
+                            companyName: selectedName,
+                            companyId: selectedCompany ? selectedCompany.id : "", // Falls keine Firma gefunden, ID leer lassen
+                        }));
+                    }}
+                    // Ende KI Fehlerverbesserung -------
                     sx={{ m: 1, width: '98%' }}
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            // Zuweisung der Daten für Übergabe
+                            // Zuweisung der Daten für Übergabe (falls Text eingegeben wurde und nicht mit Autocomplete ausgefüllt)
                             label="Unternehmen"
                             name="companyName"
                             value={formData.companyName}
@@ -162,9 +177,10 @@ export default function AddApplicationForm() {
                                     type: 'search'
                                 }
                             }} 
+                            
                         />
-                    )} 
-                />
+                    )}                     
+                /> )}
             </div>
         </Box>
         <Box

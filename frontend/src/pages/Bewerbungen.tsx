@@ -39,8 +39,8 @@ const Bewerbungen: React.FC = () => {
       .then((response) => {
         console.log('Antwort vom Server:', response.data); // Debugging
         // Umwandlung der Unternehmensnamen in das benötigte Format (durgehen des JSON Arrays und Zuweisen der Daten)
-        const transformedData = response.data.map((joboffer: { jobofferid: number; joboffername:string, companyname: string, nextapptdate: string}) => {
-          console.log('ID:', joboffer.jobofferid, 'Name:', joboffer.joboffername, 'Company:', joboffer.companyname, 'Next Apointment:', joboffer.nextapptdate); // Debugging
+        const transformedData = response.data.map((joboffer: { jobofferid: number; joboffername:string, companyid: number, companyname: string, nextapptdate: string}) => {
+          console.log('ID:', joboffer.jobofferid, 'Name:', joboffer.joboffername, 'Company ID:', joboffer.companyid, 'Company:', joboffer.companyname, 'Next Apointment:', joboffer.nextapptdate); // Debugging
           return { // Zuweisung der Daten 
             id: joboffer.jobofferid,
             title: joboffer.joboffername,
