@@ -10,6 +10,7 @@ import Einstellungen from "./pages/Einstellungen";
 import Login from "./pages/Login";
 import Profil from "./pages/Profil";
 import Stellenansicht from "./pages/Stellenansicht";
+import FormularBewerbungHinzufuegen from "./pages/FormularBewerbung";
 
 import { CssBaseline} from "@mui/material"; // aktuell nicht mehr verwendet, da es den Dark Mode blockiert hat
 

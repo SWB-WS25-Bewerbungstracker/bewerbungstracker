@@ -1,4 +1,5 @@
 import CardGrid from "../components/Grid";
+import TestButtonGroup from "../components/TestButtonGroup"
 
 import { useEffect, useState } from "react"; 
 // useState: für den internen Zustand der Komponente (Unternehmensliste)
@@ -6,16 +7,7 @@ import { useEffect, useState } from "react";
 import axios from "axios"; 
 // axios: Bibliothek, um HTTP-Requests (GET, POST, PUT, DELETE …) zu machen
 
-// Softwarearchitektur Bsp
-/*
-export default axios.create({
-  baseURL: "http://localhost:82[your-unique-numer]/api-[your-hs-esslingen-user-name]/item-management/v1",
-  headers: {
-    "Content-type": "application/json"
-  }
-});
-*/
-
+//-------------------------------------Interface----------------------------------------------
 // Die Interface für die Daten, die von der Axios Anfrage zurückkommen sollten
 interface JobofferData {
   id: number;
@@ -25,6 +17,7 @@ interface JobofferData {
   description_2?: string;
 }
 
+//-------------------------------------Seite----------------------------------------------
 const Bewerbungen: React.FC = () => {
   
   // An früherem KI-Bsp orientiert
@@ -40,7 +33,7 @@ const Bewerbungen: React.FC = () => {
     // Axios GET-Anfrage an das Backend senden
     axios
       // GET an Endpunkt mit Authentifizierungs-Cookie (wichtig: erst in http://localhost:8080/ einloggen)
-      .get('http://localhost:8080/joboffer', {withCredentials: true}) 
+      .get('http://localhost:8080/joboffer')
       // Verarbeiten der Antwort vom Backend
       .then((response) => {
         console.log('Antwort vom Server:', response.data); // Debugging
@@ -51,7 +44,7 @@ const Bewerbungen: React.FC = () => {
             id: joboffer.jobofferid,
             title: joboffer.joboffername,
             description_1: joboffer.companyname,
-            description_2: joboffer.nextapptdate
+            description_2: parseDatePassed(joboffer.nextapptdate)            
           };
         });
         // Speichern der Daten in eine Konstante außerhalb des Axios Blocks, damit diese danach an CardGrid übergeben werden kann
@@ -88,11 +81,50 @@ const Bewerbungen: React.FC = () => {
   return (
     <div>
       <h2>Bewerbungen</h2>
-      <p>Leiste mit Buttons und Filter/Suchfunktionen muss noch eingefügt werden.</p>
+        <TestButtonGroup buttons={[
+            { label: "Löschen", onClick: () => {deleteButtonClicked()} },
+            { label: "Hinzufügen", onClick: () => {addButtonClicked()}}
+        ]}/>
+        <p> Leiste mit Buttons und Filter/Suchfunktionen muss noch eingefügt werden.</p>
       <CardGrid data={joboffer}/>
     </div>
   );
 };
 
 export default Bewerbungen;
+
+//-------------------------------------Hilfsfunktionen----------------------------------------------
+// Funktion, um ein Datum in einen String umzuwandeln (an KI Bsp orientiert)
+function parseDatePassed (isoDate:string) {
+  if (isoDate) {
+    const date = new Date(isoDate);
+    const dayPart = date.toLocaleDateString("de-DE", {
+      weekday: "long",
+    });
+    const datePart = date.toLocaleDateString("de-DE", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    });
+    const timePart = date.toLocaleTimeString("de-DE", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+    return (`Nächster Termin: am ${dayPart} den ${datePart} um ${timePart} Uhr`)
+  } else {
+    return ('')
+  }
+}
+
+// Funktion, die beim Click auf den Löschen Button ausgeführt wird
+const deleteButtonClicked = () => {
+    console.log('Löschen-Button wurde geklickt!');
+  };
+
+// Funktion, die beim Click auf den Hinzufügen Button ausgeführt wird
+const addButtonClicked  = () => {
+    console.log('Hinzufügen-Button wurde geklickt!');
+    window.open('/formular'); // Zum öffnen in einer anderen Seite
+    //window.location.replace('/home'); // Zum öffnen auf dieser Seite
+  }; 
 

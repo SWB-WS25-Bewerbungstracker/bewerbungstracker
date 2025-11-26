@@ -12,6 +12,6 @@ public class JobofferDetails {
     private Integer jobofferid;
     private String joboffername;
     private String companyname;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime nextapptdate;
 }
