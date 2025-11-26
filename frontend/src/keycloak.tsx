@@ -6,4 +6,5 @@ const keycloak = new Keycloak({
  clientId: "bt-client",
 });
 
+
 export default keycloak;

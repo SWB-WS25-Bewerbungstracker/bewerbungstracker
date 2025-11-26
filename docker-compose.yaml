@@ -10,19 +10,26 @@ services:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - local_network
 
   app:
     build: ./backend
     container_name: spring-app
     depends_on:
       - db
+      - authentication
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/testdb
       SPRING_DATASOURCE_USERNAME: testU
       SPRING_DATASOURCE_PASSWORD: pass
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://authentication:7080/realms/myrealm
     ports:
       - "8080:8080"
+    networks:
+      - local_network
+
   authentication:
     image: quay.io/keycloak/keycloak:24.0
     container_name: keycloak
