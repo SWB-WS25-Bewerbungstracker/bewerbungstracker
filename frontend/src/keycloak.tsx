@@ -1,6 +1,7 @@
-import Keycloak from "keycloak-ts";
+import Keycloak from "keycloak-js";
+
 const keycloak = new Keycloak({
- url: "http://localhost:8080/auth",
+ url: "http://localhost:5173/login",
  realm: "bt-realm",
  clientId: "bt-client",
 });

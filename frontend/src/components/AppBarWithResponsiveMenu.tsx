@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link, useNavigate } from 'react-router-dom';  
+import keycloak from '../keycloak';
 
 // Tabs und Links dazu
 const pages = [
@@ -53,6 +54,7 @@ function ResponsiveAppBar() {
     //      localStorage.removeItem('authToken');
     // - Zurücksetzen des Auth-Status im Zustand
     // - Weiterleitung zur Login-Seite
+    keycloak.logout();
     navigate('/login');     
     console.log('User logged out');
   };

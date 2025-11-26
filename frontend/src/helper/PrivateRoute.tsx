@@ -1,10 +1,16 @@
-import { useKeycloak } from "@react-keycloak/web";
-// import { ReactNode } from "react";
+import { Navigate } from "react-router-dom";
+import keycloak from "../keycloak";
+import type { JSX } from "react/jsx-runtime";
 
-const PrivateRoute = ({ children }: { children?: ReactNode }) => {
-    const { keycloak } = useKeycloak();
+interface Props {
+  children: JSX.Element;
+}
 
-    const isLoggedIn = !!keycloak?.authenticated;
-
-    return isLoggedIn ? <>{children}</> : null;
+const PrivateRoute = ({ children }: Props) => {
+  if (!keycloak.authenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
 };
+
+export default PrivateRoute;

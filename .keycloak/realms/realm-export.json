@@ -1,7 +1,7 @@
 {
   "id": "42eafd55-d5f5-4d4f-9fa1-06eed6611b97",
   "realm": "bt-realm",
-  "displayName": "",
+  "displayName": "bewerbungstracker",
   "displayNameHtml": "",
   "notBefore": 0,
   "defaultSignatureAlgorithm": "RS256",
@@ -671,7 +671,7 @@
       "clientId": "bt-client",
       "name": "bewerbungstracker",
       "description": "",
-      "rootUrl": "http://localhost:8080",
+      "rootUrl": "http://localhost:5173",
       "adminUrl": "http://localhost:8080",
       "baseUrl": "",
       "surrogateAuthRequired": false,
@@ -680,10 +680,10 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "http://localhost:8080"
+        "http://localhost:5173"
       ],
       "webOrigins": [
-        "http://localhost:8080"
+        "http://localhost:5173"
       ],
       "notBefore": 0,
       "bearerOnly": false,
@@ -696,12 +696,20 @@
       "frontchannelLogout": true,
       "protocol": "openid-connect",
       "attributes": {
-        "oidc.ciba.grant.enabled": "false",
         "client.secret.creation.time": "1764097933",
-        "backchannel.logout.session.required": "true",
         "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "use.refresh.tokens": "true",
+        "oidc.ciba.grant.enabled": "false",
+        "client.use.lightweight.access.token.enabled": "false",
+        "backchannel.logout.session.required": "true",
+        "client_credentials.use_refresh_token": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "require.pushed.authorization.requests": "false",
+        "acr.loa.map": "{}",
         "display.on.consent.screen": "false",
-        "backchannel.logout.revoke.offline.tokens": "false"
+        "pkce.code.challenge.method": "S256",
+        "token.response.type.bearer.lower-case": "false"
       },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,
@@ -2221,7 +2229,7 @@
     "oauth2DeviceCodeLifespan": "600",
     "parRequestUriLifespan": "60",
     "clientSessionMaxLifespan": "0",
-    "frontendUrl": "https://localhost:8080",
+    "frontendUrl": "",
     "acr.loa.map": "{}"
   },
   "keycloakVersion": "24.0.5",
