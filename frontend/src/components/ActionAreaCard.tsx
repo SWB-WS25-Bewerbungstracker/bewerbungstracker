@@ -46,25 +46,28 @@ export default function ActionAreaCard({ id, title, image, description_1 = '', d
                 alt={title}
               />
             ) : (
+              /*Icon der Angezeigt werden soll, wenn es kein Bild gibt */
               <CardContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '140px' }}>
-                <SvgIcon component={BusinessIcon} sx={{ fontSize: '100px', color: 'grey.500' }} />
+                <SvgIcon component={BusinessIcon} sx={{ fontSize: '100px', color: 'primary' }} />
               </CardContent>
             ) 
             }
             {/* Textbereich der Karte */}
             <CardContent
               sx={{ 
+                // Inhalte vertikal anordnen
                 display: 'flex', 
-                flexDirection: 'column', // Inhalte vertikal anordnen
+                flexDirection: 'column',
+                // Ränder und Padding bei der Größe beachten
                 boxSizing: 'border-box',
+                // Abstandstyp zwischen den Inhalten
                 justifyContent: 'space-between' 
                 
               }}>
               {/* Titel der Karte */}
-              <Typography gutterBottom variant="h6" component="div" sx={{}}>
-                {title}
-              </Typography>
-              
+                <Typography variant='h6'>
+                  {title}
+                </Typography>
               {/* Beschreibung */}
               <div style={{
                   //display: 'flex', 
@@ -73,18 +76,12 @@ export default function ActionAreaCard({ id, title, image, description_1 = '', d
                   //position: 'absolute', // Text soll mit kleinem Abstand am unteren Kartenende stehen
                   //bottom: 10,  
                 }}>
-                <Typography variant="subtitle1" 
-                  sx={{ 
-                    color: 'text.primary', 
-                  }}>
+                <Typography variant="subtitle1">
                   {/*Damit Leerzeilen ausgegeben werden, wenn nichts übergeben wurde */}
                   {description_1.trim() === '' ? <br /> : description_1}
                   
                 </Typography>
-                <Typography variant="body1" 
-                  sx={{ 
-                    color: 'text.secondary'
-                  }}>
+                <Typography variant="body1">
                    {description_2.trim() === '' ? <br /> : description_2} 
                 </Typography>
               </div>
