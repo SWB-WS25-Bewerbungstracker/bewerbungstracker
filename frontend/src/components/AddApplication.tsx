@@ -1,7 +1,7 @@
 // https://mui.com/material-ui/react-text-field/
 // https://mui.com/material-ui/api/text-field/
 // https://mui.com/material-ui/react-autocomplete/#combo-box 
-import { Autocomplete, Box, Container, InputAdornment, Stack, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Container, InputAdornment, Paper, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import TestButtonGroup from "./TestButtonGroup";
 import axios from "axios";
@@ -89,15 +89,17 @@ export default function AddApplicationForm() {
 
   return (
     <>
-    <Container>
-        <Box
+    <Container sx={{
+        width:'100%',
+        display: 'flex',
+        flexDirection: 'column', 
+        gap: 2}}>
+        <Paper
             component="form"
-            sx={{
+            sx={{ 
                 '& > :not(style)': {
                     m: 1,
                     width: '100%',
-                    border: "thin solid",
-                    borderRadius: "16px",
                     padding: 2,
             }}}
         >
@@ -110,7 +112,7 @@ export default function AddApplicationForm() {
                     id="JobofferName"
                     label="Titel der Stellenausschreibung"
                     variant="outlined"
-                    sx={{ m: 1, width: '98%' }}
+                    sx={{ m: 1, width: '98%'}}
                     // Zuweisung der Daten für Übergabe
                     name="jobofferName"
                     value={formData.jobofferName}
@@ -120,15 +122,13 @@ export default function AddApplicationForm() {
                         input: {},
                     }} />
             </div>
-        </Box>
-        <Box
+        </Paper>
+        <Paper
             component="form"
             sx={{
                 '& > :not(style)': {
                     m: 1,
                     width: '100%',
-                    border: "thin solid",
-                    borderRadius: "16px",
                     padding: 2,
             }}}
         >
@@ -182,15 +182,13 @@ export default function AddApplicationForm() {
                     )}                     
                 /> )}
             </div>
-        </Box>
-        <Box
+        </Paper>
+        <Paper
             component="form"
             sx={{
                 '& > :not(style)': {
                     m: 1,
                     width: '100%',
-                    border: "thin solid",
-                    borderRadius: "16px",
                     padding: 2,
             }}}
         >
@@ -215,15 +213,13 @@ export default function AddApplicationForm() {
                         input: {},
                     }}/>
             </div>
-        </Box>
-        <Box
+        </Paper>
+        <Paper
             component="form"
             sx={{
                 '& > :not(style)': {
                     m: 1,
                     width: '100%',
-                    border: "thin solid",
-                    borderRadius: "16px",
                     padding: 2,
             }}}
         >
@@ -264,15 +260,13 @@ export default function AddApplicationForm() {
                         }}/>
                 </Stack>
             </div>
-        </Box>
-        <Box
+        </Paper>
+        <Paper
             component="form"
             sx={{
                 '& > :not(style)': {
                     m: 1,
                     width: '100%',
-                    border: "thin solid",
-                    borderRadius: "16px",
                     padding: 2,
             }}}
         >
@@ -382,16 +376,14 @@ export default function AddApplicationForm() {
                         }} />
                 </Stack>
             </div>
-        </Box>
-        <Box
+        </Paper>
+        <Paper
             component="form"
             sx={{
                 '& > :not(style)': {
                     m: 1,
                     display: "flex-wrap",
                     width: '100%',
-                    border: "thin solid",
-                    borderRadius: "16px",
                     padding: 2,
             }}}
         >
@@ -447,16 +439,14 @@ export default function AddApplicationForm() {
                         }} />
                 </Stack>
             </div>
-        </Box>
-        <Box
+        </Paper>
+        <Paper
             component="form"
             sx={{
                 '& > :not(style)': {
                     m: 1,
                     display: "flex-wrap",
                     width: '100%',
-                    border: "thin solid",
-                    borderRadius: "16px",
                     padding: 2,
             }}}
         >
@@ -505,15 +495,13 @@ export default function AddApplicationForm() {
                         }} />
                 </Stack>
             </div>
-        </Box>
-        <Box
+        </Paper>
+        <Paper
             component="form"
             sx={{
                 '& > :not(style)': {
                     m: 1,
                     width: '100%',
-                    border: "thin solid",
-                    borderRadius: "16px",
                     padding: 2,
             }}}
         >
@@ -538,15 +526,13 @@ export default function AddApplicationForm() {
                         input: {},
                     }}/>
             </div>
-        </Box>
-        <Box
+        </Paper>
+        <Paper
             component="form"
             sx={{
                 '& > :not(style)': {
                     m: 1,
                     width: '100%',
-                    border: "thin solid",
-                    borderRadius: "16px",
                     padding: 2,
             }}}
         >
@@ -569,15 +555,13 @@ export default function AddApplicationForm() {
                         input: {},
                     }}/>
             </div>
-        </Box>
-        <Box
+        </Paper>
+        <Paper
             component="form"
             sx={{
                 '& > :not(style)': {
                     m: 1,
                     width: '100%',
-                    border: "thin solid",
-                    borderRadius: "16px",
                     padding: 2,
             }}}
         >
@@ -602,7 +586,7 @@ export default function AddApplicationForm() {
                         input: {},
                     }}/>
             </div>
-        </Box>
+        </Paper>
         <Box
             component="form"
             sx={{
