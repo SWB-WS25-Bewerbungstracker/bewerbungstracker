@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/joboffer")
 @RequiredArgsConstructor
 public class JobofferCardViewController {
-    JobofferCardViewService jobofferCardViewService;
+    private final JobofferCardViewService jobofferCardViewService;
 
     @GetMapping
     public List<JobofferCardViewDTO> getAllJoboffers() {

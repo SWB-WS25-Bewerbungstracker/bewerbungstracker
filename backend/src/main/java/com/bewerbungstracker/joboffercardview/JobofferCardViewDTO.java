@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class JobofferCardViewDTO {
     private Integer jobofferid;
     private String joboffername;
+    private Integer companyid;
     private String companyname;
     // @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime nextapptdate;
