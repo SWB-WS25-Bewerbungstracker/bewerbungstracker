@@ -21,7 +21,7 @@ public class Company {
     @Column
     private String logo;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "companyaddress")
     private Address address;
 }
