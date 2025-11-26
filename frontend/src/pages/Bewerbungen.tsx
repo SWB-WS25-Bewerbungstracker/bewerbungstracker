@@ -95,30 +95,7 @@ const Bewerbungen: React.FC = () => {
 export default Bewerbungen;
 
 //-------------------------------------Hilfsfunktionen----------------------------------------------
-// Funktion, um ein Datum in einen String umzuwandeln (an KI Bsp orientiert)
-/*
-function parseDatePassed (isoDate:string) {
-  if (isoDate) {
-    const date = new Date(isoDate);
-    const dayPart = date.toLocaleDateString("de-DE", {
-      weekday: "long",
-    });
-    const datePart = date.toLocaleDateString("de-DE", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit"
-    });
-    const timePart = date.toLocaleTimeString("de-DE", {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-    return (`Nächster Termin: am ${dayPart} den ${datePart} um ${timePart} Uhr`)
-  } else {
-    return ('')
-  }
-}
-  */
-
+// Funktion, um ein Datum in einen String umzuwandeln 
 function parseDateToString (passedDate?: string) : string | undefined{
   // Versuchen, die Rückgabewerte der parseDatePassed-Funktion zu entpacken, falls dieser existiert
   if (passedDate){
