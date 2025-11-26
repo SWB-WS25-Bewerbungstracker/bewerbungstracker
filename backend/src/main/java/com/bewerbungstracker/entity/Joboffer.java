@@ -31,6 +31,7 @@ public class Joboffer {
     private String notes;
 
     @ManyToOne
+    @JoinColumn(name = "contact", referencedColumnName = "contactid")
     private Contact contact;
 
     @ManyToOne

@@ -8,11 +8,18 @@ import java.util.List;
 
 public interface JobofferCardViewRepository extends JpaRepository<Joboffer, Integer> {
     // Alle Joboffers für die Kartenansicht
-    @Query("SELECT " +
-            "jo.id, " +
-            "jo.jobtitle, " +
-            "jo.company.companyname, " +
-            "(SELECT MIN(a.appointmentdate) FROM Appointment a WHERE a.joboffer = jo AND a.appointmentdate>CURRENT_TIMESTAMP)" +
-            "FROM Joboffer jo ")
+    @Query("""
+            SELECT new com.bewerbungstracker.joboffercardview.JobofferCardViewDTO(
+                    jo.id,
+                    jo.jobtitle,
+                    jo.company.id,
+                    jo.company.companyname,
+                    MIN(a.appointmentdate)
+                )
+                FROM Joboffer jo
+                LEFT JOIN Appointment a ON a.joboffer = jo AND a.appointmentdate > CURRENT_TIMESTAMP
+                GROUP BY jo.id, jo.jobtitle, jo.company, jo.company.companyname
+                ORDER BY jo.id
+           """)
     List<JobofferCardViewDTO> getAllJoboffers();
 }
