@@ -1,5 +1,3 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 //import './App.css'
 import React from 'react'
@@ -21,13 +19,22 @@ keycloak
     onLoad: "login-required",
     checkLoginIframe: false,
     pkceMethod: "S256",
+    redirectUri: `${window.location.origin}/`,  // Explicit redirect URI
+    silentCheckSsoRedirectUri: undefined,
   })
-  .then(() => {
-    ReactDOM.createRoot(document.getElementById("root")!).render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    );
+  .then(authenticated => {
+    if (authenticated) {
+      ReactDOM.createRoot(document.getElementById('root')!).render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>,
+      )
+    } else {
+      keycloak.login()
+    }
+  })
+  .catch(() => {
+    console.error('Keycloak init failed')
   })
   setInterval(() => {
   keycloak
