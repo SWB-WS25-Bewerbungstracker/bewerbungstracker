@@ -9,15 +9,16 @@ import lombok.Data;
 public class Appuser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "userid")
     private Integer id;
 
-    @Column
+    @Column(name = "userfname")
     private String firstname;
 
-    @Column
+    @Column(name = "userlname")
     private String lastname;
 
-    @Column
+    @Column(name = "useremail")
     private String email;
 
     @ManyToOne
