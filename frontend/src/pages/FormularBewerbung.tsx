@@ -1,9 +1,11 @@
-import { Container, Typography } from "@mui/material";
+import { Container } from "@mui/material";
 import AddApplicationForm from "../components/AddApplication";
+import AddDateAndTime from "../components/AddDateAndTime";
 
 const FormularBewerbungHinzufuegen: React.FC = () => {
   return (
     <div>
+      { /*<AddDateAndTime/> */}
       <Container sx={{
         width: '100%',
         padding: 'auto',

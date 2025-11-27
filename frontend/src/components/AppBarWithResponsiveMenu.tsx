@@ -11,9 +11,10 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import { Link, useNavigate } from 'react-router-dom';  
 import keycloak from '../keycloak';
+import SvgIcon from '@mui/icons-material/Menu';
+import BusinessIcon from '@mui/icons-material/Business';
 
 // Tabs und Links dazu
 const pages = [
@@ -65,7 +66,7 @@ function ResponsiveAppBar() {
       }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <SvgIcon component={BusinessIcon} sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             component={Link}
@@ -130,7 +131,7 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ 
+          <SvgIcon component={BusinessIcon} sx={{ 
             display: { xs: 'flex', md: 'none' }, 
             mr: 1 , 
             //boxShadow: 'none'

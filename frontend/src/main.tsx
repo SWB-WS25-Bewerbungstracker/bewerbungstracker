@@ -27,11 +27,9 @@ keycloak
   .then(authenticated => {
     console.log('Keycloak authenticated:', authenticated)
     root.render(
-      <React.StrictMode>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </React.StrictMode>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     )
   })
   .catch((error) => {

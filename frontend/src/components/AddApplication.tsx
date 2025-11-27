@@ -1,11 +1,12 @@
 // https://mui.com/material-ui/react-text-field/
 // https://mui.com/material-ui/api/text-field/
 // https://mui.com/material-ui/react-autocomplete/#combo-box 
-import { Autocomplete, Box, Container, InputAdornment, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, InputAdornment, Paper, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import TestButtonGroup from "./TestButtonGroup";
 import axios from "axios";
 import { useCompanyData} from "../functions/getAllCompaniesAndId";
+import { Send } from "@mui/icons-material";
 
 /* Vllt Später für gloables Axios Setup?
 axios.defaults.baseURL = "http://localhost:8080";
@@ -30,9 +31,11 @@ export default function AddApplicationForm() {
         addressStreetNumber: '',
         addressPostcode: '',
         addressCity: '',
+        addressCountry: '',
         distanceLength: '',
         distanceTime: '',
-        contactName: '',
+        contactFirstName: '',
+        contactLastName: '',
         contactEmail: '',
         contactPhoneNumber: '',
         salaryMinimum: '',
@@ -89,22 +92,16 @@ export default function AddApplicationForm() {
 
   return (
     <>
-    <Container sx={{
+    <Box sx={{
         width:'100%',
         display: 'flex',
         flexDirection: 'column', 
         gap: 2,
         justifyContent: 'center',
-        alignContent: 'center'}}>
-        <Paper
-            component="form"
-            sx={{ 
-                '& > :not(style)': {
-                    m: 1,
-                    width: '100%',
-                    padding: 2,
-            }}}
-        >
+        alignContent: 'center',
+        padding: 2,
+        }}>
+        <Paper component="form">
             <div>
                 <Typography>
                     Wie heißt die Stelle bei der Sie sich bewerben wollen?
@@ -112,7 +109,8 @@ export default function AddApplicationForm() {
                 <TextField
                     // Darstellung
                     id="JobofferName"
-                    label="Titel der Stellenausschreibung"
+                    //label="Titel der Stellenausschreibung"
+                    placeholder="Titel der Stellenausschreibung"
                     variant="outlined"
                     sx={{ m: 1, width: '98%'}}
                     // Zuweisung der Daten für Übergabe
@@ -125,15 +123,7 @@ export default function AddApplicationForm() {
                     }} />
             </div>
         </Paper>
-        <Paper
-            component="form"
-            sx={{
-                '& > :not(style)': {
-                    m: 1,
-                    width: '100%',
-                    padding: 2,
-            }}}
-        >
+        <Paper component="form">
             <div>
                 <Typography>
                     Welches Unternehmen hat die Stelle ausgeschrieben?
@@ -168,10 +158,11 @@ export default function AddApplicationForm() {
                         <TextField
                             {...params}
                             // Zuweisung der Daten für Übergabe (falls Text eingegeben wurde und nicht mit Autocomplete ausgefüllt)
-                            label="Unternehmen"
+                            //label="Unternehmen"
                             name="companyName"
                             value={formData.companyName}
                             onChange={handleChange}
+                            placeholder="Unternehmen"
                             // Input
                             slotProps={{
                                 input: {
@@ -185,15 +176,7 @@ export default function AddApplicationForm() {
                 /> )}
             </div>
         </Paper>
-        <Paper
-            component="form"
-            sx={{
-                '& > :not(style)': {
-                    m: 1,
-                    width: '100%',
-                    padding: 2,
-            }}}
-        >
+        <Paper component="form">
             <div>
                 <Typography>
                     Kurzbeschriebung der Stelle
@@ -201,7 +184,8 @@ export default function AddApplicationForm() {
                 <TextField
                     // Darstellung
                     id="JobofferDescription"
-                    label="Beschreibung der Stelle"
+                    //label="Beschreibung der Stelle"
+                    placeholder="Beschreibung der Stelle"
                     variant="outlined"
                     multiline
                     minRows={5}
@@ -216,15 +200,7 @@ export default function AddApplicationForm() {
                     }}/>
             </div>
         </Paper>
-        <Paper
-            component="form"
-            sx={{
-                '& > :not(style)': {
-                    m: 1,
-                    width: '100%',
-                    padding: 2,
-            }}}
-        >
+        <Paper component="form">
             <div>
                 <Typography>
                     Termine
@@ -235,7 +211,8 @@ export default function AddApplicationForm() {
                     <TextField
                         // Darstellung
                         id="AppointmentDate"
-                        label="Datum"
+                        //label="Datum"
+                        placeholder="Datum"
                         variant="outlined"
                         sx={{ m: 1, width: '49%' }}
                         // Zuweisung der Daten für Übergabe  
@@ -249,7 +226,8 @@ export default function AddApplicationForm() {
                     <TextField
                         // Darstellung
                         id="AppointmentTime"
-                        label="Zeit"
+                        //label="Zeit"
+                        placeholder="Zeit"
                         variant="outlined"
                         sx={{ m: 1, width: '49%' }}
                         // Zuweisung der Daten für Übergabe  
@@ -263,17 +241,9 @@ export default function AddApplicationForm() {
                 </Stack>
             </div>
         </Paper>
-        <Paper
-            component="form"
-            sx={{
-                '& > :not(style)': {
-                    m: 1,
-                    width: '100%',
-                    padding: 2,
-            }}}
-        >
+        <Paper component="form">
             <div>
-                <Typography>
+                <Typography paddingBottom={1}>
                     Adresse
                 </Typography>
                 <Stack  direction="row" 
@@ -284,6 +254,7 @@ export default function AddApplicationForm() {
                         // Darstellung
                         id="AddressStreet"
                         label="Straße"
+                        //placeholder="Straße"
                         variant="outlined"
                         sx={{ m: 1, width: '79%' }}
                         // Zuweisung der Daten für Übergabe  
@@ -298,6 +269,7 @@ export default function AddApplicationForm() {
                         // Darstellung
                         id="AddressStreetNumber"
                         label="Hausnummer"
+                        //placeholder="Hausnummer"
                         variant="outlined"
                         sx={{ m: 1, width: '29%' }}
                         // Zuweisung der Daten für Übergabe  
@@ -309,13 +281,14 @@ export default function AddApplicationForm() {
                             input: {},
                         }} />
                 </Stack>
-                <Stack direction="row" spacing={1} paddingLeft={1}>
+                <Stack padding={1} direction="row" spacing={1} paddingLeft={1}>
                     <TextField
                         // Darstellung
                         id="AddressPostcode"
                         label="Postleitzahl"
+                        //placeholder="Postleitzahl"
                         variant="outlined"
-                        sx={{ m: 1, width: '49%' }}
+                        sx={{ m: 1, width: '29%' }}
                         // Zuweisung der Daten für Übergabe  
                         name="addressPostcode"
                         value={formData.addressPostcode}
@@ -328,8 +301,9 @@ export default function AddApplicationForm() {
                         // Darstellung
                         id="AddressCity"
                         label="Ort"
+                        //placeholder="Ort"
                         variant="outlined"
-                        sx={{ m: 1, width: '49%' }}
+                        sx={{ m: 1, width: '79%' }}
                         // Zuweisung der Daten für Übergabe  
                         name="addressCity"
                         value={formData.addressCity}
@@ -339,7 +313,22 @@ export default function AddApplicationForm() {
                             input: {},
                         }} />
                 </Stack>
-                <Typography>
+                <TextField
+                    // Darstellung
+                    id="AddressCountry"
+                    label="Land"
+                    //placeholder="Land"
+                    variant="outlined"
+                    sx={{ m: 1, width: '98%' }}
+                    // Zuweisung der Daten für Übergabe  
+                    name="addressCountry"
+                    value={formData.addressCountry}
+                    onChange={handleChange}
+                    // Input
+                    slotProps={{
+                        input: {},
+                    }} />
+                <Typography paddingBottom={1}>
                     <br></br>
                     Distanz
                 </Typography>
@@ -379,34 +368,45 @@ export default function AddApplicationForm() {
                 </Stack>
             </div>
         </Paper>
-        <Paper
-            component="form"
-            sx={{
-                '& > :not(style)': {
-                    m: 1,
-                    display: "flex-wrap",
-                    width: '100%',
-                    padding: 2,
-            }}}
-        >
+        <Paper component="form">
             <div>
-                <Typography>
+                <Typography paddingBottom={1}>
                     Kontaktperson
                 </Typography>
-                <TextField
-                    // Darstellung
-                    id="ContactName"
-                    label="Name"
-                    variant="outlined"
-                    sx={{ m: 1, width: '98%' }}
-                    // Zuweisung der Daten für Übergabe  
-                    name="contactName"
-                    value={formData.contactName}
-                    onChange={handleChange}
-                    // Input
-                    slotProps={{
-                        input: {},
+                <Stack direction="row" 
+                        spacing={1} 
+                        paddingLeft={1}
+                        paddingBottom={1}>
+                   <TextField
+                        // Darstellung
+                        id="ContactFirstName"
+                        label="Vorname"
+                        variant="outlined"
+                        sx={{ m: 1, width: '49%' }}
+                        // Zuweisung der Daten für Übergabe  
+                        name="contactFirstName"
+                        value={formData.contactFirstName}
+                        onChange={handleChange}
+                        // Input
+                        slotProps={{
+                            input: {},
                     }} />
+                    <TextField
+                        // Darstellung
+                        id="ContactLastName"
+                        label="Nachname"
+                        variant="outlined"
+                        sx={{ m: 1, width: '49%' }}
+                        // Zuweisung der Daten für Übergabe  
+                        name="contactLastName"
+                        value={formData.contactLastName}
+                        onChange={handleChange}
+                        // Input
+                        slotProps={{
+                            input: {},
+                    }} /> 
+                </Stack>
+                
                 <Stack  direction="row" 
                         spacing={1} 
                         paddingLeft={1}
@@ -442,24 +442,14 @@ export default function AddApplicationForm() {
                 </Stack>
             </div>
         </Paper>
-        <Paper
-            component="form"
-            sx={{
-                '& > :not(style)': {
-                    m: 1,
-                    display: "flex-wrap",
-                    width: '100%',
-                    padding: 2,
-            }}}
-        >
+        <Paper component="form">
             <div>
-                <Typography>
+                <Typography paddingBottom={1}>
                     Gehaltsspielraum
                 </Typography>
                 <Stack  direction="row" 
                         spacing={1} 
-                        paddingLeft={1}
-                        paddingTop={1}>
+                        paddingLeft={1}>
                     <TextField
                         // Darstellung
                         id="SalaryMinimum"
@@ -498,15 +488,7 @@ export default function AddApplicationForm() {
                 </Stack>
             </div>
         </Paper>
-        <Paper
-            component="form"
-            sx={{
-                '& > :not(style)': {
-                    m: 1,
-                    width: '100%',
-                    padding: 2,
-            }}}
-        >
+        <Paper component="form">
             <div>
                 <Typography>
                     Perks und Benefits
@@ -514,7 +496,8 @@ export default function AddApplicationForm() {
                 <TextField
                     // Darstellung
                     id="Perks"
-                    label="Perks"
+                    //label="Perks"
+                    placeholder="Perks"
                     variant="outlined"
                     multiline
                     minRows={5}
@@ -529,15 +512,7 @@ export default function AddApplicationForm() {
                     }}/>
             </div>
         </Paper>
-        <Paper
-            component="form"
-            sx={{
-                '& > :not(style)': {
-                    m: 1,
-                    width: '100%',
-                    padding: 2,
-            }}}
-        >
+        <Paper component="form">
             <div>
                 <Typography>
                     Größe des Unternehmens
@@ -545,7 +520,8 @@ export default function AddApplicationForm() {
                 <TextField
                     // Darstellung
                     id="NumberOfEmployees"
-                    label="Anzahl Mitarbeiter"
+                    //label="Anzahl Mitarbeiter"
+                    placeholder="Anzahl Mitarbeiter"
                     variant="outlined"
                     sx={{ m: 1, width: '98%' }}
                     // Zuweisung der Daten für Übergabe
@@ -558,15 +534,7 @@ export default function AddApplicationForm() {
                     }}/>
             </div>
         </Paper>
-        <Paper
-            component="form"
-            sx={{
-                '& > :not(style)': {
-                    m: 1,
-                    width: '100%',
-                    padding: 2,
-            }}}
-        >
+        <Paper component="form">
             <div>
                 <Typography>
                     Persönliche Notizen
@@ -574,7 +542,8 @@ export default function AddApplicationForm() {
                 <TextField
                     // Darstellung
                     id="PersonalNotes"
-                    label="Notizen"
+                    //label="Notizen"
+                    placeholder="Notizen"
                     variant="outlined"
                     multiline
                     minRows={5}
@@ -590,26 +559,22 @@ export default function AddApplicationForm() {
             </div>
         </Paper>
         <Box
-            component="form"
             sx={{
                 '& > :not(style)': {
-                    m: 1,
                     width: '100%',
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    borderRadius: "16px",
                     padding: 2,
-                    boxShadow: "none",
             }}}
         >
             {/* Senden Button */}
             <TestButtonGroup buttons={[
-                    { label: "Senden", onClick: () => { sendButtonClicked(); } }
+                    { label: "Senden", icon: < Send/>, iconPosition: 'end', onClick: () => { sendButtonClicked(); } }
                 ]} 
             />
         </Box>
-    </Container>  
+    </Box>  
     </>
   );
 }

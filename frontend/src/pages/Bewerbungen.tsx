@@ -94,8 +94,8 @@ const Bewerbungen: React.FC = () => {
           alignContent:'center'
           }}>
           <TestButtonGroup buttons={[
-              { label: "Löschen", icon: <Delete />, onClick: () => {deleteButtonClicked()} },
-              { label: "Hinzufügen", icon: <Add />, onClick: () => {addButtonClicked()}}
+              { label: "Löschen", icon: <Delete />, iconPosition:'start', onClick: () => {deleteButtonClicked()} },
+              { label: "Hinzufügen", icon: <Add />, iconPosition:'start', onClick: () => {addButtonClicked()}}
           ]}/>
         </Container>
       </Container>

@@ -17,8 +17,8 @@ export const theme: ThemeOptions = {
         },
         // Hintergrund
         background: {
-            default: '#ffffffff',
-            paper: '#d4d4ffff'
+            default: '#d4d4ffff',
+            paper: '#ffffffff'
         },
         // Text
         text: {
@@ -115,7 +115,8 @@ export const theme: ThemeOptions = {
 };
 
 export const brandedComponents: ThemeOptions['components'] = {
-  MuiButton: {
+    // Buttions
+    MuiButton: {
     defaultProps: {
       disableElevation: true,
     },
@@ -136,6 +137,16 @@ export const brandedComponents: ThemeOptions['components'] = {
         root: {
             color: 'black',
             textDecoration: 'none'
+        }
+    }
+  },
+  // Papers
+  MuiPaper: {
+    styleOverrides: {
+        root: {
+            m: 1,
+            width: '100%',
+            padding: '2%',
         }
     }
   }
