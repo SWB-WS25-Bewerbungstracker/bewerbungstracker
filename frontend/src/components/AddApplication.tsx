@@ -93,7 +93,9 @@ export default function AddApplicationForm() {
         width:'100%',
         display: 'flex',
         flexDirection: 'column', 
-        gap: 2}}>
+        gap: 2,
+        justifyContent: 'center',
+        alignContent: 'center'}}>
         <Paper
             component="form"
             sx={{ 

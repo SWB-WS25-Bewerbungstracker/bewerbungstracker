@@ -123,6 +123,7 @@ export const brandedComponents: ThemeOptions['components'] = {
       root: {
         minWidth: 'unset',
         textTransform: 'capitalize',
+        maxHeight: 'fit-content',
         '&:hover': {
           textDecoration: 'underline',
         },

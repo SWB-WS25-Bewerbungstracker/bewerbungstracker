@@ -1,11 +1,13 @@
 import CardGrid from "../components/Grid";
 import TestButtonGroup from "../components/TestButtonGroup"
+import { Delete, Add } from '@mui/icons-material'; 
 
 import { useEffect, useState } from "react"; 
 // useState: für den internen Zustand der Komponente (Unternehmensliste)
 // useEffect: führt Code nach dem Rendern aus (z. B. Daten vom Backend laden)
 import axios from "axios"; 
 import { parseDatePassed } from "../functions/parseDateFromIso";
+import { Container } from "@mui/material";
 // axios: Bibliothek, um HTTP-Requests (GET, POST, PUT, DELETE …) zu machen
 
 //-------------------------------------Interface----------------------------------------------
@@ -81,12 +83,23 @@ const Bewerbungen: React.FC = () => {
 
   return (
     <div>
-      <h2>Bewerbungen</h2>
-        <TestButtonGroup buttons={[
-            { label: "Löschen", onClick: () => {deleteButtonClicked()} },
-            { label: "Hinzufügen", onClick: () => {addButtonClicked()}}
-        ]}/>
-        <p> Leiste mit Filter/Suchfunktionen muss noch eingefügt werden.</p>
+      <Container sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+          }}>
+        <h1>Bewerbungen</h1>
+        <Container sx={{ 
+          padding: 'auto',
+          alignContent:'center'
+          }}>
+          <TestButtonGroup buttons={[
+              { label: "Löschen", icon: <Delete />, onClick: () => {deleteButtonClicked()} },
+              { label: "Hinzufügen", icon: <Add />, onClick: () => {addButtonClicked()}}
+          ]}/>
+        </Container>
+      </Container>
+      <p> Leiste mit Filter/Suchfunktionen muss noch eingefügt werden.</p>
       <CardGrid data={joboffer}/>
     </div>
   );
