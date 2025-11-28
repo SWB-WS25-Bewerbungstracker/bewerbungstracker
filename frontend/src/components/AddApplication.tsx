@@ -9,11 +9,6 @@ import { useCompanyData} from "../functions/getAllCompaniesAndId";
 import { Delete, Send } from "@mui/icons-material";
 import AddDateAndTime from "./AddDateAndTime";
 
-/* Vllt Später für gloables Axios Setup?
-axios.defaults.baseURL = "http://localhost:8080";
-axios.defaults.headers.post["Content-Type"] = "application/json";
- */
-
 export default function AddApplicationForm() {
 
     // Verwendung des Custom Hooks, um die Firmen- und Ladezustandsdaten zu holen

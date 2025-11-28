@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 // useState: für den internen Zustand der Komponente (Unternehmensliste)
 // useEffect: führt Code nach dem Rendern aus (z. B. Daten vom Backend laden)
 import axios from "axios"; 
-import { Box, Paper, Stack, Typography } from '@mui/material';
+import { Box, Container, Paper, Stack, Typography } from '@mui/material';
 // axios: Bibliothek, um HTTP-Requests (GET, POST, PUT, DELETE …) zu machen
 
 //-------------------------------------Interface----------------------------------------------
@@ -14,7 +14,10 @@ interface JobofferDetails {
   jobofferDescription: string;
   jobofferRating: string;
   jobofferNotes: string;
-  jobofferContactId: string;
+  contactId: string;
+  contactName: string;
+  contactEmail: string;
+  contactPhone: string;
   companyId: number;
   companyName: string;
   companyEmployees: number;
@@ -69,7 +72,10 @@ const Stellenansicht: React.FC = () => {
             jobofferDescription:  response.data.joboffer?.description,
             jobofferRating:       response.data.joboffer?.rating,
             jobofferNotes:        response.data.joboffer?.notes,
-            jobofferContactId:    response.data.joboffer?.contact.id,
+            contactId:            response.data.joboffer?.contact.id,
+            contactName:          response.data.joboffer?.contact.firstname + ' ' +response.data.joboffer?.contact.lastname,
+            contactEmail:         response.data.joboffer?.contact.email,
+            contactPhone:         response.data.joboffer?.contact.phoneno,
             companyId:            response.data.joboffer?.company.id,
             companyName:          response.data.joboffer?.company.companyname,
             companyEmployees:     response.data.joboffer?.company.empcount,
@@ -124,7 +130,7 @@ const Stellenansicht: React.FC = () => {
   }
 
   return (
-    <div>
+    <Box padding={2}>
       <h1>Stellenansicht</h1>
       <p>Hier werden Informationen über die Bewerbungsstelle angezeigt.</p>
         <Stack direction='column' spacing={2}>
@@ -164,7 +170,7 @@ const Stellenansicht: React.FC = () => {
         </Stack>
         
       
-    </div>
+    </Box>
   );
 };
 

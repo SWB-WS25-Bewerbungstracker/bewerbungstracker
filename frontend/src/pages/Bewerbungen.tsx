@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 // useEffect: führt Code nach dem Rendern aus (z. B. Daten vom Backend laden)
 import axios from "axios"; 
 import { parseDatePassed } from "../functions/parseDateFromIso";
-import { Container } from "@mui/material";
+import { Box, Container, Stack } from "@mui/material";
 // axios: Bibliothek, um HTTP-Requests (GET, POST, PUT, DELETE …) zu machen
 
 //-------------------------------------Interface----------------------------------------------
@@ -83,23 +83,15 @@ const Bewerbungen: React.FC = () => {
 
   return (
     <div>
-      <Container sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          }}>
+      <Stack padding={2} direction={'row'} spacing={'auto'} width={'100%'} alignItems={'center'}>
         <h1>Bewerbungen</h1>
-        <Container sx={{ 
-          padding: 'auto',
-          alignContent:'center'
-          }}>
+        <Box>
           <TestButtonGroup buttons={[
               { label: "Löschen", icon: <Delete />, iconPosition:'start', onClick: () => {deleteButtonClicked()} },
               { label: "Hinzufügen", icon: <Add />, iconPosition:'start', onClick: () => {addButtonClicked()}}
           ]}/>
-        </Container>
-      </Container>
-      <p> Leiste mit Filter/Suchfunktionen muss noch eingefügt werden.</p>
+        </Box>
+      </Stack>
       <CardGrid data={joboffer}/>
     </div>
   );
