@@ -60,7 +60,7 @@ export default function AddApplicationForm() {
         setFormData(prevState => {
         const updatedAppointments = [...prevState.appointmentDate]; // Termine abrufen
         updatedAppointments.splice(index, 1);  // Termin an dem jeweiligen Index aus der Liste entfernen
-        return { ...prevState, appointmentDates: updatedAppointments }; // restliche Termine übergeben
+        return { ...prevState, appointmentDate: updatedAppointments }; // restliche Termine übergeben
         });
     };
 
@@ -126,6 +126,7 @@ export default function AddApplicationForm() {
         }}>
         <Paper component="form">
             <div>
+            <Stack direction={'row'}>
                 <Typography>
                     Wie heißt die Stelle bei der Sie sich bewerben wollen?
                 </Typography>
@@ -144,6 +145,8 @@ export default function AddApplicationForm() {
                     slotProps={{
                         input: {},
                     }} />
+            </Stack>
+                
             </div>
         </Paper>
         <Paper component="form">
