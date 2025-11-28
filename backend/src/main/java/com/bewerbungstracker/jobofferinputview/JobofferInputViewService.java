@@ -1,18 +1,13 @@
 package com.bewerbungstracker.jobofferinputview;
 
-import com.bewerbungstracker.entity.Address;
-import com.bewerbungstracker.entity.Company;
-import com.bewerbungstracker.entity.Contact;
-import com.bewerbungstracker.entity.Joboffer;
-import com.bewerbungstracker.repository.AddressRepository;
-import com.bewerbungstracker.repository.CompanyRepository;
-import com.bewerbungstracker.repository.ContactRepository;
-import com.bewerbungstracker.repository.JobofferRepository;
+import com.bewerbungstracker.entity.*;
+import com.bewerbungstracker.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -24,6 +19,7 @@ public class JobofferInputViewService {
     private final CompanyRepository companyRepository;
     private final ContactRepository contactRepository;
     private final AddressRepository addressRepository;
+    private final AppointmentRepository appointmentRepository;
 
     private static void assignIfNotNull(String value, Consumer<String> setter) {
         if (value != null && !value.isBlank()) {
@@ -37,9 +33,10 @@ public class JobofferInputViewService {
         }
     }
 
-    public Joboffer saveJobofferInput(JobofferInputDTO jobofferInput) {
+    public void saveJobofferInput(JobofferInputDTO jobofferInput) {
         Joboffer joboffer = convertInputToJoboffer(jobofferInput);
-        return jobofferRepository.save(joboffer);
+        jobofferRepository.save(joboffer);
+        convertInputToAppointment(jobofferInput, joboffer);
     }
 
     private Joboffer convertInputToJoboffer(JobofferInputDTO jobofferInput) {
@@ -152,5 +149,18 @@ public class JobofferInputViewService {
         return contact;
     }
 
+    private void convertInputToAppointment(JobofferInputDTO jobofferInput, Joboffer joboffer) {
+        if (jobofferInput.getAppointmentDate().isEmpty()) {
+            return;
+        }
 
+        for (LocalDateTime appointmentToStore : jobofferInput.getAppointmentDate()) {
+            Appointment appointment = new Appointment();
+
+            appointment.setAppointmentdate(appointmentToStore);
+            appointment.setJoboffer(joboffer);
+
+            appointmentRepository.save(appointment);
+        }
+    }
 }
