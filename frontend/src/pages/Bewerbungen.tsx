@@ -1,21 +1,16 @@
 import CardGrid from "../components/Grid";
+import TestButtonGroup from "../components/TestButtonGroup"
+import { Delete, Add } from '@mui/icons-material'; 
 
 import { useEffect, useState } from "react"; 
 // useState: für den internen Zustand der Komponente (Unternehmensliste)
 // useEffect: führt Code nach dem Rendern aus (z. B. Daten vom Backend laden)
 import axios from "axios"; 
+import { parseDatePassed } from "../functions/parseDateFromIso";
+import { Container } from "@mui/material";
 // axios: Bibliothek, um HTTP-Requests (GET, POST, PUT, DELETE …) zu machen
 
-// Softwarearchitektur Bsp
-/*
-export default axios.create({
-  baseURL: "http://localhost:82[your-unique-numer]/api-[your-hs-esslingen-user-name]/item-management/v1",
-  headers: {
-    "Content-type": "application/json"
-  }
-});
-*/
-
+//-------------------------------------Interface----------------------------------------------
 // Die Interface für die Daten, die von der Axios Anfrage zurückkommen sollten
 interface JobofferData {
   id: number;
@@ -25,6 +20,7 @@ interface JobofferData {
   description_2?: string;
 }
 
+//-------------------------------------Seite----------------------------------------------
 const Bewerbungen: React.FC = () => {
   
   // An früherem KI-Bsp orientiert
@@ -40,18 +36,18 @@ const Bewerbungen: React.FC = () => {
     // Axios GET-Anfrage an das Backend senden
     axios
       // GET an Endpunkt mit Authentifizierungs-Cookie (wichtig: erst in http://localhost:8080/ einloggen)
-      .get('http://localhost:8080/joboffer', {withCredentials: true}) 
+      .get('http://localhost:8080/joboffer')
       // Verarbeiten der Antwort vom Backend
       .then((response) => {
         console.log('Antwort vom Server:', response.data); // Debugging
         // Umwandlung der Unternehmensnamen in das benötigte Format (durgehen des JSON Arrays und Zuweisen der Daten)
-        const transformedData = response.data.map((joboffer: { jobofferid: number; joboffername:string, companyname: string, nextapptdate: string}) => {
-          console.log('ID:', joboffer.jobofferid, 'Name:', joboffer.joboffername, 'Company:', joboffer.companyname, 'Next Apointment:', joboffer.nextapptdate); // Debugging
+        const transformedData = response.data.map((joboffer: { jobofferid: number; joboffername:string, companyid: number, companyname: string, nextapptdate: string}) => {
+          console.log('ID:', joboffer.jobofferid, 'Name:', joboffer.joboffername, 'Company ID:', joboffer.companyid, 'Company:', joboffer.companyname, 'Next Apointment:', joboffer.nextapptdate); // Debugging
           return { // Zuweisung der Daten 
             id: joboffer.jobofferid,
             title: joboffer.joboffername,
             description_1: joboffer.companyname,
-            description_2: joboffer.nextapptdate
+            description_2: parseDateToString(joboffer.nextapptdate)            
           };
         });
         // Speichern der Daten in eine Konstante außerhalb des Axios Blocks, damit diese danach an CardGrid übergeben werden kann
@@ -87,12 +83,58 @@ const Bewerbungen: React.FC = () => {
 
   return (
     <div>
-      <h2>Bewerbungen</h2>
-      <p>Leiste mit Buttons und Filter/Suchfunktionen muss noch eingefügt werden.</p>
+      <Container sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+          }}>
+        <h1>Bewerbungen</h1>
+        <Container sx={{ 
+          padding: 'auto',
+          alignContent:'center'
+          }}>
+          <TestButtonGroup buttons={[
+              { label: "Löschen", icon: <Delete />, iconPosition:'start', onClick: () => {deleteButtonClicked()} },
+              { label: "Hinzufügen", icon: <Add />, iconPosition:'start', onClick: () => {addButtonClicked()}}
+          ]}/>
+        </Container>
+      </Container>
+      <p> Leiste mit Filter/Suchfunktionen muss noch eingefügt werden.</p>
       <CardGrid data={joboffer}/>
     </div>
   );
 };
 
 export default Bewerbungen;
+
+//-------------------------------------Hilfsfunktionen----------------------------------------------
+// Funktion, um ein Datum in einen String umzuwandeln 
+function parseDateToString (passedDate?: string) : string | undefined{
+  // Versuchen, die Rückgabewerte der parseDatePassed-Funktion zu entpacken, falls dieser existiert
+  if (passedDate){
+    const result = parseDatePassed(passedDate); 
+    // Überprüfen, ob das Ergebnis ein Array ist und es entpacken
+    if (result && result.length === 3) {
+      const [dayPart, datePart, timePart] = result;
+
+      // Wenn alle Teile vorhanden sind, erstelle den Terminstring
+      return `Nächster Termin: am ${dayPart} den ${datePart} um ${timePart} Uhr`;
+    } else {
+      // Wenn das Ergebnis nicht gültig ist, gib einen leeren String zurück
+      return '';
+    }
+  }
+}
+
+// Funktion, die beim Click auf den Löschen Button ausgeführt wird
+const deleteButtonClicked = () => {
+    console.log('Löschen-Button wurde geklickt!');
+  };
+
+// Funktion, die beim Click auf den Hinzufügen Button ausgeführt wird
+const addButtonClicked  = () => {
+    console.log('Hinzufügen-Button wurde geklickt!');
+    window.open('/formular'); // Zum öffnen in einer anderen Seite
+    //window.location.replace('/home'); // Zum öffnen auf dieser Seite
+  }; 
 

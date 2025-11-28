@@ -12,15 +12,15 @@ public class Contact {
     @Column(name = "contactid")
     private Integer id;
 
-    @Column
+    @Column(name = "contactfname")
     private String firstname;
 
-    @Column
+    @Column(name = "contactlname")
     private String lastname;
 
-    @Column
+    @Column (name = "contactemail")
     private String email;
 
-    @Column
+    @Column (name = "contactphoneno")
     private String phoneno;
 }

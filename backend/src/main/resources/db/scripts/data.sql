@@ -158,3 +158,40 @@ VALUES
     (11, '2026-01-24 16:10:00', 'suscipit', 20),
     (12, '2026-01-30 15:00:00', 'dolorum', 21)
 ON CONFLICT DO NOTHING;
+
+
+-- Fix all serial keys to be correct
+SELECT setval(
+               pg_get_serial_sequence('address', 'addressid'),
+               COALESCE((SELECT MAX(addressid) FROM address), 1)
+       );
+
+SELECT setval(
+               pg_get_serial_sequence('contact', 'contactid'),
+               COALESCE((SELECT MAX(contactid) FROM contact), 1)
+       );
+
+SELECT setval(
+               pg_get_serial_sequence('appuser', 'userid'),
+               COALESCE((SELECT MAX(userid) FROM appuser), 1)
+       );
+
+SELECT setval(
+               pg_get_serial_sequence('company', 'companyid'),
+               COALESCE((SELECT MAX(companyid) FROM company), 1)
+       );
+
+SELECT setval(
+               pg_get_serial_sequence('joboffer', 'jobofferid'),
+               COALESCE((SELECT MAX(jobofferid) FROM joboffer), 1)
+       );
+
+SELECT setval(
+               pg_get_serial_sequence('document', 'documentid'),
+               COALESCE((SELECT MAX(documentid) FROM document), 1)
+       );
+
+SELECT setval(
+               pg_get_serial_sequence('appointment', 'appointmentid'),
+               COALESCE((SELECT MAX(appointmentid) FROM appointment), 1)
+       );

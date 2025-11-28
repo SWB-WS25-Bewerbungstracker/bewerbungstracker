@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS address
 CREATE TABLE IF NOT EXISTS contact
 (
     ContactID SERIAL PRIMARY KEY,
-    ContactFName TEXT NOT NULL,
-    ContactLName TEXT NOT NULL,
+    ContactFName TEXT,
+    ContactLName TEXT,
     ContactEmail TEXT,
     ContactPhoneNo TEXT
 );
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS appointment
 (
     AppointmentID SERIAL PRIMARY KEY,
     AppointmentDate TIMESTAMP NOT NULL,
-    AppointmentName TEXT NOT NULL,
+    AppointmentName TEXT,
 -- Foreign key to link to related application
     Joboffer INTEGER REFERENCES joboffer
 );

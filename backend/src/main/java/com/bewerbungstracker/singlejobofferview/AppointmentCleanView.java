@@ -1,4 +1,4 @@
-package com.bewerbungstracker.dto;
+package com.bewerbungstracker.singlejobofferview;
 
 import com.bewerbungstracker.entity.Appointment;
 import lombok.Data;

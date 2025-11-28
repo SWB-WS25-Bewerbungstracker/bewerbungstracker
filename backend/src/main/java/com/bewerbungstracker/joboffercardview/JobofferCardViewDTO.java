@@ -1,4 +1,4 @@
-package com.bewerbungstracker.dto;
+package com.bewerbungstracker.joboffercardview;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -8,10 +8,11 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class JobofferDetails {
+public class JobofferCardViewDTO {
     private Integer jobofferid;
     private String joboffername;
+    private Integer companyid;
     private String companyname;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime nextapptdate;
 }
