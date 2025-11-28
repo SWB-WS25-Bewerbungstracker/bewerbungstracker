@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS address
 CREATE TABLE IF NOT EXISTS contact
 (
     ContactID SERIAL PRIMARY KEY,
-    ContactFName TEXT NOT NULL,
-    ContactLName TEXT NOT NULL,
+    ContactFName TEXT,
+    ContactLName TEXT,
     ContactEmail TEXT,
     ContactPhoneNo TEXT
 );
