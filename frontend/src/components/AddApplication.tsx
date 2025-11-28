@@ -51,7 +51,7 @@ export default function AddApplicationForm() {
         setFormData(prevState => ({
             ...prevState, // Behalte die alten Daten bei
             // appointmentDate: combinedDate, // Aktualisiere nur appointmentDate
-            appointmentDates: [...prevState.appointmentDate, combinedDate] // die vorherigen Termine behalten und hinten den nächsten Termin anhängen
+            appointmentDate: [...prevState.appointmentDate, combinedDate] // die vorherigen Termine behalten und hinten den nächsten Termin anhängen
         }));
     };
 
@@ -91,6 +91,10 @@ export default function AddApplicationForm() {
             });
             // Antwort vom Server auslesen
             console.log("Server response:", response.data);
+
+            if (response.status === 201 || response.status === 200) {
+                window.close();
+            }
 
         } catch (error) {
             // Axios-Fehlerbehandlung 

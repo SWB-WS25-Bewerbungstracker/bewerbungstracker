@@ -82,7 +82,7 @@ const AddDateAndTime: React.FC<AddDateAndTimeProps> = ({ onSave }) =>  {
         setDateAndTime(combinedDateAndTime); 
 
         // KI: Die kombinierte Zeit als ISO-String an die übergeordnete Komponente zurückgeben
-        if (dateAndTime) onSave(dateAndTime.toISOString());
+        onSave(combinedDateAndTime.toISOString());
 
     }
 

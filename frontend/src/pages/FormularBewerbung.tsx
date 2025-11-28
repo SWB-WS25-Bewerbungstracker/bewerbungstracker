@@ -1,16 +1,12 @@
-import { Container } from "@mui/material";
+import { Container, Stack } from "@mui/material";
 import AddApplicationForm from "../components/AddApplication";
 
 const FormularBewerbungHinzufuegen: React.FC = () => {
   return (
     <div>
-      { /*<AddDateAndTime/> */}
-      <Container sx={{
-        width: '100%',
-        padding: 'auto',
-      }}>
+      <Stack padding={2} direction={'column'}>
         <h1> Bewerbung Hinzufügen </h1>
-      </Container>
+      </Stack>
       <AddApplicationForm/>
     </div>
   );
