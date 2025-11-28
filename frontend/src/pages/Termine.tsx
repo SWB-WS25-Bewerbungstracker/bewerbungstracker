@@ -102,6 +102,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Rabbit from '../components/TerminList'; //die TerminListe
 
+
+
 const Termine: React.FC = () => {
     return (
         <div style={{
