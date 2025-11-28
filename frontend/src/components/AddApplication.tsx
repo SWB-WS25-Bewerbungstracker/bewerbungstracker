@@ -26,9 +26,8 @@ export default function AddApplicationForm() {
         companyId: '',
         companyName: '',
         jobofferDescription: '',
-        //appointmentDate: '',
-        //appointmentTime: '',
-        appointmentDates: [] as string[], // Typ deklaration (mehrere Termine können so als Array gespeichert und übergeben werden)
+        appointmentDate: [] as string[], // Typ deklaration (mehrere Termine können so als Array gespeichert und übergeben werden)
+        appointmentTime: '',
         addressStreet: '',
         addressStreetNumber: '',
         addressPostcode: '',
@@ -52,14 +51,14 @@ export default function AddApplicationForm() {
         setFormData(prevState => ({
             ...prevState, // Behalte die alten Daten bei
             // appointmentDate: combinedDate, // Aktualisiere nur appointmentDate
-            appointmentDates: [...prevState.appointmentDates, combinedDate] // die vorherigen Termine behalten und hinten den nächsten Termin anhängen
+            appointmentDates: [...prevState.appointmentDate, combinedDate] // die vorherigen Termine behalten und hinten den nächsten Termin anhängen
         }));
     };
 
     // KI: Termin löschen
     const handleDeleteAppointment = (index: number) => {
         setFormData(prevState => {
-        const updatedAppointments = [...prevState.appointmentDates]; // Termine abrufen
+        const updatedAppointments = [...prevState.appointmentDate]; // Termine abrufen
         updatedAppointments.splice(index, 1);  // Termin an dem jeweiligen Index aus der Liste entfernen
         return { ...prevState, appointmentDates: updatedAppointments }; // restliche Termine übergeben
         });
@@ -232,12 +231,12 @@ export default function AddApplicationForm() {
                 <Typography variant="body1" sx={{ marginTop: 2 }}>Hinzugefügte Termine:</Typography>
       
                 {/* KI: Liste der hinzugefügten Termine */}
-                {formData.appointmentDates.length === 0 ? ( 
+                {formData.appointmentDate.length === 0 ? ( 
                     /* Wenn noch keine Termine hinzugefügt wurden, dann daruaf hinweisen */
                     <Typography variant="body2">Noch keine Termine hinzugefügt.</Typography>
                 ) : ( /* Wenn Termine vorgemerkt wurden, dann Liste der Termine anzeigen */
                     <ul>
-                    {formData.appointmentDates.map((appointment, index) => ( /* Liste der Termine durchiterieren */
+                    {formData.appointmentDate.map((appointment, index) => ( /* Liste der Termine durchiterieren */
                         <li key={index}>
                             <Stack direction={"row"} spacing={2} padding={1} alignItems={'center'}>
                                 <Typography variant="body1">
