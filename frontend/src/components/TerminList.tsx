@@ -1,68 +1,111 @@
 import Box from '@mui/material/Box';
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
+import { parseDatePassed } from "../functions/parseDateFromIso";
+import axios from "axios"; // für HHTP Requests( PUT, GET, etc.)
+import { useEffect, useState } from "react";
 
-const rows = [
-    { id: 1, FirmaName: 'Mercedes-Benz AG', Termin: 'Jjksdnf', Datum: 14 },
-    { id: 2, FirmaName: 'Snow', Termin: 'Jon', Datum: 14, Uhrzeit: 14.20, ToDo:'duschen' },
-    { id: 3, FirmaName: 'Snow', Termin: 'ton', Datum: 14, Uhrzeit: 14.20  },
-    { id: 4, FirmaName: 'Snow', Termin: 'don', Datum: 14, Uhrzeit: 14.20  },
-    { id: 5, FirmaName: 'Snow', Termin: 'son', Datum: 14, Uhrzeit: 14.20  },
-    { id: 6, FirmaName: 'Snow', Termin: 'non', Datum: 14, Uhrzeit: 14.20  },
-    { id: 7, FirmaName: 'Snow', Termin: 'von', Datum: 14, Uhrzeit: 14.20  },
-];
+//**************** INTERFACE *************************
+export interface terminListProps{
+    id : number,
+    datum : Date | string,
+    uhrzeit: string,
+    firmaName? : string,
+    terminName? : string,
+    toDo? : string,
+    contact? : string,
+}
 
-const columns: GridColDef<(typeof rows)[number]>[] = [
-    { field: 'id', headerName: 'ID', width: 90},
-    {
-        field: 'FirmaName',
-        headerName: 'Unternehmen',
-        maxWidth: 150,
-        editable: true,
-        align: 'left',
-    },
-    {
-        field: 'Termin',
-        headerName: 'Terminart',
-        width: 100,
-        editable: true,
-        align: 'left',
-    },
-    {
-        field: 'Datum',
-        headerName: 'Datum',
-        type: 'number',
-        width: 110,
-        editable: true,
-        align: 'center',
-        headerAlign: 'left',
-    },
-    {
-        field: 'Uhrzeit',
-        headerName: 'Uhrzeit',
-        type: 'number',
-        width: 100,
-        align: 'center',
-        headerAlign: 'center',
-        editable: true,
-    },
-    {
-        field: 'ToDo',
-        headerName: 'To-Do',
-        width: 160,
-        align: 'left',
-        headerAlign: 'left',
-        editable: true,
-    },
-];
+export interface BackendTermin {
+    appointmentID: number,
+    appointmentdate: string,
+    appointmentname: string,
+    jobofferID: number,
+    joboffername: string,
+    companyname: string,
+}
+
+
 
 const TerminList: React.FC = () => {
+
+    const [rows, setRows] = useState<terminListProps[]>([])
+    const columns: GridColDef<(typeof rows)[number]>[] = [
+        { field: 'id', headerName: 'ID', width: 90},
+        {
+            field: 'firmaName',
+            headerName: 'Unternehmen',
+            maxWidth: 150,
+            editable: true,
+            align: 'left',
+        },
+        {
+            field: 'terminName',
+            headerName: 'Terminart',
+            width: 100,
+            editable: true,
+            align: 'left',
+        },
+        {
+            field: 'datum',
+            headerName: 'Datum',
+            type: 'number',
+            width: 110,
+            editable: true,
+            align: 'center',
+            headerAlign: 'left',
+        },
+        {
+            field: 'uhrzeit',
+            headerName: 'Uhrzeit',
+            type: 'number',
+            width: 100,
+            align: 'center',
+            headerAlign: 'center',
+            editable: true,
+        },
+        {
+            field: 'toDo',
+            headerName: 'To-Do',
+            width: 160,
+            align: 'left',
+            headerAlign: 'left',
+            editable: true,
+        },
+        ];
+
+// use Effect wird immer aufgerufen beim ersten rendern.
+    useEffect(() => {
+        axios
+            .get('http://localhost:8080/appointments')
+            .then((response) =>
+        {
+            const appointmentDataMapped = response.data.map(
+                (t: BackendTermin): terminListProps => {
+                    const parsed = parseDatePassed(t.appointmentdate);
+                    return{
+                        id: t.appointmentID,
+                        datum: parsed[1],
+                        uhrzeit: parsed[2],
+                        firmaName: t.companyname,
+                        terminName: t.appointmentname,
+                        //toDo: t.toDo,
+                        //contact: t.contact
+                    };
+                }
+            );
+            setRows(appointmentDataMapped)
+        });
+    },[]);
+
+
+
     return (
-        <Box sx={{ height: 400, width: '100%' }}>
+        <Box sx={{ height: 370, width: '100%' }}>
             <DataGrid
                 sx={{
                     background: '',
                     '& .MuiDataGrid-row': {
-                        marginBottom: '8px',
+                        marginBottom: '0px',
                     },
                     '& .MuiDataGrid-row:last-child': {
                         marginBottom: 0,
