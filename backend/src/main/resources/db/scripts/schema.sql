@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS appointment
 (
     AppointmentID SERIAL PRIMARY KEY,
     AppointmentDate TIMESTAMP NOT NULL,
-    AppointmentName TEXT NOT NULL,
+    AppointmentName TEXT,
 -- Foreign key to link to related application
     Joboffer INTEGER REFERENCES joboffer
 );
