@@ -6,7 +6,8 @@ import { useState } from "react";
 import TestButtonGroup from "./TestButtonGroup";
 import axios from "axios";
 import { useCompanyData} from "../functions/getAllCompaniesAndId";
-import { Send } from "@mui/icons-material";
+import { Delete, Send } from "@mui/icons-material";
+import AddDateAndTime from "./AddDateAndTime";
 
 /* Vllt Später für gloables Axios Setup?
 axios.defaults.baseURL = "http://localhost:8080";
@@ -25,7 +26,7 @@ export default function AddApplicationForm() {
         companyId: '',
         companyName: '',
         jobofferDescription: '',
-        appointmentDate: '',
+        appointmentDate: [] as string[], // Typ deklaration (mehrere Termine können so als Array gespeichert und übergeben werden)
         appointmentTime: '',
         addressStreet: '',
         addressStreetNumber: '',
@@ -43,7 +44,25 @@ export default function AddApplicationForm() {
         perks: '',
         numberOfEmployees: '',
         personalNotes: '',
-    });;
+    });
+
+    // KI Callback, um das kombinierte Datum aus AddDateAndTime zu empfangen
+    const handleDateTimeSave = (combinedDate: string) => {
+        setFormData(prevState => ({
+            ...prevState, // Behalte die alten Daten bei
+            // appointmentDate: combinedDate, // Aktualisiere nur appointmentDate
+            appointmentDates: [...prevState.appointmentDate, combinedDate] // die vorherigen Termine behalten und hinten den nächsten Termin anhängen
+        }));
+    };
+
+    // KI: Termin löschen
+    const handleDeleteAppointment = (index: number) => {
+        setFormData(prevState => {
+        const updatedAppointments = [...prevState.appointmentDate]; // Termine abrufen
+        updatedAppointments.splice(index, 1);  // Termin an dem jeweiligen Index aus der Liste entfernen
+        return { ...prevState, appointmentDates: updatedAppointments }; // restliche Termine übergeben
+        });
+    };
 
     // Wird bei jeder Änderung in einem TextField aufgerufen (an KI Bsp orientiert)
     const handleChange = (e: { target: { name: string; value: unknown; }; }) => {
@@ -205,40 +224,32 @@ export default function AddApplicationForm() {
                 <Typography>
                     Termine
                 </Typography>
-                <Stack  direction="row" 
-                        spacing={1} 
-                        paddingLeft={1}>
-                    <TextField
-                        // Darstellung
-                        id="AppointmentDate"
-                        //label="Datum"
-                        placeholder="Datum"
-                        variant="outlined"
-                        sx={{ m: 1, width: '49%' }}
-                        // Zuweisung der Daten für Übergabe  
-                        name="appointmentDate"
-                        value={formData.appointmentDate}
-                        onChange={handleChange}
-                        // Input
-                        slotProps={{
-                            input: {},
-                        }}/>
-                    <TextField
-                        // Darstellung
-                        id="AppointmentTime"
-                        //label="Zeit"
-                        placeholder="Zeit"
-                        variant="outlined"
-                        sx={{ m: 1, width: '49%' }}
-                        // Zuweisung der Daten für Übergabe  
-                        name="appointmentTime"
-                        value={formData.appointmentTime}
-                        onChange={handleChange}
-                        // Input
-                        slotProps={{
-                            input: {},
-                        }}/>
-                </Stack>
+                {/* Datum und Zeit durch AddDateAndTime festlegen */}
+                <AddDateAndTime onSave={handleDateTimeSave} />
+
+                {/* KI: Anzeige des kombinierten Datums und der Zeit */}
+                <Typography variant="body1" sx={{ marginTop: 2 }}>Hinzugefügte Termine:</Typography>
+      
+                {/* KI: Liste der hinzugefügten Termine */}
+                {formData.appointmentDate.length === 0 ? ( 
+                    /* Wenn noch keine Termine hinzugefügt wurden, dann daruaf hinweisen */
+                    <Typography variant="body2">Noch keine Termine hinzugefügt.</Typography>
+                ) : ( /* Wenn Termine vorgemerkt wurden, dann Liste der Termine anzeigen */
+                    <ul>
+                    {formData.appointmentDate.map((appointment, index) => ( /* Liste der Termine durchiterieren */
+                        <li key={index}>
+                            <Stack direction={"row"} spacing={2} padding={1} alignItems={'center'}>
+                                <Typography variant="body1">
+                                    {new Date(appointment).toString()} {/* Termin auflisten */}
+                                </Typography>
+                                <TestButtonGroup buttons={[ /* Löschen Button für jeden Termin anzeigen*/
+                                    { label: "Entfernen", icon: < Delete/>, iconPosition: 'start', onClick: () => { handleDeleteAppointment(index); } }
+                                ]} />
+                            </Stack>
+                        </li>
+                    ))}
+                    </ul>
+                )}
             </div>
         </Paper>
         <Paper component="form">

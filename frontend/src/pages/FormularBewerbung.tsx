@@ -1,6 +1,5 @@
 import { Container } from "@mui/material";
 import AddApplicationForm from "../components/AddApplication";
-import AddDateAndTime from "../components/AddDateAndTime";
 
 const FormularBewerbungHinzufuegen: React.FC = () => {
   return (
