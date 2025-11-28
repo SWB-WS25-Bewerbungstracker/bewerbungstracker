@@ -88,7 +88,7 @@ const TerminList: React.FC = () => {
                         uhrzeit: parsed[2],
                         firmaName: t.companyname,
                         terminName: t.appointmentname,
-                        //toDo: t.toDo,
+                        //oDo: t.oDo,
                         //contact: t.contact
                     };
                 }
