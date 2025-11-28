@@ -3,6 +3,9 @@ package com.bewerbungstracker.jobofferinputview;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 @RequiredArgsConstructor
 public class JobofferInputDTO {
@@ -35,6 +38,6 @@ public class JobofferInputDTO {
     private String contactPhoneNumber;
 
     // Appointment related information
-    private String appointmentDate;
-    private String appointmentTime;
+    private List<LocalDateTime> appointmentDate;
+    //private String appointmentTime;
 }
