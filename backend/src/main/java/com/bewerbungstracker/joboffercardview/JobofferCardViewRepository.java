@@ -12,13 +12,14 @@ public interface JobofferCardViewRepository extends JpaRepository<Joboffer, Inte
             SELECT new com.bewerbungstracker.joboffercardview.JobofferCardViewDTO(
                     jo.id,
                     jo.jobtitle,
-                    jo.company.id,
-                    jo.company.companyname,
+                    c.id,
+                    c.companyname,
                     MIN(a.appointmentdate)
                 )
                 FROM Joboffer jo
+                LEFT JOIN jo.company c
                 LEFT JOIN Appointment a ON a.joboffer = jo AND a.appointmentdate > CURRENT_TIMESTAMP
-                GROUP BY jo.id, jo.jobtitle, jo.company, jo.company.companyname
+                GROUP BY jo.id, jo.jobtitle, c.id, c.companyname
                 ORDER BY jo.id
            """)
     List<JobofferCardViewDTO> getAllJoboffers();
