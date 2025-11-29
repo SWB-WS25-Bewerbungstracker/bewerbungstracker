@@ -2,6 +2,7 @@ package com.bewerbungstracker.singlejobofferview;
 
 import com.bewerbungstracker.entity.Appointment;
 import com.bewerbungstracker.entity.Joboffer;
+import com.bewerbungstracker.repository.JobofferRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class SingleJobofferViewService {
-    private final SingleJobofferViewRepository singleJobofferViewRepository;
+    private final JobofferRepository singleJobofferViewRepository;
 
     public SingleJobofferViewDetails getJobofferDetails(Integer offerid) {
         Joboffer joboffer = singleJobofferViewRepository.getJobofferById(offerid);
