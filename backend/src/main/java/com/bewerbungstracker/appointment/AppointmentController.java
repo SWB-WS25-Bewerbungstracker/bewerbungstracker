@@ -11,11 +11,11 @@ import java.util.List;
 @RequestMapping("/appointments")
 @RequiredArgsConstructor
 public class AppointmentController {
-    private final TempAppointmentService tempAppointmentService;
+    private final AppointmentService appointmentService;
 
     @GetMapping
     public List<AppointmentDTO> getAllAppointments() {
-        return tempAppointmentService.getAllAppointments();
+        return appointmentService.getAllAppointments();
     }
 
 }
