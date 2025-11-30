@@ -1,6 +1,7 @@
 import CardGrid from "../components/Grid";
 import TestButtonGroup from "../components/TestButtonGroup"
-import { Delete, Add } from '@mui/icons-material'; 
+import { Delete, Add } from '@mui/icons-material';
+import keycloak from "../keycloak"
 
 import { useEffect, useState } from "react"; 
 // useState: für den internen Zustand der Komponente (Unternehmensliste)
@@ -29,12 +30,20 @@ const Bewerbungen: React.FC = () => {
   const [joboffer, setJoboffer] = useState<JobofferData[]>([]); // Hält die Unternehmensdaten, die von der API abgerufen werden
   const [loading, setLoading] = useState<boolean>(true); // Zustand, der anzeigt, ob die Daten noch geladen werden
   const [error, setError] = useState<string | null>(null); // Fehlerbeschreibung
-    
+
   // useEffect-Hook
   // wird ausgeführt, wenn die Komponente zum ersten Mal gerendert wird
   useEffect(() => {
+    if(!keycloak || !keycloak.token) return;
+    const api = axios.create({
+      baseURL:'http://localhost:8080',
+      headers: {
+        Authorization:`Bearer ${keycloak.token}`
+        }
+    })
+    if(!keycloak.token) return;
     // Axios GET-Anfrage an das Backend senden
-    axios
+    api
       // GET an Endpunkt mit Authentifizierungs-Cookie (wichtig: erst in http://localhost:8080/ einloggen)
       .get('http://localhost:8080/joboffer')
       // Verarbeiten der Antwort vom Backend

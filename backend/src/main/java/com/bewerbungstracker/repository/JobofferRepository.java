@@ -23,10 +23,11 @@ public interface JobofferRepository extends JpaRepository<Joboffer, Integer> {
                 FROM Joboffer jo
                 LEFT JOIN jo.company c
                 LEFT JOIN Appointment a ON a.joboffer = jo AND a.appointmentdate > CURRENT_TIMESTAMP
+                WHERE jo.appuser.email = ?1
                 GROUP BY jo.id, jo.jobtitle, c.id, c.companyname
                 ORDER BY jo.id
            """)
-    List<JobofferCardViewDTO> getAllJoboffers();
+    List<JobofferCardViewDTO> getAllJoboffers(String email);
 
     @Query("SELECT jo FROM Joboffer jo WHERE jo.id=:id")
     Joboffer getJobofferById(@Param("id") Integer id);
