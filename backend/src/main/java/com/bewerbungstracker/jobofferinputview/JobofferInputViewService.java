@@ -60,9 +60,8 @@ public class JobofferInputViewService {
         */
 
         Company company = convertInputToCompany(jobofferInput);
-        if (company != null) {
-            companyRepository.save(company);
-        }
+        companyRepository.save(company);
+
 
         Contact contact = convertInputToContact(jobofferInput);
         if (contact != null) {
@@ -87,10 +86,7 @@ public class JobofferInputViewService {
         Address address = convertInputToAddress(jobofferInput);
 
         if (jobofferInput.getCompanyName().isBlank()) {
-            if (jobofferInput.getNumberOfEmployees() != null || address != null) {
-                throw new IllegalArgumentException("Company name must be provided if other company-related information is given.");
-            }
-            return null;
+            throw new IllegalArgumentException("Company name must be provided.");
         }
 
         if (address != null) {
