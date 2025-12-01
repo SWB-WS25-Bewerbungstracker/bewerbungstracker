@@ -1,16 +1,19 @@
-import axios, {AxiosHeaders} from 'axios';
+import axios from 'axios';
 import keycloak from '../keycloak';
 
 
 const applicationTrackerApi = axios.create({
     baseURL:'http://localhost:8080',
-})
+    headers: {
+        'Content-Type':'application/json',
+    },
+});
 
-//Mit Unterstützung von KI
+//With support from AI
+//Adding current JWT to requests
 applicationTrackerApi.interceptors.request.use(
-    async(config) => {
+    (config) => {
         // Authorization Header setzen
-        if (!config.headers) config.headers = new AxiosHeaders();
         config.headers.Authorization = `Bearer ${keycloak.token}`;
         return config;
     },
