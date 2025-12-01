@@ -2,7 +2,8 @@ import { useParams } from 'react-router-dom'; // Zum Verarbeiten der mitgegeben 
 import { useEffect, useState } from "react"; 
 // useState: für den internen Zustand der Komponente (Unternehmensliste)
 // useEffect: führt Code nach dem Rendern aus (z. B. Daten vom Backend laden)
-import axios from "axios"; 
+import axios from "axios";
+import applicationTrackerApi from "../services/api.ts";
 import { Box, Container, Paper, Stack, Typography } from '@mui/material';
 // axios: Bibliothek, um HTTP-Requests (GET, POST, PUT, DELETE …) zu machen
 
@@ -57,9 +58,9 @@ const Stellenansicht: React.FC = () => {
     if (id) {
 
     // Axios GET-Anfrage an das Backend senden
-    axios
+    applicationTrackerApi
       // GET an Endpunkt mit Authentifizierungs-Cookie (wichtig: erst in http://localhost:8080/ einloggen)
-      .get(`http://localhost:8080/joboffer/${id}`, {withCredentials: true})
+      .get(`/joboffer/${id}`, {withCredentials: true})
       // Verarbeiten der Antwort vom Backend
       .then((response) => {
         console.log('Antwort vom Server:', response.data); // Debugging

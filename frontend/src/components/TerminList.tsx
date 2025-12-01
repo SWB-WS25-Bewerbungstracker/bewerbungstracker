@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import { parseDatePassed } from "../functions/parseDateFromIso";
 import axios from "axios"; // für HHTP Requests( PUT, GET, etc.)
+import applicationTrackerApi from "../services/api.ts";
 import { useEffect, useState } from "react";
 
 //**************** INTERFACE *************************
@@ -75,8 +76,8 @@ const TerminList: React.FC = () => {
 
 // use Effect wird immer aufgerufen beim ersten rendern.
     useEffect(() => {
-        axios
-            .get('http://localhost:8080/appointments')
+        applicationTrackerApi
+            .get('/appointments')
             .then((response) =>
         {
             const appointmentDataMapped = response.data.map(

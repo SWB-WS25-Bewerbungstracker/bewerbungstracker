@@ -11,7 +11,7 @@
               <entry key="SPRING_DATASOURCE_URL" value="jdbc:postgresql://localhost:5433/testdb" />
               <entry key="SPRING_DATASOURCE_USERNAME" value="testU" />
               <entry key="SPRING_JPA_HIBERNATE_DDL_AUTO" value="update" />
-              <entry key="SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI" value="http://localhost:7080/realms/bt-realm" />
+              <entry key="SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI" value="http://authentication:7080/realms/bt-realm" />
             </map>
           </option>
           <option name="jreName" value="#USE_PROJECT_JDK" />

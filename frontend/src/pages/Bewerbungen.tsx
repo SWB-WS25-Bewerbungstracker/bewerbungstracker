@@ -2,6 +2,7 @@ import CardGrid from "../components/Grid";
 import TestButtonGroup from "../components/TestButtonGroup"
 import { Delete, Add } from '@mui/icons-material';
 import keycloak from "../keycloak"
+import applicationTrackerApi from "../services/api.ts"
 
 import { useEffect, useState } from "react"; 
 // useState: für den internen Zustand der Komponente (Unternehmensliste)
@@ -35,17 +36,12 @@ const Bewerbungen: React.FC = () => {
   // wird ausgeführt, wenn die Komponente zum ersten Mal gerendert wird
   useEffect(() => {
     if(!keycloak || !keycloak.token) return;
-    const api = axios.create({
-      baseURL:'http://localhost:8080',
-      headers: {
-        Authorization:`Bearer ${keycloak.token}`
-        }
-    })
+
     if(!keycloak.token) return;
     // Axios GET-Anfrage an das Backend senden
-    api
+    applicationTrackerApi
       // GET an Endpunkt mit Authentifizierungs-Cookie (wichtig: erst in http://localhost:8080/ einloggen)
-      .get('http://localhost:8080/joboffer')
+      .get('/joboffer')
       // Verarbeiten der Antwort vom Backend
       .then((response) => {
         console.log('Antwort vom Server:', response.data); // Debugging
