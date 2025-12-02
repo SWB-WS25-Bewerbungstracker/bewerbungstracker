@@ -157,8 +157,10 @@ const Stellenansicht: React.FC = () => {
           </Typography>
         </Paper>
         <Paper>
-          <Typography variant="h5"> Rating </Typography>
-          <Typography variant="body1">{joboffer?.jobofferRating}</Typography>
+          <Stack alignItems={"baseline"}>
+            <Typography variant="h5"> Rating </Typography>
+            <Typography variant="body1">{joboffer?.jobofferRating}</Typography>
+          </Stack>
         </Paper>
         <Paper>
           <Stack direction={"column"} spacing={0}>
@@ -173,7 +175,7 @@ const Stellenansicht: React.FC = () => {
         </Paper>
         <Paper>
           <Stack direction={"row"} spacing={2} alignItems={"center"}>
-            <Typography variant="h5"> Adresse: </Typography>
+            <Typography variant="h5"> Adresse </Typography>
             <Stack direction={"column"} spacing={0}>
               <Stack direction={"row"}>
                 <Typography variant="body1">
@@ -196,8 +198,10 @@ const Stellenansicht: React.FC = () => {
           </Stack>
         </Paper>
         <Paper>
-          <h2> Notizen: </h2>
-          <Typography variant="body1">{joboffer?.jobofferNotes}</Typography>
+          <Stack direction={"column"}>
+            <Typography variant="h5">Notizen: </Typography>
+            <Typography variant="body1">{joboffer?.jobofferNotes}</Typography>
+          </Stack>
         </Paper>
         {/*}
           <Paper> 
@@ -209,5 +213,13 @@ const Stellenansicht: React.FC = () => {
     </Box>
   );
 };
+
+// TO DO:
+// contactName
+// contactEmail
+// contactPhone
+
+// appointmentDate
+// appointmentName
 
 export default Stellenansicht;
