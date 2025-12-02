@@ -39,7 +39,7 @@ type Appointment = {
 
 //-------------------------------------Seite----------------------------------------------
 const Stellenansicht: React.FC = () => {
-  // Extrahiere die ID aus der URL
+  // KI: Extrahiere die ID aus der URL
   const { id } = useParams<{ id: string }>(); // Die ID kommt als URL-Parameter
 
   // useState-Hooks

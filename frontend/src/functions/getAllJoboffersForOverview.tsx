@@ -7,6 +7,7 @@ import { parseDateToString } from "./parseDate";
 /*// Verwendung des Custom Hooks, um die Joboffer- und Ladezustandsdaten zu holen:
     const { listOfJoboffers, loading, error } = useJobofferData(); */
 
+//-------------------------------------Interface----------------------------------------------
 // Typ für die Joboffer Daten
 export interface JobofferOverview {
   jobofferId: number;
@@ -17,6 +18,7 @@ export interface JobofferOverview {
   nextAppointment?: string;
 }
 
+//-------------------------------------Daten-API----------------------------------------------
 // Funktion zum Abrufen aller Jobofferdaten
 export async function getOverviewOfAllJoboffers() {
   try {
@@ -72,6 +74,7 @@ export async function getOverviewOfAllJoboffers() {
   }
 }
 
+//-------------------------------------Custom-Hook----------------------------------------------
 // Custom Hook, der die Joboffers abruft und den Ladezustand verwaltet sowie die Fehlerbehandlung übernimmt
 export function useJobofferData() {
   // const [variableName, setMethodName] = useState<type>(initialState); // Element, dass das enthält, wird neu geladen, wenn sich die variable ändert
