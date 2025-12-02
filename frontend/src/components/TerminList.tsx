@@ -35,7 +35,7 @@ const TerminList: React.FC = () => {
             field: 'firmaName',
             headerName: 'Unternehmen',
             maxWidth: 150,
-            editable: true,
+            editable: false,
             align: 'left',
         },
         {
@@ -66,7 +66,7 @@ const TerminList: React.FC = () => {
         {
             field: 'toDo',
             headerName: 'To-Do',
-            width: 160,
+            flex: 1, // soll die restliche Zeile auffüllen
             align: 'left',
             headerAlign: 'left',
             editable: true,
@@ -79,8 +79,10 @@ const TerminList: React.FC = () => {
             .get('http://localhost:8080/appointments')
             .then((response) =>
         {
-            const appointmentDataMapped = response.data.map(
-                (t: BackendTermin): terminListProps => {
+            const today = new Date(); //erstellt ein neues Objekt mit dem heuigen Datum.
+
+            const appointmentDataMapped = response.data
+                .map((t: BackendTermin): terminListProps => {
                     const parsed = parseDatePassed(t.appointmentdate);
                     return{
                         id: t.appointmentID,
@@ -91,8 +93,17 @@ const TerminList: React.FC = () => {
                         //oDo: t.oDo,
                         //contact: t.contact
                     };
-                }
-            );
+                })
+                //Filter erstellen, damit nur Termine Heute oder in Zukunft angezeigt werden
+                .filter((t: terminListProps) => {
+                    const [day, month, year] = t.datum.split('.').map(Number); //trennt string bei jedem Punkt, wandelt dann string in Zahlen um
+                    const date = new Date(year, month - 1, day);
+                    today.setHours(0, 0, 0, 0);
+                    date.setHours(0, 0, 0, 0);
+                    return date >= today;
+                })
+
+
             setRows(appointmentDataMapped)
         });
     },[]);
@@ -102,14 +113,26 @@ const TerminList: React.FC = () => {
     return (
         <Box sx={{ height: 370, width: '100%' }}>
             <DataGrid
-                sx={{
-                    background: '',
+                sx={{ background: 'transparent',
+
+                    '& .MuiDataGrid-columnHeaders': {
+                        backgroundColor: 'transparent',
+                    },
+                    '& .MuiDataGrid-columnHeader': {
+                        backgroundColor: 'transparent',
+                        color: 'black',
+                        fontWeight: 'bold',
+                    },
+
+
                     '& .MuiDataGrid-row': {
-                        marginBottom: '0px',
+                    marginBottom: '0px',
                     },
+
                     '& .MuiDataGrid-row:last-child': {
-                        marginBottom: 0,
+                    marginBottom: 0,
                     },
+
                 }}
                 rows={rows}
                 columns={columns}
