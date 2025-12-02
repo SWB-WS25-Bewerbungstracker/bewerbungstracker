@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 // useEffect: führt Code nach dem Rendern aus (z. B. Daten vom Backend laden)
 import axios from "axios"; 
 import { parseDatePassed } from "../functions/parseDateFromIso";
-import { Box, Container, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 // axios: Bibliothek, um HTTP-Requests (GET, POST, PUT, DELETE …) zu machen
 
 //-------------------------------------Interface----------------------------------------------
