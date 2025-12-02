@@ -11,10 +11,10 @@ export const theme: ThemeOptions = {
   palette: {
     // Primär- und Sekundärfarbe
     primary: {
-      main: "#00299bff",
+      main: "#000000ff",
     },
     secondary: {
-      main: "#5959ffff",
+      main: "#6e6effff",
     },
     // Hintergrund
     background: {
@@ -34,48 +34,52 @@ export const theme: ThemeOptions = {
   },
   // Text: Schriftart, -größe und -breite
   typography: {
-    fontFamily: "Roboto, sans-serif",
+    fontFamily: "Inter, sans-serif",
     h1: {
-      fontSize: "2.125rem",
-      fontWeight: 700,
+      fontSize: "3rem",
+      fontWeight: 600,
+      lineHeight: 1.2,
+      letterSpacing: -0.5,
     },
     h2: {
-      fontSize: "1.75rem",
-      fontWeight: 700,
+      fontSize: "2.25rem",
+      fontWeight: 600,
+      lineHeight: 1.2,
     },
     h3: {
-      fontSize: "1.75rem",
-      fontWeight: 700,
+      fontSize: "1.875rem",
+      lineHeight: 1.2,
     },
     h4: {
-      fontSize: "1.75rem",
-      fontWeight: 700,
+      fontSize: "1.5rem",
+      fontWeight: 600,
+      lineHeight: 1.5,
     },
     h5: {
-      fontSize: "1.75rem",
-      fontWeight: 700,
+      fontSize: "1.25rem",
+      fontWeight: 600,
     },
     h6: {
-      fontSize: "1.75rem",
-      fontWeight: 700,
+      fontSize: "1.125rem",
+      fontWeight: 600,
+    },
+    subtitle1: {
+      fontSize: "1.125rem",
+    },
+    subtitle2: {
+      fontSize: "1rem",
+      fontWeight: 500,
     },
     body1: {
       fontSize: "1rem",
     },
     body2: {
       fontSize: "1rem",
-    },
-    subtitle1: {
-      fontSize: "1rem",
-    },
-    subtitle2: {
-      fontSize: "1rem",
+      fontWeight: 400,
     },
     caption: {
-      fontSize: "1rem",
-    },
-    button: {
-      fontSize: "1rem",
+      fontSize: "0.8rem",
+      fontWeight: 400,
     },
   },
   // Standardabstand
@@ -179,6 +183,13 @@ export const customComponents: ThemeOptions["components"] = {
         width: "100%",
         padding: "2%",
       },
+    },
+  },
+  // Papers
+  MuiStack: {
+    defaultProps: {
+      direction: "row",
+      spacing: 1,
     },
   },
 };
