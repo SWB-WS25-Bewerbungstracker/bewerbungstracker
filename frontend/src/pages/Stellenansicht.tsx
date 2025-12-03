@@ -86,7 +86,7 @@ const Stellenansicht: React.FC = () => {
             addressCity: response.data.joboffer?.company.address.city,
             addressZipCode: response.data.joboffer?.company.address.zip,
             addressCountry: response.data.joboffer?.company.address.country,
-            appointments: (response.data.joboffer?.appointments || []).map(
+            appointments: (response.data.appointments || []).map(
               (appointment: {
                 id: number;
                 appointmentdate: string;
@@ -148,9 +148,7 @@ const Stellenansicht: React.FC = () => {
           <Typography variant="h1">{joboffer?.jobofferTitle}</Typography>
         </Paper>
         <Paper>
-          <Typography variant="h5" color="initial">
-            Beschreibung
-          </Typography>
+          <Typography variant="h5">Beschreibung</Typography>
           <Typography variant="body1">
             {" "}
             {joboffer?.jobofferDescription}{" "}

@@ -35,7 +35,7 @@ type Appointment = {
 // Die Interface für die Daten, die von der Axios Anfrage zurückkommen sollten
 interface JobofferResponse {
   joboffer: Joboffer;
-  appointments: Appointment[];
+  appointments: Appointments[];
 }
 
 type Joboffer = {
@@ -46,7 +46,6 @@ type Joboffer = {
   notes: string;
   contact: Contact;
   company: Company;
-  appointments: Appointments[];
 };
 
 type Contact = {
@@ -121,7 +120,7 @@ export async function getAllJobofferDetailsById(id: number) {
       addressCity: response.data.joboffer?.company.address.city,
       addressZipCode: response.data.joboffer?.company.address.zip,
       addressCountry: response.data.joboffer?.company.address.country,
-      appointments: (response.data.joboffer?.appointments || []).map(
+      appointments: (response.data.appointments || []).map(
         // KI Bug Fix: nicht auf appointments = undefinded gecheckt, und daher hat map nicht funktioniert
         (appointment: {
           id: number;
