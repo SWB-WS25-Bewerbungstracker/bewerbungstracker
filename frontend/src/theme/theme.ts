@@ -1,32 +1,64 @@
 // https://mui.com/material-ui/guides/building-extensible-themes/
 // https://mui.com/material-ui/customization/dark-mode/
 
-// Das ist erstmal nur ein Bsp von MUI an dem man sehen kann, wie Themes erstellt werden können
+// Das ist erstmal nur ein Bsp, wie Themes erstellt werden können
 
 import { createTheme } from "@mui/material/styles";
 import type { ThemeOptions } from "@mui/material/styles";
 
-export const theme: ThemeOptions = {
+// KI: Funktion zum Ermitteln des aktuellen Systemmodus
+export const getSystemMode = (): "light" | "dark" => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
+export const theme = (mode: "light" | "dark"): ThemeOptions => ({
   // Farbschema
   palette: {
-    // Primär- und Sekundärfarbe
-    primary: {
-      main: "#000000ff",
-    },
-    secondary: {
-      main: "#6e6effff",
-    },
-    // Hintergrund
-    background: {
-      default: "#d4d4ffff",
-      paper: "#ffffffff",
-    },
-    // Text
-    text: {
-      primary: "#000000ff",
-      secondary: "#292929ff",
-      disabled: "#757575ff",
-    },
+    mode, // KI: Tipp zur Implementation des Dark Modes: Auswahl von 'light' oder 'dark' möglich
+    ...(mode === "light" // Farben für den Light-Mode
+      ? {
+          // Primär- und Sekundärfarbe
+          primary: {
+            main: "#85a1ffff",
+          },
+          secondary: {
+            main: "#ff6eb6ff",
+          },
+          // Hintergrund
+          background: {
+            default: "#d4d4ffff",
+            paper: "#ffffffff",
+          },
+          // Text
+          text: {
+            primary: "#000000ff",
+            secondary: "#292929ff",
+            disabled: "#757575ff",
+          },
+        }
+      : {
+          // Farben für den Dark Mode
+          // Primär- und Sekundärfarbe
+          primary: {
+            main: "#002d57ff",
+          },
+          secondary: {
+            main: "#66001aff",
+          },
+          // Hintergrund
+          background: {
+            default: "#000000ff",
+            paper: "#252525ff",
+          },
+          // Text
+          text: {
+            primary: "#ffffffff",
+            secondary: "#bbbbbbff",
+            disabled: "#757575ff",
+          },
+        }),
   },
   // Abrundungen
   shape: {
@@ -106,14 +138,28 @@ export const theme: ThemeOptions = {
       standard: 300,
     },
   },
-  // Link-Farbe
+  // MUI-Link-Farbe
   components: {
     MuiLink: {
       styleOverrides: {
         root: {
-          color: "black", // Linkfarbe auf "inherit" setzen, sodass sie die Farbe des Elternteils übernimmt
+          color: mode === "light" ? "#000000" : "#ffffff", // Linkfarbe je nach Theme anders
           textDecoration: "none", // Standard-Link-Unterstreichung entfernen
-          cursor: "text",
+          cursor: "pointer",
+        },
+      },
+    },
+    // KI: Globale CSS-Überschreibungen für <a> Tags (HTML-Links)
+    MuiCssBaseline: {
+      styleOverrides: {
+        a: {
+          color: mode === "light" ? "#000000" : "#ffffff", // Link-Farbe basierend auf dem Modus (hell oder dunkel)
+          textDecoration: "none", // Keine standardmäßige Unterstreichung für Links
+          cursor: "pointer", // Stellt sicher, dass Cursor als "Zeiger" angezeigt wird, wenn über dem Link
+          "&:hover": {
+            color: mode === "light" ? "#000000" : "#ffffff", // Hover-Farbe für den Link basierend auf dem Modus
+            textDecoration: "underline", // Link wird unterstrichen, wenn der Benutzer mit der Maus darüber ist
+          },
         },
       },
     },
@@ -147,10 +193,10 @@ export const theme: ThemeOptions = {
     "none", //24
     "none", //25
   ],
-};
+});
 
 export const customComponents: ThemeOptions["components"] = {
-  // Buttions
+  // Buttons
   MuiButton: {
     defaultProps: {
       disableElevation: true,
@@ -166,15 +212,6 @@ export const customComponents: ThemeOptions["components"] = {
       },
     },
   },
-  // Text der Cards auf normale Textfarbe setzen
-  MuiCardContent: {
-    styleOverrides: {
-      root: {
-        color: "black",
-        textDecoration: "none",
-      },
-    },
-  },
   // Papers
   MuiPaper: {
     styleOverrides: {
@@ -185,7 +222,7 @@ export const customComponents: ThemeOptions["components"] = {
       },
     },
   },
-  // Papers
+  // Stack
   MuiStack: {
     defaultProps: {
       direction: "row",
@@ -194,26 +231,10 @@ export const customComponents: ThemeOptions["components"] = {
   },
 };
 
+// Theme erstellen
 const customTheme = createTheme({
-  ...theme,
+  ...theme(getSystemMode()),
   components: customComponents,
-  colorSchemes: {
-    light: {
-      palette: {
-        primary: {
-          main: "#FF5733",
-        },
-      },
-    },
-    // dark: true, // Dark Mode wird unterstützt
-    dark: {
-      palette: {
-        primary: {
-          main: "#E0C2FF",
-        },
-      },
-    },
-  },
 });
 
 export default customTheme;
