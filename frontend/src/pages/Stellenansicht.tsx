@@ -9,18 +9,20 @@ const Stellenansicht: React.FC = () => {
   // KI: Extrahiere die ID aus der URL
   const { id } = useParams<{ id: string }>(); // Die ID kommt als URL-Parameter
   // Daten mithilfe externer Funktion laden
-  const { jobofferDetails, loading, error } = useJobofferDetails(id);
+  const { jobofferDetails, loadingJoboffer, errorRetrievingJoboffer } =
+    useJobofferDetails(id);
   // Prüfen ob überhaupt Daten empfangen wurden
   if (!jobofferDetails) {
+    // sollte ein Leeres Array sein wenn keine Id mitgegeben wurde
     return <div>Keine Daten geladen...</div>;
   }
   // Falls noch Daten geladen werden, dies auf der Seite ausgeben
-  if (loading) {
+  if (loadingJoboffer) {
     return <div>Loading...</div>;
   }
   // Falls ein Fehler auftrat, den auf der Seite ausgeben
-  if (error) {
-    return <div>{error}</div>;
+  if (errorRetrievingJoboffer) {
+    return <div>{errorRetrievingJoboffer}</div>;
   }
 
   return (
@@ -31,7 +33,7 @@ const Stellenansicht: React.FC = () => {
       </Typography>
       <Stack direction="column" spacing={2}>
         <Paper>
-          <Typography variant="h1">{jobofferDetails.jobofferTitle}</Typography>
+          <Typography variant="h1">{jobofferDetails.jobofferName}</Typography>
         </Paper>
         <Paper>
           <Stack direction={"row"} spacing={2} alignItems={"center"}>
@@ -117,7 +119,9 @@ const Stellenansicht: React.FC = () => {
             </Box>
             <Stack direction={"column"} spacing={0}>
               <Typography variant="body1">
-                {jobofferDetails.contactName}
+                {jobofferDetails.contactFirstName +
+                  " " +
+                  jobofferDetails.contactLastName}
               </Typography>
               <Typography variant="body1">
                 {jobofferDetails.contactPhone}

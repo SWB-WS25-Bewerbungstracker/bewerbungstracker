@@ -5,29 +5,34 @@ import { useEffect, useState } from "react";
 // Die Interface für das Konstrukt, in das die Daten der Joboffer Detailansicht gespeichert werden
 export interface JobofferDetails {
   jobofferId: number;
-  jobofferTitle: string;
+  jobofferName: string;
   jobofferDescription: string;
   jobofferRating: number;
   jobofferNotes: string;
-  contactId: number;
-  contactName: string;
-  contactEmail: string;
-  contactPhone: string;
+
   companyId: number;
   companyName: string;
   companyEmployees: number;
   companyLogo: string;
+
+  appointments: Appointment[];
+
   addressId: number;
   addressStreet: string;
   addressStreetNumber: string;
-  addressCity: string;
   addressZipCode: number;
+  addressCity: string;
   addressCountry: string;
-  appointments: Appointment[];
+
+  contactId: number;
+  contactFirstName: string;
+  contactLastName: string;
+  contactEmail: string;
+  contactPhone: string;
 }
 
-type Appointment = {
-  appointmentId: number;
+export type Appointment = {
+  appointmentId: number | string;
   appointmentDate: string;
   appointmentName: string;
 };
@@ -81,7 +86,10 @@ type Appointments = {
 
 //-------------------------------------Daten-API----------------------------------------------
 // Funktion zum Abrufen aller Jobofferdaten
-export async function getAllJobofferDetailsById(id: string) {
+export async function getAllJobofferDetailsById(id?: string) {
+  if (!id) {
+    return null;
+  }
   try {
     // Daten mit Axios holen
     const response = await axios.get<JobofferResponse>(
@@ -99,15 +107,13 @@ export async function getAllJobofferDetailsById(id: string) {
     // Umwandlung der Daten in ein Array von Joboffer Details
     const jobofferData: JobofferDetails = {
       jobofferId: response.data.joboffer?.id,
-      jobofferTitle: response.data.joboffer?.jobtitle,
+      jobofferName: response.data.joboffer?.jobtitle,
       jobofferDescription: response.data.joboffer?.description,
       jobofferRating: response.data.joboffer?.rating,
       jobofferNotes: response.data.joboffer?.notes,
       contactId: response.data.joboffer?.contact.id,
-      contactName:
-        response.data.joboffer?.contact.firstname +
-        " " +
-        response.data.joboffer?.contact.lastname,
+      contactFirstName: response.data.joboffer?.contact.firstname,
+      contactLastName: response.data.joboffer?.contact.lastname,
       contactEmail: response.data.joboffer?.contact.email,
       contactPhone: response.data.joboffer?.contact.phoneno,
       companyId: response.data.joboffer?.company.id,
@@ -150,8 +156,8 @@ export async function getAllJobofferDetailsById(id: string) {
 export function useJobofferDetails(id?: string) {
   // const [variableName, setMethodName] = useState<type>(initialState); // Element, dass das enthält, wird neu geladen, wenn sich die variable ändert
   const [jobofferDetails, setJoboffer] = useState<JobofferDetails>(); // Joboffers speichern
-  const [loading, setLoading] = useState<boolean>(true); // Ladezustand speichern
-  const [error, setError] = useState<string | null>(null); // Fehlerbehandlung
+  const [loadingJoboffer, setLoading] = useState<boolean>(true); // Ladezustand speichern
+  const [errorRetrievingJoboffer, setError] = useState<string | null>(null); // Fehlerbehandlung
 
   // // useEffect wird nur einmal beim ersten Rendern des Components ausgeführt
   useEffect(() => {
@@ -205,5 +211,5 @@ export function useJobofferDetails(id?: string) {
   }, [id]); // Effekt läuft nur einmal beim ersten Laden, oder wenn sich die Id ändert
 
   // Alle Werte übergeben
-  return { jobofferDetails, loading, error };
+  return { jobofferDetails, loadingJoboffer, errorRetrievingJoboffer };
 }

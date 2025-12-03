@@ -1,3 +1,15 @@
+// Funktion, um ein Iso-Timestamp in ein Date Objekt umzuwandeln
+export function parseIsoStringToDateObject(isoDate: string): Date | null {
+  // Funktioniert nur für Iso-Timestamps
+  if (isoDate) {
+    // Aus dem Iso-Timestamp ein Datum-Objekt erstellen
+    const date = new Date(isoDate);
+    return date;
+  } else {
+    return null;
+  }
+}
+
 // Funktion, um ein Iso-Timestamp in die Komponenten Wochentag, Datum und Uhrzeit zu zerlegen (basierend auf KI Vorschlag(?))
 export function parseDateFromIso(isoDate: string): string[] | null {
   // Funktioniert nur für Iso-Timestamps
@@ -25,7 +37,7 @@ export function parseDateFromIso(isoDate: string): string[] | null {
   }
 }
 
-// Funktion, um ein Datum in einen String umzuwandeln
+// Funktion, um ein Datum in einen String für den nächsten Termin umzuwandeln
 export function parseDateToNextAppointmentString(
   passedDate?: string
 ): string | undefined {
