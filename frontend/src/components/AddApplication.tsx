@@ -14,7 +14,7 @@ import { useState } from "react";
 import TestButtonGroup from "./TestButtonGroup";
 import axios from "axios";
 import { useCompanyData } from "../functions/getAllCompaniesAndId";
-import { Delete, Send } from "@mui/icons-material";
+import { Delete, Edit, Send } from "@mui/icons-material";
 import AddDateAndTime from "./AddDateAndTime";
 import {
   useJobofferDetails,
@@ -58,6 +58,11 @@ interface JobofferFormData {
 
   perks: string;
 }
+/* type Appointment = {
+  appointmentId: number | string;
+  appointmentDate: string;
+  appointmentName: string;
+};*/
 
 // Standardwerte
 let jobofferInputData: JobofferFormData = {
@@ -96,13 +101,11 @@ let jobofferInputData: JobofferFormData = {
   perks: "",
 };
 
-/* type Appointment = {
-  appointmentId: number | string;
-  appointmentDate: string;
-  appointmentName: string;
-};*/
+interface AddApplicationFormProps {
+  id?: string; // Make id optional and of type string | undefined
+}
 
-export default function AddApplicationForm(id?: string) {
+const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
   /* ----------------------------------Bisherige Daten holen---------------------------------- */
 
   // Daten mithilfe externer Funktion laden
@@ -119,7 +122,12 @@ export default function AddApplicationForm(id?: string) {
   // Prüfen ob überhaupt Daten empfangen wurden
   else {
     // Debugging
-    console.log("Abrufen der Stellendaten für ", id);
+    console.log(
+      "Abrufen der Stellendaten für ",
+      id,
+      "Jobofferdaten: ",
+      jobofferDetails
+    );
     if (jobofferDetails) {
       jobofferInputData = {
         jobofferId: jobofferDetails.jobofferId,
@@ -176,48 +184,30 @@ export default function AddApplicationForm(id?: string) {
   // Konstrukt, in dem die Daten gespeichert werden und welches nachher ans Backend gesendet wird (Standard ist jobofferInputData)
   const [formData, setFormData] = useState<JobofferFormData>(jobofferInputData);
 
-  /* ----------------------------------Termine handeln---------------------------------- */
+  /* ----------------------------------Termine verarbeiten---------------------------------- */
 
   // Das kombinierte Datum aus AddDateAndTime hinzufügen, sowie AppointmentName
-  const handleAppointmentSave = (
-    date: string,
-    id?: string | number,
-    name?: string
-  ) => {
+  const handleAppointmentSave = (appointment: Appointment) => {
     setFormData((prevState) => {
-      // Neues Appointment erstellen
-      const newAppointment: Appointment = {
-        appointmentId: id || "",
-        appointmentDate: date,
-        appointmentName: name || "",
-      };
+      // Kopieren der bestehenden Termine um diese zu bearbeiten
+      // und hinten den neuen Termin anfügen
+      const updatedAppointments = [...prevState.appointments, appointment];
       return {
-        // Behalte die alten Daten bei
+        // der restliche Zustand bleibt unverändert
         ...prevState,
-        // die vorherigen Termine behalten und hinten den nächsten Termin anhängen
-        appointments: [...prevState.appointments, newAppointment],
+        // und nur die appointments werden aktualisier
+        appointments: updatedAppointments,
       };
     });
   };
 
   // Termin bearbeiten
-  const handleAppointmentEdit = (
-    index: number,
-    date: string,
-    id?: string | number,
-    name?: string
-  ) => {
+  const handleAppointmentEdit = (index: number, appointment: Appointment) => {
     setFormData((prevState) => {
-      // Neues Appointment erstellen
-      const newAppointment: Appointment = {
-        appointmentId: id || "",
-        appointmentDate: date,
-        appointmentName: name || "",
-      };
       // Kopieren der bestehenden Termine um diese zu bearbeiten
       const updatedAppointments = [...prevState.appointments];
       // zu bearbeitenden Termin ersetzen
-      updatedAppointments.splice(index, 1, newAppointment);
+      updatedAppointments.splice(index, 1, appointment);
       // der restliche Zustand bleibt unverändert
       // und nur die appointments werden aktualisiert
       return { ...prevState, appointments: updatedAppointments };
@@ -408,8 +398,6 @@ export default function AddApplicationForm(id?: string) {
                   value={formData.companyName}
                   onChange={handleChange}
                   placeholder="Unternehmen"
-                  // Falls bereits ein Wert besteht diesen anzeigen, sonst leer lassen
-                  defaultValue={formData.companyName || ""}
                   // Input
                   slotProps={{
                     input: {
@@ -430,8 +418,6 @@ export default function AddApplicationForm(id?: string) {
             id="JobofferDescription"
             //label="Beschreibung der Stelle"
             placeholder="Beschreibung der Stelle"
-            // Falls bereits ein Wert besteht diesen anzeigen, sonst leer lassen
-            defaultValue={formData.jobofferDescription || ""}
             variant="outlined"
             multiline
             minRows={5}
@@ -450,7 +436,10 @@ export default function AddApplicationForm(id?: string) {
         <Paper component="form">
           <Typography>Termine</Typography>
           {/* Datum und Zeit durch AddDateAndTime festlegen */}
-          <AddDateAndTime onSave={handleAppointmentSave} />
+          <AddDateAndTime
+            onSave={handleAppointmentSave}
+            editMode={false} // Setze den editMode-Flag, wenn der Bearbeitungsmodus aktiv ist
+          />
 
           {/* KI: Anzeige des kombinierten Datums und der Zeit */}
           <Typography variant="body1" sx={{ marginTop: 2 }}>
@@ -481,7 +470,17 @@ export default function AddApplicationForm(id?: string) {
                       </Typography>
                       <TestButtonGroup
                         buttons={[
-                          /* Löschen Button für jeden Termin anzeigen*/
+                          /* Bearbeiten Button für jeden Termin anzeigen*/
+                          {
+                            label: "Bearbeiten",
+                            icon: <Edit />,
+                            iconPosition: "start",
+                            onClick: () => {
+                              // Setze den Index für den Bearbeitungsmodus und gebe die bestehenden Werte weiter
+                              handleAppointmentEdit(index, appointment);
+                              //handleAppointmentEdit(index);
+                            },
+                          } /* Löschen Button für jeden Termin anzeigen*/,
                           {
                             label: "Entfernen",
                             icon: <Delete />,
@@ -837,4 +836,6 @@ export default function AddApplicationForm(id?: string) {
       </Box>
     </>
   );
-}
+};
+
+export default AddApplicationForm;

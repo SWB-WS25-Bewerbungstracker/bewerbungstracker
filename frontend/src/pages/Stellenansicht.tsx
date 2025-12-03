@@ -2,12 +2,15 @@ import { useParams } from "react-router-dom"; // Zum Verarbeiten der mitgegeben 
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { useJobofferDetails } from "../functions/getJobofferById";
 import { parseDateToString } from "../functions/parseDate";
+import TestButtonGroup from "../components/TestButtonGroup";
+import { Edit } from "@mui/icons-material";
 
 const TitleWidth = "20%";
 //-------------------------------------Seite----------------------------------------------
 const Stellenansicht: React.FC = () => {
-  // KI: Extrahiere die ID aus der URL
+  // Extrahiere die ID aus der URL
   const { id } = useParams<{ id: string }>(); // Die ID kommt als URL-Parameter
+
   // Daten mithilfe externer Funktion laden
   const { jobofferDetails, loadingJoboffer, errorRetrievingJoboffer } =
     useJobofferDetails(id);
@@ -26,122 +29,140 @@ const Stellenansicht: React.FC = () => {
   }
 
   return (
-    <Box padding={2}>
-      <Typography variant="h1">Stellenansicht</Typography>
-      <Typography variant="subtitle1">
-        Hier werden Informationen über die Bewerbungsstelle angezeigt.
-      </Typography>
-      <Stack direction="column" spacing={2}>
-        <Paper>
-          <Typography variant="h1">{jobofferDetails.jobofferName}</Typography>
-        </Paper>
-        <Paper>
-          <Stack direction={"row"} spacing={2} alignItems={"center"}>
-            <Box minWidth={TitleWidth}>
-              <Typography variant="h5"> Termine </Typography>
-            </Box>
-            <Stack>
-              {jobofferDetails.appointments.map((appointments) => {
-                return (
-                  <Stack>
-                    <Typography>{appointments.appointmentName}</Typography>
-                    <Typography>
-                      {parseDateToString(appointments.appointmentDate)}
-                    </Typography>
-                  </Stack>
-                );
-              })}
+    <>
+      {/* Daten bearbeiten können */}
+      <TestButtonGroup
+        buttons={[
+          {
+            label: "Bearbeiten",
+            icon: <Edit />,
+            iconPosition: "start",
+            onClick: () => {
+              window.open(`/formular/${id}`);
+            },
+          },
+        ]}
+      />
+      {/* Daten anzeigen */}
+      <Box padding={2}>
+        <Typography variant="h1">Stellenansicht</Typography>
+        <Typography variant="subtitle1">
+          Hier werden Informationen über die Bewerbungsstelle angezeigt.
+        </Typography>
+        <Stack direction="column" spacing={2}>
+          <Paper>
+            <Typography variant="h1">{jobofferDetails.jobofferName}</Typography>
+          </Paper>
+          <Paper>
+            <Stack direction={"row"} spacing={2} alignItems={"center"}>
+              <Box minWidth={TitleWidth}>
+                <Typography variant="h5"> Termine </Typography>
+              </Box>
+              <Stack>
+                {jobofferDetails.appointments.map((appointments) => {
+                  return (
+                    <Stack key={appointments.appointmentId}>
+                      <Typography>{appointments.appointmentName}</Typography>
+                      <Typography>
+                        {parseDateToString(appointments.appointmentDate)}
+                      </Typography>
+                    </Stack>
+                  );
+                })}
+              </Stack>
             </Stack>
-          </Stack>
-        </Paper>
-        <Paper>
-          <Typography variant="h5">Beschreibung</Typography>
-          <Typography variant="body1">
-            {" "}
-            {jobofferDetails.jobofferDescription}{" "}
-          </Typography>
-        </Paper>
-        <Paper>
-          <Stack alignItems={"baseline"}>
-            <Box minWidth={TitleWidth}>
-              <Typography variant="h5"> Rating </Typography>
-            </Box>
+          </Paper>
+          <Paper>
+            <Typography variant="h5">Beschreibung</Typography>
             <Typography variant="body1">
-              {jobofferDetails.jobofferRating}
+              {" "}
+              {jobofferDetails.jobofferDescription}{" "}
             </Typography>
-          </Stack>
-        </Paper>
-        <Paper>
-          <Stack direction={"column"} spacing={0}>
-            <Typography variant="h5">{jobofferDetails.companyName}</Typography>
+          </Paper>
+          <Paper>
             <Stack alignItems={"baseline"}>
               <Box minWidth={TitleWidth}>
-                <Typography variant="body1"> Mitarbeiteranzahl: </Typography>
+                <Typography variant="h5"> Rating </Typography>
               </Box>
               <Typography variant="body1">
-                {jobofferDetails.companyEmployees}
+                {jobofferDetails.jobofferRating}
               </Typography>
             </Stack>
-          </Stack>
-        </Paper>
-        <Paper>
-          <Stack direction={"row"} spacing={2} alignItems={"center"}>
-            <Box minWidth={TitleWidth}>
-              <Typography variant="h5"> Adresse </Typography>
-            </Box>
+          </Paper>
+          <Paper>
             <Stack direction={"column"} spacing={0}>
-              <Stack direction={"row"}>
+              <Typography variant="h5">
+                {jobofferDetails.companyName}
+              </Typography>
+              <Stack alignItems={"baseline"}>
+                <Box minWidth={TitleWidth}>
+                  <Typography variant="body1"> Mitarbeiteranzahl: </Typography>
+                </Box>
                 <Typography variant="body1">
-                  {jobofferDetails.addressStreet}
-                </Typography>
-                <Typography variant="body1">
-                  {jobofferDetails.addressStreetNumber}
-                </Typography>
-              </Stack>
-              <Stack direction={"row"}>
-                <Typography variant="body1">
-                  {jobofferDetails.addressZipCode}
-                </Typography>
-                <Typography variant="body1">
-                  {jobofferDetails.addressCity}
-                </Typography>
-                <Typography variant="body1">
-                  {jobofferDetails.addressCountry}
+                  {jobofferDetails.companyEmployees}
                 </Typography>
               </Stack>
             </Stack>
-          </Stack>
-        </Paper>
-        <Paper>
-          <Stack direction={"row"} spacing={2} alignItems={"center"}>
-            <Box minWidth={TitleWidth}>
-              <Typography variant="h5"> Kontaktperson </Typography>
-            </Box>
-            <Stack direction={"column"} spacing={0}>
+          </Paper>
+          <Paper>
+            <Stack direction={"row"} spacing={2} alignItems={"center"}>
+              <Box minWidth={TitleWidth}>
+                <Typography variant="h5"> Adresse </Typography>
+              </Box>
+              <Stack direction={"column"} spacing={0}>
+                <Stack direction={"row"}>
+                  <Typography variant="body1">
+                    {jobofferDetails.addressStreet}
+                  </Typography>
+                  <Typography variant="body1">
+                    {jobofferDetails.addressStreetNumber}
+                  </Typography>
+                </Stack>
+                <Stack direction={"row"}>
+                  <Typography variant="body1">
+                    {jobofferDetails.addressZipCode}
+                  </Typography>
+                  <Typography variant="body1">
+                    {jobofferDetails.addressCity}
+                  </Typography>
+                  <Typography variant="body1">
+                    {jobofferDetails.addressCountry}
+                  </Typography>
+                </Stack>
+              </Stack>
+            </Stack>
+          </Paper>
+          <Paper>
+            <Stack direction={"row"} spacing={2} alignItems={"center"}>
+              <Box minWidth={TitleWidth}>
+                <Typography variant="h5"> Kontaktperson </Typography>
+              </Box>
+              <Stack direction={"column"} spacing={0}>
+                <Typography variant="body1">
+                  {jobofferDetails.contactFirstName +
+                    " " +
+                    jobofferDetails.contactLastName}
+                </Typography>
+                <Typography variant="body1">
+                  {jobofferDetails.contactPhone}
+                </Typography>
+                <Typography variant="body1">
+                  {jobofferDetails.contactEmail}
+                </Typography>
+              </Stack>
+            </Stack>
+          </Paper>
+          <Paper>
+            <Stack direction={"column"}>
+              <Typography variant="h5">Notizen: </Typography>
               <Typography variant="body1">
-                {jobofferDetails.contactFirstName +
-                  " " +
-                  jobofferDetails.contactLastName}
-              </Typography>
-              <Typography variant="body1">
-                {jobofferDetails.contactPhone}
-              </Typography>
-              <Typography variant="body1">
-                {jobofferDetails.contactEmail}
+                {jobofferDetails.jobofferNotes}
               </Typography>
             </Stack>
-          </Stack>
-        </Paper>
-        <Paper>
-          <Stack direction={"column"}>
-            <Typography variant="h5">Notizen: </Typography>
-            <Typography variant="body1">
-              {jobofferDetails.jobofferNotes}
-            </Typography>
-          </Stack>
-        </Paper>
-      </Stack>
-    </Box>
+          </Paper>
+        </Stack>
+      </Box>
+    </>
   );
 };
 

@@ -87,8 +87,9 @@ type Appointments = {
 //-------------------------------------Daten-API----------------------------------------------
 // Funktion zum Abrufen aller Jobofferdaten
 export async function getAllJobofferDetailsById(id?: string) {
-  if (!id) {
-    return null;
+  // KI Fehlerkorrektur: zusätzlich zu null und undefined prüfen, ob id ein leeres Objekt ist
+  if (!id || (typeof id === "object" && Object.keys(id).length === 0)) {
+    return undefined;
   }
   try {
     // Daten mit Axios holen

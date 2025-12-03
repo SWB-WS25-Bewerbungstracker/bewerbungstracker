@@ -92,7 +92,7 @@ function App() {
               }
             />
             <Route
-              path="/formular"
+              path="/formular/:id?"
               element={
                 <PrivateRoute>
                   <FormularBewerbungHinzufuegen />
