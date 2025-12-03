@@ -216,7 +216,7 @@ export const theme = (mode: "light" | "dark"): ThemeOptions => ({
         root: {
           m: 1,
           width: "100%",
-          padding: "2%",
+          padding: "1%",
         },
       },
     },

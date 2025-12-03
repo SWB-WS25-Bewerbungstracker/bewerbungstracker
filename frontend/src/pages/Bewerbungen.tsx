@@ -2,12 +2,12 @@ import CardGrid from "../components/Grid";
 import TestButtonGroup from "../components/TestButtonGroup";
 import { Delete, Add } from "@mui/icons-material";
 import { Box, Stack } from "@mui/material";
-import { useJobofferData } from "../functions/getAllJoboffersForOverview";
+import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOverview";
 // axios: Bibliothek, um HTTP-Requests (GET, POST, PUT, DELETE …) zu machen
 
 //-------------------------------------Seite----------------------------------------------
 const Bewerbungen: React.FC = () => {
-  const { listOfJoboffers, loading, error } = useJobofferData();
+  const { listOfJoboffers, loading, error } = useOverviewOfAllJoboffers();
 
   // Umwandeln auf Typ den ActionAreaCard erwartet
   const listOfJoboffersForCard = listOfJoboffers.map((joboffer) => ({

@@ -81,7 +81,7 @@ type Appointments = {
 
 //-------------------------------------Daten-API----------------------------------------------
 // Funktion zum Abrufen aller Jobofferdaten
-export async function getAllJobofferDetailsById(id: number) {
+export async function getAllJobofferDetailsById(id: string) {
   try {
     // Daten mit Axios holen
     const response = await axios.get<JobofferResponse>(
@@ -147,7 +147,7 @@ export async function getAllJobofferDetailsById(id: number) {
 
 //-------------------------------------Custom-Hook----------------------------------------------
 // Custom Hook, der die Joboffers abruft und den Ladezustand verwaltet sowie die Fehlerbehandlung übernimmt
-export function useJobofferData(id: number) {
+export function useJobofferDetails(id?: string) {
   // const [variableName, setMethodName] = useState<type>(initialState); // Element, dass das enthält, wird neu geladen, wenn sich die variable ändert
   const [jobofferDetails, setJoboffer] = useState<JobofferDetails>(); // Joboffers speichern
   const [loading, setLoading] = useState<boolean>(true); // Ladezustand speichern
@@ -162,7 +162,13 @@ export function useJobofferData(id: number) {
         setError(null);
         // Ladezustand setzen (Daten werden geladen)
         setLoading(true);
-        // Daten mit seperater axios-get-Funktion holen
+
+        // Falls keine Id vorhanden:
+        if (!id) {
+          return { jobofferDetails: [], loading: false, error: null };
+        }
+
+        // Falls Id vorhanden: Daten mit seperater axios-get-Funktion holen
         const response = await getAllJobofferDetailsById(id);
 
         // Speichern der zugewiesenen Daten

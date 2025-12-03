@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { parseDateToString } from "./parseDate";
+import { parseDateToNextAppointmentString } from "./parseDate";
 
 /* Modul, dass die Liste an Joboffer-Daten holt */
 
@@ -60,7 +60,9 @@ export async function getOverviewOfAllJoboffers() {
           companyID: joboffer.companyid,
           companyName: joboffer.companyname,
           companyImage: "", // Default: Leerer String, da momentan noch kein Bild mitgegeben wird
-          nextAppointment: parseDateToString(joboffer.nextapptdate),
+          nextAppointment: parseDateToNextAppointmentString(
+            joboffer.nextapptdate
+          ),
         };
       }
     );
@@ -76,7 +78,7 @@ export async function getOverviewOfAllJoboffers() {
 
 //-------------------------------------Custom-Hook----------------------------------------------
 // Custom Hook, der die Joboffers abruft und den Ladezustand verwaltet sowie die Fehlerbehandlung übernimmt
-export function useJobofferData() {
+export function useOverviewOfAllJoboffers() {
   // const [variableName, setMethodName] = useState<type>(initialState); // Element, dass das enthält, wird neu geladen, wenn sich die variable ändert
   const [listOfJoboffers, setJobofferList] = useState<JobofferOverview[]>([]); // Joboffers speichern
   const [loading, setLoading] = useState<boolean>(true); // Ladezustand speichern
