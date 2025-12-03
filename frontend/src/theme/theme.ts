@@ -138,32 +138,6 @@ export const theme = (mode: "light" | "dark"): ThemeOptions => ({
       standard: 300,
     },
   },
-  // MUI-Link-Farbe
-  components: {
-    MuiLink: {
-      styleOverrides: {
-        root: {
-          color: mode === "light" ? "#000000" : "#ffffff", // Linkfarbe je nach Theme anders
-          textDecoration: "none", // Standard-Link-Unterstreichung entfernen
-          cursor: "pointer",
-        },
-      },
-    },
-    // KI: Globale CSS-Überschreibungen für <a> Tags (HTML-Links)
-    MuiCssBaseline: {
-      styleOverrides: {
-        a: {
-          color: mode === "light" ? "#000000" : "#ffffff", // Link-Farbe basierend auf dem Modus (hell oder dunkel)
-          textDecoration: "none", // Keine standardmäßige Unterstreichung für Links
-          cursor: "pointer", // Stellt sicher, dass Cursor als "Zeiger" angezeigt wird, wenn über dem Link
-          "&:hover": {
-            color: mode === "light" ? "#000000" : "#ffffff", // Hover-Farbe für den Link basierend auf dem Modus
-            textDecoration: "underline", // Link wird unterstrichen, wenn der Benutzer mit der Maus darüber ist
-          },
-        },
-      },
-    },
-  },
   // Schatten
   shadows: [
     // Standardmäßig alle Schatten auf 'none' (müssen leider 25 sein)
@@ -193,48 +167,75 @@ export const theme = (mode: "light" | "dark"): ThemeOptions => ({
     "none", //24
     "none", //25
   ],
-});
 
-export const customComponents: ThemeOptions["components"] = {
-  // Buttons
-  MuiButton: {
-    defaultProps: {
-      disableElevation: true,
-    },
-    styleOverrides: {
-      root: {
-        minWidth: "unset",
-        textTransform: "capitalize",
-        maxHeight: "fit-content",
-        "&:hover": {
-          textDecoration: "underline",
+  // MUI-Komponenten
+  components: {
+    // MUI-Link-Farbe
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          color: mode === "light" ? "#000000" : "#ffffff", // Linkfarbe je nach Theme anders
+          textDecoration: "none", // Standard-Link-Unterstreichung entfernen
+          cursor: "pointer",
         },
       },
     },
-  },
-  // Papers
-  MuiPaper: {
-    styleOverrides: {
-      root: {
-        m: 1,
-        width: "100%",
-        padding: "2%",
+    // KI: Globale CSS-Überschreibungen für <a> Tags (HTML-Links)
+    MuiCssBaseline: {
+      styleOverrides: {
+        a: {
+          color: mode === "light" ? "#000000" : "#ffffff", // Link-Farbe basierend auf dem Modus (hell oder dunkel)
+          textDecoration: "none", // Keine standardmäßige Unterstreichung für Links
+          cursor: "pointer", // Stellt sicher, dass Cursor als "Zeiger" angezeigt wird, wenn über dem Link
+          "&:hover": {
+            color: mode === "light" ? "#000000" : "#ffffff", // Hover-Farbe für den Link basierend auf dem Modus
+            textDecoration: "underline", // Link wird unterstrichen, wenn der Benutzer mit der Maus darüber ist
+          },
+        },
+      },
+    },
+    // Buttons
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+      },
+      styleOverrides: {
+        root: {
+          minWidth: "unset",
+          textTransform: "capitalize",
+          maxHeight: "fit-content",
+          "&:hover": {
+            textDecoration: "underline",
+          },
+        },
+      },
+    },
+    // Papers
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          m: 1,
+          width: "100%",
+          padding: "2%",
+        },
+      },
+    },
+    // Stack
+    MuiStack: {
+      defaultProps: {
+        direction: "row",
+        spacing: 1,
       },
     },
   },
-  // Stack
-  MuiStack: {
-    defaultProps: {
-      direction: "row",
-      spacing: 1,
-    },
-  },
-};
+});
+
+//export const customComponents: ThemeOptions["components"] = {};
 
 // Theme erstellen
 const customTheme = createTheme({
   ...theme(getSystemMode()),
-  components: customComponents,
+  //components: customComponents,
 });
 
 export default customTheme;
