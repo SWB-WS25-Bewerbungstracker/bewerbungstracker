@@ -75,9 +75,8 @@ const TerminList: React.FC = () => {
 
 // use Effect wird immer aufgerufen beim ersten rendern.
     useEffect(() => {
-        axios
-            .get('http://localhost:8080/appointments')
-            .then((response) =>
+        axios   .get('http://localhost:8080/appointments')
+                .then((response) =>
         {
             const today = new Date(); //erstellt ein neues Objekt mit dem heuigen Datum.
 
@@ -98,8 +97,6 @@ const TerminList: React.FC = () => {
                 .filter((t: terminListProps) => {
                     const [day, month, year] = t.datum.split('.').map(Number); //trennt string bei jedem Punkt, wandelt dann string in Zahlen um
                     const date = new Date(year, month - 1, day);
-                    today.setHours(0, 0, 0, 0);
-                    date.setHours(0, 0, 0, 0);
                     return date >= today;
                 })
 
@@ -118,7 +115,7 @@ const TerminList: React.FC = () => {
                     '& .MuiDataGrid-columnHeaders': {
                         backgroundColor: 'transparent',
                     },
-                    '& .MuiDataGrid-columnHeader': {
+                    '& .MuiDataGrid-columnHeader': {    //die einzelnen überschriften
                         backgroundColor: 'transparent',
                         color: 'black',
                         fontWeight: 'bold',
@@ -127,6 +124,9 @@ const TerminList: React.FC = () => {
 
                     '& .MuiDataGrid-row': {
                     marginBottom: '0px',
+                        '&:hover': {
+                            backgroundColor: 'lightblue'  // Beispiel-Hover-Farbe
+                        }
                     },
 
                     '& .MuiDataGrid-row:last-child': {
