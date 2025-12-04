@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TestButtonGroup from "./TestButtonGroup";
 import axios from "axios";
 import { useCompanyData } from "../functions/getAllCompaniesAndId";
@@ -20,7 +20,6 @@ import {
   useJobofferDetails,
   type Appointment,
 } from "../functions/getJobofferById";
-import { parseIsoStringToDateObject } from "../functions/parseDate";
 
 //-------------------------------------Interface----------------------------------------------
 interface JobofferFormData {
@@ -65,7 +64,7 @@ interface JobofferFormData {
 };*/
 
 // Standardwerte
-let jobofferInputData: JobofferFormData = {
+const jobofferInputData: JobofferFormData = {
   jobofferId: "",
   jobofferName: "",
   jobofferRating: "",
@@ -101,35 +100,43 @@ let jobofferInputData: JobofferFormData = {
   perks: "",
 };
 
+// KI: Anpassungstipp um das ganze mit Props nutzbar zu machen un  nicht Parametern, da es eine Komponente und keine Funktion ist
 interface AddApplicationFormProps {
-  id?: string; // Make id optional and of type string | undefined
+  id?: string; // Id soll optional sein
 }
+
+//-------------------------------------Komponente----------------------------------------------
 
 const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
   /* ----------------------------------Bisherige Daten holen---------------------------------- */
-
   // Daten mithilfe externer Funktion laden
   const { jobofferDetails, loadingJoboffer, errorRetrievingJoboffer } =
     useJobofferDetails(id);
+  // Um welchen Vorgang handelt es sich? (Bearbeiten oder Hinzufügen (default)?)
+  const [action, setAction] = useState<string>("Stellenangaben hinzufügen");
 
-  // Zum ausgeben, welcher vorgang gerade stattfindet (default: Hinzufügen)
-  let action = "Stellenangaben hinzufügen";
-  // Prüfen  Id mitgegeben wurde (= ob Stelle schon existiert)
-  if (!id) {
-    // sollte ein Leeres Array sein wenn keine Id mitgegeben wurde
-    action = "Stellenangaben hinzufügen";
-  }
-  // Prüfen ob überhaupt Daten empfangen wurden
-  else {
-    // Debugging
-    console.log(
-      "Abrufen der Stellendaten für ",
-      id,
-      "Jobofferdaten: ",
-      jobofferDetails
-    );
-    if (jobofferDetails) {
-      jobofferInputData = {
+  // KI Tipp: Zuweisung der Daten im useEffect um die Daten nach dem erfolgreichen Laden zu setzen
+  useEffect(() => {
+    // Prüfen  Id mitgegeben wurde (= ob Stelle schon existiert)
+    if (!id) {
+      // sollte ein Leeres Array sein wenn keine Id mitgegeben wurde
+      setAction("Stellenangaben hinzufügen");
+    }
+    // Prüfen ob Daten noch geladen werden
+    else if (loadingJoboffer) {
+      setAction("Daten werden geladen");
+    } // Prüfen ob ein Fehler auftrat
+    else if (errorRetrievingJoboffer) {
+      setAction("Es trat ein Fehler auf: " + errorRetrievingJoboffer);
+    } else if (jobofferDetails) {
+      // Debugging
+      console.log(
+        "Abrufen der Stellendaten für ",
+        id,
+        "Jobofferdaten: ",
+        jobofferDetails
+      ); // Falls noch Daten geladen werden, dies als Standardwerte setzen
+      setFormData({
         jobofferId: jobofferDetails.jobofferId,
         jobofferName: jobofferDetails.jobofferName,
         jobofferDescription: jobofferDetails.jobofferDescription,
@@ -163,16 +170,9 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
         salaryMaximum: "", // Wird aktuell bei getJobofferById noch nicht bereitgestellt
 
         perks: "", // Wird aktuell bei getJobofferById noch nicht bereitgestellt
-      };
-      // Falls noch Daten geladen werden, dies auf der Seite ausgeben
-      if (loadingJoboffer) {
-        action = "Daten werden geladen";
-      } // Falls ein Fehler auftrat, den auf der Seite ausgeben
-      if (errorRetrievingJoboffer) {
-        action = "Es trat ein Fehler auf: " + errorRetrievingJoboffer;
-      }
+      });
     }
-  }
+  }, [id, loadingJoboffer, errorRetrievingJoboffer, jobofferDetails]);
 
   /* ----------------------------------Unternehmensliste abrufen---------------------------------- */
 
@@ -311,6 +311,10 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
     console.log("Senden-Button wurde geklickt!");
     handleSubmit();
   };
+
+  /* ----------------------------------Setzen der Standardwerte fürs Formular---------------------------------- */
+
+  // setFormData(jobofferInputData);
 
   /* ----------------------------------Input Formular---------------------------------- */
 
