@@ -1,6 +1,11 @@
 // https://mui.com/material-ui/react-text-field/
 // https://mui.com/material-ui/api/text-field/
 // https://mui.com/material-ui/react-autocomplete/#combo-box
+
+/* Bugs gefunden:
+- Termine können gelöscht und hinzugefügt werden, aber noch nicht bearbeitet 
+*/
+
 import {
   Autocomplete,
   Box,
@@ -20,6 +25,9 @@ import {
   useJobofferDetails,
   type Appointment,
 } from "../functions/getJobofferById";
+import { parseDateToString } from "../functions/parseDate";
+
+const TitleWidth = "20%";
 
 //-------------------------------------Interface----------------------------------------------
 interface JobofferFormData {
@@ -179,7 +187,7 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
   /* ----------------------------------Unternehmensliste abrufen---------------------------------- */
 
   // Verwendung des Custom Hooks, um die Firmen- und Ladezustandsdaten zu holen
-  const { listOfCompanies, loading } = useCompanyData();
+  const { listOfCompanies, loadingCompanies } = useCompanyData();
 
   /* ----------------------------------Input Formular Datenkonstrukt---------------------------------- */
 
@@ -339,11 +347,24 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
 
         {/* ----------------------------------Titel der Stelle---------------------------------- */}
         <Paper component="form">
-          <Stack direction={"row"} alignItems={"center"}>
-            <Typography>Stelle</Typography>
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            sx={{ flexWrap: "wrap" }}
+          >
+            <Box minWidth={TitleWidth}>
+              <Typography>Stellenbezeichnung </Typography>
+            </Box>
+            {/* ---------------Textfeld Stelle--------------- */}
             <TextField
               // Darstellung
-              sx={{ m: 1, width: "98%" }}
+              // KI: Textfeld soll flexibel groß sein, aber Umbruch bei kleinen Bildschirmen ermöglichen
+              sx={{
+                //Auf kleinen Bildschirmen nimmt das Textfeld maximal 100% der Breite ein, anonsten flexibel groß
+                width: { xs: "100%", sm: "auto" },
+                flexGrow: 1, // Textfeld nimmt den verbleibenden Platz ein
+                minWidth: 200, // verhindert, dass das Textfeld zu schmal wird
+              }}
               id="JobofferName"
               label="Titel der Stellenausschreibung"
               variant="outlined"
@@ -358,96 +379,136 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
             />
           </Stack>
         </Paper>
+
         {/* ----------------------------------Unternehmen---------------------------------- */}
         <Paper component="form">
-          <Typography>
-            Welches Unternehmen hat die Stelle ausgeschrieben?
-          </Typography>
-          {loading ? (
-            <TextField
-              sx={{ m: 1, width: "98%" }}
-              label="Lade Firmen..."
-              variant="outlined"
-              disabled
-            />
-          ) : (
-            <Autocomplete
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            sx={{ flexWrap: "wrap" }}
+          >
+            <Box minWidth={TitleWidth}>
+              <Typography>Unternehmen</Typography>
+            </Box>
+
+            {/* ---------------Autocomplete-Textfeld Unternehmen--------------- */}
+            {/* Während Unternehmensliste noch geladen wird: */}
+            {loadingCompanies ? (
+              <TextField
+                // KI: Textfeld soll flexibel groß sein, aber Umbruch bei kleinen Bildschirmen ermöglichen
+                sx={{
+                  //Auf kleinen Bildschirmen nimmt das Textfeld maximal 100% der Breite ein, anonsten flexibel groß
+                  width: { xs: "100%", sm: "auto" },
+                  flexGrow: 1, // Textfeld nimmt den verbleibenden Platz ein
+                  minWidth: 200, // verhindert, dass das Textfeld zu schmal wird
+                }}
+                label="Unternehmen"
+                placeholder="Lade Firmen..."
+                variant="outlined"
+                disabled
+              />
+            ) : (
+              /* Nachdem Unternehmensliste geladen wurde: */
               // Darstellung Autocomplete
-              freeSolo // Benutzer kann eigene Eingaben machen
-              id="CompanyName"
-              // KI Fehlerverbesserung --------
-              // Dropdown Auswahl (Liste an Unternehmen)
-              options={listOfCompanies.map((company) => company.name)} // Nur die Namen der Unternehmen anzeigen
-              //getOptionLabel={(option) => option} // Einfach nur den Namen anzeigen
-              //value={formData.companyName || ""} // Wenn es einen Wert gibt, zeige ihn an, sonst leer
-              onChange={(_event, newValue) => {
-                // Wenn der Benutzer einen Namen auswählt
-                const selectedName = newValue || ""; // Entweder den ausgewählten Wert nehmen oder sonst leer lassen
-                // Finde das Unternehmen anhand des eingegebenen Namens (um Id wieder zu bekommen für Zuweisung)
-                const selectedCompany = listOfCompanies.find(
-                  (c) => c.name === selectedName
-                );
-                // Zuweisen der Daten
-                setFormData((prev) => ({
-                  ...prev,
-                  companyName: selectedName,
-                  companyId: selectedCompany ? selectedCompany.id : "", // Falls keine Firma gefunden, ID leer lassen
-                }));
-              }}
-              // Ende KI Fehlerverbesserung -------
-              sx={{ m: 1, width: "98%" }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  // Zuweisung der Daten für Übergabe (falls Text eingegeben wurde und nicht mit Autocomplete ausgefüllt)
-                  //label="Unternehmen"
-                  name="companyName"
-                  value={formData.companyName}
-                  onChange={handleChange}
-                  placeholder="Unternehmen"
-                  // Input
-                  slotProps={{
-                    input: {
-                      ...params.InputProps,
-                      type: "search",
-                    },
-                  }}
-                />
-              )}
-            />
-          )}
+              <Autocomplete
+                freeSolo // Benutzer kann auch eigene Eingaben machen
+                id="CompanyName"
+                // KI Fehlerverbesserung --------
+                // Dropdown Auswahl (Liste an Unternehmen)
+                options={listOfCompanies.map((company) => company.name)} // Nur die Namen der Unternehmen anzeigen
+                //getOptionLabel={(option) => option} // Einfach nur den Namen anzeigen
+                value={formData.companyName || ""} // Wenn es einen Wert gibt, zeige ihn an, sonst leer
+                onChange={(_event, newValue) => {
+                  // Wenn der Benutzer einen Namen auswählt
+                  const selectedName = newValue || ""; // Entweder den ausgewählten Wert nehmen oder sonst leer lassen
+                  // Finde das Unternehmen anhand des eingegebenen Namens (um Id wieder zu bekommen für Zuweisung)
+                  const selectedCompany = listOfCompanies.find(
+                    (c) => c.name === selectedName
+                  );
+                  // Zuweisen der Daten
+                  setFormData((prev) => ({
+                    ...prev,
+                    companyName: selectedName,
+                    companyId: selectedCompany ? selectedCompany.id : "", // Falls keine Firma gefunden, ID leer lassen
+                  }));
+                }}
+                // Ende Fehlerverbesserung -------
+                // KI: Textfeld soll flexibel groß sein, aber Umbruch bei kleinen Bildschirmen ermöglichen
+                sx={{
+                  //Auf kleinen Bildschirmen nimmt das Textfeld maximal 100% der Breite ein, anonsten flexibel groß
+                  width: { xs: "100%", sm: "auto" },
+                  flexGrow: 1, // Textfeld nimmt den verbleibenden Platz ein
+                  minWidth: 200, // verhindert, dass das Textfeld zu schmal wird
+                }}
+                // Wenn kein Unternehmen ausgewählt ist, soll eins eingegeben werden können
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    // Darstellung des Textfelds
+                    label="Unternehmen"
+                    // Zuweisung der Daten für Übergabe (falls Text eingegeben wurde und nicht mit Autocomplete ausgefüllt)
+                    name="companyName"
+                    value={formData.companyName}
+                    onChange={handleChange}
+                    // Input
+                    slotProps={{
+                      input: {
+                        ...params.InputProps,
+                        type: "search",
+                      },
+                    }}
+                  />
+                )}
+              />
+            )}
+          </Stack>
         </Paper>
         {/* ----------------------------------Unternehmensbeschreibung---------------------------------- */}
         <Paper component="form">
-          <Typography>Kurzbeschriebung der Stelle</Typography>
-          <TextField
-            // Darstellung
-            id="JobofferDescription"
-            //label="Beschreibung der Stelle"
-            placeholder="Beschreibung der Stelle"
-            variant="outlined"
-            multiline
-            minRows={5}
-            sx={{ m: 1, width: "98%" }}
-            // Zuweisung der Daten für Übergabe
-            name="jobofferDescription"
-            value={formData.jobofferDescription}
-            onChange={handleChange}
-            // Input
-            slotProps={{
-              input: {},
-            }}
-          />
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            sx={{ flexWrap: "wrap" }}
+          >
+            <Box minWidth={TitleWidth}>
+              <Typography>Kurzbeschriebung der Stelle</Typography>
+            </Box>
+            {/* ---------------Textfeld Beschriebung--------------- */}
+            <TextField
+              // Darstellung
+              id="JobofferDescription"
+              //label="Beschreibung der Stelle"
+              placeholder="Beschreibung der Stelle"
+              variant="outlined"
+              multiline
+              minRows={5}
+              sx={{
+                //Auf kleinen Bildschirmen nimmt das Textfeld maximal 100% der Breite ein, anonsten flexibel groß
+                width: { xs: "100%", sm: "auto" },
+                flexGrow: 1, // Textfeld nimmt den verbleibenden Platz ein
+                minWidth: 200, // verhindert, dass das Textfeld zu schmal wird
+              }}
+              // Zuweisung der Daten für Übergabe
+              name="jobofferDescription"
+              value={formData.jobofferDescription}
+              onChange={handleChange}
+              // Input
+              slotProps={{
+                input: {},
+              }}
+            />
+          </Stack>
         </Paper>
         {/* ----------------------------------Termine---------------------------------- */}
         <Paper component="form">
           <Typography>Termine</Typography>
+          {/* ---------------Externe Komponente zur Datumserstellung--------------- */}
           {/* Datum und Zeit durch AddDateAndTime festlegen */}
           <AddDateAndTime
             onSave={handleAppointmentSave}
             editMode={false} // Setze den editMode-Flag, wenn der Bearbeitungsmodus aktiv ist
           />
-
+          {/* ---------------Anzeige der Termine--------------- */}
           {/* KI: Anzeige des kombinierten Datums und der Zeit */}
           <Typography variant="body1" sx={{ marginTop: 2 }}>
             Hinzugefügte Termine:
@@ -472,14 +533,16 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
                       alignItems={"center"}
                     >
                       <Typography variant="body1">
-                        {new Date(appointment.appointmentDate).toString()}{" "}
+                        {parseDateToString(
+                          appointment.appointmentDate.toString()
+                        )}
                         {/* Termin auflisten */}
                       </Typography>
                       <TestButtonGroup
                         buttons={[
                           /* Bearbeiten Button für jeden Termin anzeigen*/
                           {
-                            label: "Bearbeiten",
+                            label: "",
                             icon: <Edit />,
                             iconPosition: "start",
                             onClick: () => {
@@ -489,7 +552,7 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
                             },
                           } /* Löschen Button für jeden Termin anzeigen*/,
                           {
-                            label: "Entfernen",
+                            label: "",
                             icon: <Delete />,
                             iconPosition: "start",
                             onClick: () => {
@@ -508,7 +571,9 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
         {/* ----------------------------------Adresse---------------------------------- */}
         <Paper component="form">
           <Typography paddingBottom={1}>Adresse</Typography>
+          {/* ---------------Textfelder--------------- */}
           <Stack direction="row" spacing={1} paddingLeft={1} paddingBottom={1}>
+            {/* ---------------Straße--------------- */}
             <TextField
               // Darstellung
               id="AddressStreet"
@@ -525,6 +590,7 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
                 input: {},
               }}
             />
+            {/* ---------------Hausnummer--------------- */}
             <TextField
               // Darstellung
               id="AddressStreetNumber"
@@ -542,6 +608,7 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
               }}
             />
           </Stack>
+          {/* ---------------Postleitzahl--------------- */}
           <Stack padding={1} direction="row" spacing={1} paddingLeft={1}>
             <TextField
               // Darstellung
@@ -559,6 +626,7 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
                 input: {},
               }}
             />
+            {/* ---------------Stadt--------------- */}
             <TextField
               // Darstellung
               id="AddressCity"
@@ -576,6 +644,7 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
               }}
             />
           </Stack>
+          {/* ---------------Land--------------- */}
           <TextField
             // Darstellung
             id="AddressCountry"
@@ -592,11 +661,17 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
               input: {},
             }}
           />
-          <Typography paddingBottom={1}>
-            <br></br>
-            Distanz
-          </Typography>
-          <Stack direction="row" spacing={1} paddingLeft={1}>
+        </Paper>
+
+        {/* ----------------------------------Distanz---------------------------------- */}
+        <Paper component="form">
+          <Stack direction="row" spacing={1} alignItems={"center"}>
+            <Box minWidth={TitleWidth}>
+              <Typography>Distanz</Typography>
+            </Box>
+            {/* ---------------Textfelder--------------- */}
+
+            {/* ---------------Distanz als Strecke--------------- */}
             <TextField
               // Darstellung
               id="AddressDistance"
@@ -616,6 +691,7 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
                 },
               }}
             />
+            {/* ---------------Distanz als Zeit--------------- */}
             <TextField
               // Darstellung
               id="AddressDistanceTime"
@@ -640,7 +716,9 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
         {/* ----------------------------------Kontaktperson---------------------------------- */}
         <Paper component="form">
           <Typography paddingBottom={1}>Kontaktperson</Typography>
+          {/* ---------------Textfelder--------------- */}
           <Stack direction="row" spacing={1} paddingLeft={1} paddingBottom={1}>
+            {/* ---------------Vorname--------------- */}
             <TextField
               // Darstellung
               id="ContactFirstName"
@@ -656,6 +734,7 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
                 input: {},
               }}
             />
+            {/* ---------------Nachname--------------- */}
             <TextField
               // Darstellung
               id="ContactLastName"
@@ -674,6 +753,7 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
           </Stack>
 
           <Stack direction="row" spacing={1} paddingLeft={1} paddingTop={1}>
+            {/* ---------------Emails--------------- */}
             <TextField
               // Darstellung
               id="ContactEmail"
@@ -689,6 +769,7 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
                 input: {},
               }}
             />
+            {/* ---------------Telefonnummer--------------- */}
             <TextField
               // Darstellung
               id="ContactPhoneNumber"
@@ -709,7 +790,9 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
         {/* ----------------------------------Gehalt---------------------------------- */}
         <Paper component="form">
           <Typography paddingBottom={1}>Gehaltsspielraum</Typography>
+          {/* ---------------Textfelder--------------- */}
           <Stack direction="row" spacing={1} paddingLeft={1}>
+            {/* ---------------Minimum Gehalt--------------- */}
             <TextField
               // Darstellung
               id="SalaryMinimum"
@@ -730,6 +813,7 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
               }}
             />
             <Typography alignContent="center">bis</Typography>
+            {/* ---------------Maximum Gehalt--------------- */}
             <TextField
               // Darstellung
               id="SalaryMaximum"
@@ -754,6 +838,7 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
         {/* ----------------------------------Perks---------------------------------- */}
         <Paper component="form">
           <Typography>Perks und Benefits</Typography>
+          {/* ---------------Textfeld Perks--------------- */}
           <TextField
             // Darstellung
             id="Perks"
@@ -775,27 +860,32 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
         </Paper>
         {/* ----------------------------------Mitarbeiteranzahl---------------------------------- */}
         <Paper component="form">
-          <Typography>Größe des Unternehmens</Typography>
-          <TextField
-            // Darstellung
-            id="NumberOfEmployees"
-            //label="Anzahl Mitarbeiter"
-            placeholder="Anzahl Mitarbeiter"
-            variant="outlined"
-            sx={{ m: 1, width: "98%" }}
-            // Zuweisung der Daten für Übergabe
-            name="numberOfEmployees"
-            value={formData.companyEmployees}
-            onChange={handleChange}
-            // Input
-            slotProps={{
-              input: {},
-            }}
-          />
+          <Stack direction={"row"} alignItems={"center"}>
+            <Box minWidth={TitleWidth}>
+              <Typography>Größe des Unternehmens</Typography>
+            </Box>
+            {/* ---------------Textfeld Mitarbeiter--------------- */}
+            <TextField
+              // Darstellung
+              id="NumberOfEmployees"
+              label="Anzahl Mitarbeiter"
+              variant="outlined"
+              sx={{ m: 1, width: "98%" }}
+              // Zuweisung der Daten für Übergabe
+              name="numberOfEmployees"
+              value={formData.companyEmployees}
+              onChange={handleChange}
+              // Input
+              slotProps={{
+                input: {},
+              }}
+            />
+          </Stack>
         </Paper>
         {/* ----------------------------------Notizen---------------------------------- */}
         <Paper component="form">
           <Typography>Persönliche Notizen</Typography>
+          {/* ---------------Textfeld Notizen--------------- */}
           <TextField
             // Darstellung
             id="PersonalNotes"
@@ -815,6 +905,8 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
             }}
           />
         </Paper>
+
+        {/* ----------------------------------Senden Button---------------------------------- */}
         <Box
           sx={{
             "& > :not(style)": {
@@ -826,7 +918,6 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
             },
           }}
         >
-          {/* ----------------------------------Senden Button---------------------------------- */}
           <TestButtonGroup
             buttons={[
               {
