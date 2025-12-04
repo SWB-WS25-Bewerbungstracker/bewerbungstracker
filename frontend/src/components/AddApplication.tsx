@@ -8,6 +8,7 @@ import axios from "axios";
 import { useCompanyData} from "../functions/getAllCompaniesAndId";
 import { Delete, Send } from "@mui/icons-material";
 import AddDateAndTime from "./AddDateAndTime";
+import applicationTrackerApi from "../services/api.ts";
 
 export default function AddApplicationForm() {
 
@@ -76,7 +77,7 @@ export default function AddApplicationForm() {
         console.log("Daten an Backend: ", formData);
         // Versuch die Daten zu Senden
         try {
-            const response = await axios.post(
+            const response = await applicationTrackerApi.post(
                 "http://localhost:8080/joboffer/inputForm", // Backend Schnittstelle
                 formData,              // zu sendende Daten (automatisch als JSON) 
                 {
