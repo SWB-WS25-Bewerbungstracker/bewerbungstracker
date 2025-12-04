@@ -196,12 +196,38 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
 
   /* ----------------------------------Termine verarbeiten---------------------------------- */
 
+  // KI Tipp: Flags die das Bearbeiten von Terminen ermöglichen
+  const [editAppointment, setAppointmentEditMode] = useState<boolean>(false);
+  const [selectedAppointment, setSelectedAppointment] =
+    useState<Appointment | null>(null);
+  const [selectedAppointmentIndex, setSelectedAppointmentIndex] = useState<
+    number | null
+  >(null); // Um den Index zu speichern
+
   // Das kombinierte Datum aus AddDateAndTime hinzufügen, sowie AppointmentName
-  const handleAppointmentSave = (appointment: Appointment) => {
+  const handleAppointmentSave = (appointment: Appointment, index?: number) => {
+    // Termin speichern (hinzufügen bzw. ändern)
     setFormData((prevState) => {
-      // Kopieren der bestehenden Termine um diese zu bearbeiten
-      // und hinten den neuen Termin anfügen
-      const updatedAppointments = [...prevState.appointments, appointment];
+      let updatedAppointments;
+
+      if (appointment.appointmentId) {
+        // Wenn es eine appointmentId gibt, handelt es sich um ein Update (Bearbeiten eines bestehenden Termins)
+        updatedAppointments = prevState.appointments.map(
+          (existingAppointment) =>
+            existingAppointment.appointmentId === appointment.appointmentId
+              ? appointment // Ersetze den existierenden Termin durch den bearbeiteten
+              : existingAppointment // Andernfalls bleibt der Termin unverändert
+        );
+      } else if (index != null || index != undefined) {
+        // KI: Falls der Termin noch keine Id hat, aber einen Index
+        updatedAppointments = [...prevState.appointments];
+        updatedAppointments[index] = appointment; // Ersetze den Termin anhand des Index
+      } else {
+        // Falls es sich um einen neuen Termin ohen Id oder Index handelt:
+        // Kopieren der bestehenden Termine um diese zu bearbeiten
+        // und hinten den neuen Termin anfügen
+        updatedAppointments = [...prevState.appointments, appointment];
+      }
       return {
         // der restliche Zustand bleibt unverändert
         ...prevState,
@@ -209,10 +235,19 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
         appointments: updatedAppointments,
       };
     });
+    // Zurücksetzen der Flags zum Bearbeiten
+    setAppointmentEditMode(false);
+    setSelectedAppointment(null);
+    setSelectedAppointmentIndex(null);
   };
 
   // Termin bearbeiten
   const handleAppointmentEdit = (index: number, appointment: Appointment) => {
+    // KI Tip: Flags zur sicherheit nochmal richtig setzen
+    setSelectedAppointment(appointment);
+    setAppointmentEditMode(true);
+    setSelectedAppointmentIndex(index); // Speichern des Index
+    /*
     setFormData((prevState) => {
       // Kopieren der bestehenden Termine um diese zu bearbeiten
       const updatedAppointments = [...prevState.appointments];
@@ -222,6 +257,7 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
       // und nur die appointments werden aktualisiert
       return { ...prevState, appointments: updatedAppointments };
     });
+    */
   };
 
   // KI: Termin löschen
@@ -322,10 +358,6 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
     handleSubmit();
     window.close();
   };
-
-  /* ----------------------------------Setzen der Standardwerte fürs Formular---------------------------------- */
-
-  // setFormData(jobofferInputData);
 
   /* ----------------------------------Input Formular---------------------------------- */
 
@@ -505,8 +537,13 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
           {/* ---------------Externe Komponente zur Datumserstellung--------------- */}
           {/* Datum und Zeit durch AddDateAndTime festlegen */}
           <AddDateAndTime
-            onSave={handleAppointmentSave}
-            editMode={false} // Setze den editMode-Flag, wenn der Bearbeitungsmodus aktiv ist
+            // onSave={handleAppointmentSave}
+            onSave={(appointment: Appointment, index?: number) =>
+              handleAppointmentSave(appointment, index)
+            }
+            editMode={editAppointment}
+            appointmentData={selectedAppointment}
+            index={selectedAppointmentIndex}
           />
           {/* ---------------Anzeige der Termine--------------- */}
           {/* KI: Anzeige des kombinierten Datums und der Zeit */}
@@ -535,7 +572,11 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
                       <Typography variant="body1">
                         {parseDateToString(
                           appointment.appointmentDate.toString()
-                        )}
+                        ) +
+                          " Terminname: " +
+                          appointment.appointmentName +
+                          " ID: " +
+                          appointment.appointmentId}
                         {/* Termin auflisten */}
                       </Typography>
                       <TestButtonGroup
@@ -548,7 +589,8 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
                             onClick: () => {
                               // Setze den Index für den Bearbeitungsmodus und gebe die bestehenden Werte weiter
                               handleAppointmentEdit(index, appointment);
-                              //handleAppointmentEdit(index);
+                              //setAppointmentEditMode(true);
+                              //setSelectedAppointment(appointment);
                             },
                           } /* Löschen Button für jeden Termin anzeigen*/,
                           {

@@ -6,21 +6,22 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box, Paper, Stack, TextField } from "@mui/material";
 import TestButtonGroup from "./TestButtonGroup";
-import { Add } from "@mui/icons-material";
+import { Save } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import type { Appointment } from "../functions/getJobofferById";
 
 // KI: die Komponente als externes Modul nutzbar machen
 export interface AddDateAndTimeProps {
   // Speichern des Termins
-  onSave: (appointment: Appointment) => void;
+  onSave: (appointment: Appointment, index?: number) => void;
   // KI: Terminbearbeitung möglich machen :
   // Flag, das angibt, ob ein bestehender Termin bearbeitet wird
   editMode: boolean;
   // bestehende Daten verwenden, falls vorhanden (z.B. fürs Bearbeiten)
-  appointmentData?: Appointment;
+  appointmentData?: Appointment | null;
   // Termin löschen ermöglichen (für spätere Implementierung)
   onDelete?: () => void;
+  index?: number | null;
 }
 
 // Komponente, die seperate Datum und Zeiteingabe erlaubt und diese kombiniert
@@ -28,8 +29,10 @@ const AddDateAndTime: React.FC<AddDateAndTimeProps> = ({
   onSave,
   editMode,
   appointmentData,
-}: //onDelete,
-AddDateAndTimeProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onDelete, // (für spätere Implementierung)
+  index,
+}: AddDateAndTimeProps) => {
   const [date, setDate] = useState<Dayjs | null>(dayjs());
   const [time, setTime] = useState<Dayjs | null>(dayjs());
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -115,7 +118,8 @@ AddDateAndTimeProps) => {
 
     // KI: Speichern des kombinierten Werts und Senden an die Hauptkomponente
     onSave({
-      appointmentId: appointmentData?.appointmentId || "",
+      appointmentId:
+        appointmentData?.appointmentId || (index ? "new_" + index : ""),
       appointmentDate: combinedDateAndTime.toISOString(),
       appointmentName,
     });
@@ -156,8 +160,8 @@ AddDateAndTimeProps) => {
             <TestButtonGroup
               buttons={[
                 {
-                  label: "Hinzufügen",
-                  icon: <Add />,
+                  label: "",
+                  icon: <Save />,
                   iconPosition: "start",
                   onClick: () => {
                     combineDateAndTime();
