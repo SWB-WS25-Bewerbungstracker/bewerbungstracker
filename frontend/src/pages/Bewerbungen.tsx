@@ -41,14 +41,6 @@ const Bewerbungen: React.FC = () => {
           <TestButtonGroup
             buttons={[
               {
-                label: "Löschen",
-                icon: <Delete />,
-                iconPosition: "start",
-                onClick: () => {
-                  deleteButtonClicked();
-                },
-              },
-              {
                 label: "Hinzufügen",
                 icon: <Add />,
                 iconPosition: "start",
@@ -68,10 +60,6 @@ const Bewerbungen: React.FC = () => {
 export default Bewerbungen;
 
 //-------------------------------------Hilfsfunktionen----------------------------------------------
-// Funktion, die beim Click auf den Löschen Button ausgeführt wird
-const deleteButtonClicked = () => {
-  console.log("Löschen-Button wurde geklickt!");
-};
 
 // Funktion, die beim Click auf den Hinzufügen Button ausgeführt wird
 const addButtonClicked = () => {
