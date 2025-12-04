@@ -1,5 +1,6 @@
 import axios from "axios"; 
 import { useEffect, useState } from "react";
+import applicationTrackerApi from "../services/api.ts";
 
 /* Modul, dass die Liste an Unternehmensdaten und zugehörigen Ids holt */
 
@@ -15,7 +16,7 @@ export interface Company {
 // KI (Abfrage von Seite Bewerbungen übernommen und angepasst)
 export async function getAllCompanies(): Promise<Company[]> {
     try {
-        const response = await axios.get('http://localhost:8080/companies');
+        const response = await applicationTrackerApi.get('http://localhost:8080/companies');
     
         // Umwandlung der Daten in ein Array von Firmennamen
         const companyData = response.data.map((company: { id: number; companyname: string}) => ({
