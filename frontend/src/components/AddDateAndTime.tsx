@@ -19,7 +19,7 @@ export interface AddDateAndTimeProps {
   editMode: boolean;
   // bestehende Daten verwenden, falls vorhanden (z.B. fürs Bearbeiten)
   appointmentData?: Appointment;
-  // Termin löschen ermöglichen
+  // Termin löschen ermöglichen (für spätere Implementierung)
   onDelete?: () => void;
 }
 
@@ -28,11 +28,12 @@ const AddDateAndTime: React.FC<AddDateAndTimeProps> = ({
   onSave,
   editMode,
   appointmentData,
-}: AddDateAndTimeProps) => {
+}: //onDelete,
+AddDateAndTimeProps) => {
   const [date, setDate] = useState<Dayjs | null>(dayjs());
   const [time, setTime] = useState<Dayjs | null>(dayjs());
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [dateAndTime, setDateAndTime] = useState<Dayjs | null>(null);
+  const [dateAndTime, setDateAndTime] = useState<Dayjs | null>(null); // Wird verwendet, aber in if-Bedingung
   const [appointmentName, setAppointmentName] = useState<string>("");
 
   // KI: Aktiviere das UTC-Plugins

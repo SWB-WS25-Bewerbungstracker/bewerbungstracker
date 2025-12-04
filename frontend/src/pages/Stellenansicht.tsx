@@ -3,13 +3,18 @@ import { Box, Paper, Stack, Typography } from "@mui/material";
 import { useJobofferDetails } from "../functions/getJobofferById";
 import { parseDateToString } from "../functions/parseDate";
 import TestButtonGroup from "../components/TestButtonGroup";
-import { Edit } from "@mui/icons-material";
+import { ArrowBack, Delete, Edit } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const TitleWidth = "20%";
+
 //-------------------------------------Seite----------------------------------------------
 const Stellenansicht: React.FC = () => {
   // Extrahiere die ID aus der URL
   const { id } = useParams<{ id: string }>(); // Die ID kommt als URL-Parameter
+
+  // Navigation zwischen Seiten ermöglichen
+  const navigate = useNavigate();
 
   // Daten mithilfe externer Funktion laden
   const { jobofferDetails, loadingJoboffer, errorRetrievingJoboffer } =
@@ -31,24 +36,47 @@ const Stellenansicht: React.FC = () => {
   return (
     <>
       {/* Daten bearbeiten können */}
-      <TestButtonGroup
-        buttons={[
-          {
-            label: "Bearbeiten",
-            icon: <Edit />,
-            iconPosition: "start",
-            onClick: () => {
-              window.open(`/formular/${id}`);
+      <Stack padding={2} justifyContent={"space-between"}>
+        <TestButtonGroup
+          buttons={[
+            {
+              label: "Zurück zu Übersicht",
+              icon: <ArrowBack />,
+              iconPosition: "start",
+              onClick: () => {
+                console.log("Zurück Button wurde geklickt");
+                //window.close();
+                navigate("/bewerbungen");
+              },
             },
-          },
-        ]}
-      />
+          ]}
+        />
+        <TestButtonGroup
+          buttons={[
+            {
+              label: "Bearbeiten",
+              icon: <Edit />,
+              iconPosition: "start",
+              onClick: () => {
+                console.log("Bearbeiten Button wurde geklickt");
+                window.open(`/formular/${id}`);
+              },
+            },
+            {
+              label: "Löschen",
+              icon: <Delete />,
+              iconPosition: "start",
+              onClick: () => {
+                console.log("Löschen Button wurde geklickt");
+                // Jeweiligen Behfel ans Backend Senden (Schnittstelle fehlt noch -> noch nicht implementiert);
+              },
+            },
+          ]}
+        />
+      </Stack>
+
       {/* Daten anzeigen */}
       <Box padding={2}>
-        <Typography variant="h1">Stellenansicht</Typography>
-        <Typography variant="subtitle1">
-          Hier werden Informationen über die Bewerbungsstelle angezeigt.
-        </Typography>
         <Stack direction="column" spacing={2}>
           <Paper>
             <Typography variant="h1">{jobofferDetails.jobofferName}</Typography>

@@ -135,7 +135,9 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
         id,
         "Jobofferdaten: ",
         jobofferDetails
-      ); // Falls noch Daten geladen werden, dies als Standardwerte setzen
+      );
+      setAction("Stellenangaben bearbeiten");
+      // Falls Daten geladen wurden, dies als Standardwerte setzen
       setFormData({
         jobofferId: jobofferDetails.jobofferId,
         jobofferName: jobofferDetails.jobofferName,
@@ -310,6 +312,7 @@ const AddApplicationForm: React.FC<AddApplicationFormProps> = ({ id }) => {
   const sendButtonClicked = () => {
     console.log("Senden-Button wurde geklickt!");
     handleSubmit();
+    window.close();
   };
 
   /* ----------------------------------Setzen der Standardwerte fürs Formular---------------------------------- */
