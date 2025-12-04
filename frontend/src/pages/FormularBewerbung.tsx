@@ -7,9 +7,6 @@ const FormularBewerbungHinzufuegen: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Die ID kommt als URL-Parameter
   return (
     <div>
-      <Stack padding={2} direction={"column"}>
-        <h1> Bewerbung Hinzufügen </h1>
-      </Stack>
       <AddApplicationForm id={id} />
     </div>
   );
