@@ -5,7 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { Box } from '@mui/material';
 import { PickersDay } from '@mui/x-date-pickers/PickersDay';
-
+import { Tooltip } from "@mui/material";
 
 import 'dayjs/locale/de';
 import 'dayjs/locale/en';
@@ -33,7 +33,17 @@ function AppointmentDate(props: any) {
     const dateStr = day.format("YYYY-MM-DD"); //das Datum 'day' ins richtige Format bringen
     const hasEvent = events.some((e: CalendarDate) => e.datum === dateStr); //event.some() prüft ob minfdestens ein Event in events am aktuellen Datum ist
 
+    // Nur Events dieses Tages um einen Text für hover zu bekommen
+    const dayEvents = events.filter((ev: CalendarDate) => ev.datum === dateStr);
+    const hoverText = dayEvents
+        .map(ev => `${ev.firmaName} - (${ev.uhrzeit}) ${ev.terminName} `)
+
     return (
+        <Tooltip // erstellt bim Hovern ein Hiweisfenster mit dem Inhalt hoverText
+        title={hasEvent ? hoverText :""}
+        arrow
+        placement="top"
+        >
         <PickersDay     // stellt einen einzelnen Tag im Kalender dar
             {...other}  //auch hier, alle Props an PickersDay übergeben ohne sie nochmal in day oder events zu entpacken
             day={day}
@@ -46,7 +56,9 @@ function AppointmentDate(props: any) {
 
                 }
             }}
-        />
+            />
+        </Tooltip>
+
     );
 }
 
