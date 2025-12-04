@@ -31,6 +31,16 @@ keycloak
         <App />
       </BrowserRouter>
     )
+    setInterval(() => {
+      keycloak
+        .updateToken(180)
+        .then(refreshed => {
+          if (refreshed) {
+            console.log("Token refreshed", new Date());
+          }
+        })
+        .catch(err => console.error("Failed to refresh token", err));
+    }, 10000);
   })
   .catch((error) => {
     console.error('Keycloak init error:', error)
@@ -45,13 +55,4 @@ keycloak
       </React.StrictMode>,
     )
   })
-  setInterval(() => {
-  keycloak
-    .updateToken(180)
-    .then(refreshed => {
-      if (refreshed) {
-        console.log("Token refreshed", new Date());
-      }
-    })
-    .catch(err => console.error("Failed to refresh token", err));
-}, 10000);
+
