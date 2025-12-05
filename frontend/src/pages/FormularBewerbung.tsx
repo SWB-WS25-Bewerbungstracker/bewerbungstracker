@@ -1,5 +1,5 @@
-import AddApplicationForm from "../components/AddApplication";
-import { useNavigate, useParams } from "react-router-dom";
+import AddJobofferForm from "../components/AddJoboffer";
+import { useParams } from "react-router-dom";
 import TestButtonGroup from "../components/TestButtonGroup";
 import { Stack } from "@mui/material";
 import { ArrowBack, Delete } from "@mui/icons-material";
@@ -9,7 +9,7 @@ const FormularBewerbungHinzufuegen: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Die ID kommt als URL-Parameter
 
   // Navigation zwischen Seiten ermöglichen
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <div>
@@ -42,7 +42,7 @@ const FormularBewerbungHinzufuegen: React.FC = () => {
           ]}
         />
       </Stack>
-      <AddApplicationForm id={id} />
+      <AddJobofferForm id={id} />
     </div>
   );
 };

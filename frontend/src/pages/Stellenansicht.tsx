@@ -86,18 +86,22 @@ const Stellenansicht: React.FC = () => {
               <Box minWidth={TitleWidth}>
                 <Typography variant="h5"> Termine </Typography>
               </Box>
-              <Stack>
+              {/* Termien als Liste */}
+              <ul>
+                {" "}
                 {jobofferDetails.appointments.map((appointments) => {
                   return (
-                    <Stack key={appointments.appointmentId}>
-                      <Typography>{appointments.appointmentName}</Typography>
-                      <Typography>
-                        {parseDateToString(appointments.appointmentDate)}
-                      </Typography>
-                    </Stack>
+                    <li>
+                      <Stack key={appointments.appointmentId}>
+                        <Typography>{appointments.appointmentName}</Typography>
+                        <Typography>
+                          {parseDateToString(appointments.appointmentDate)}
+                        </Typography>
+                      </Stack>
+                    </li>
                   );
                 })}
-              </Stack>
+              </ul>
             </Stack>
           </Paper>
           <Paper>
