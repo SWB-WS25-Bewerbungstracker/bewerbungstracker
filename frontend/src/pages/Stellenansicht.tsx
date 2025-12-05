@@ -88,12 +88,12 @@ const Stellenansicht: React.FC = () => {
               </Box>
               {/* Termien als Liste */}
               <ul>
-                {" "}
                 {jobofferDetails.appointments.map((appointments) => {
                   return (
                     <li>
                       <Stack key={appointments.appointmentId}>
                         <Typography>{appointments.appointmentName}</Typography>
+                        <Typography> {" am "}</Typography>
                         <Typography>
                           {parseDateToString(appointments.appointmentDate)}
                         </Typography>

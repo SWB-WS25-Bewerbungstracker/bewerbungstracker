@@ -9,6 +9,7 @@ import TestButtonGroup from "./TestButtonGroup";
 import { Save, Edit, Delete } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import type { Appointment } from "../functions/getJobofferById";
+import { parseDateToString } from "../functions/parseDate";
 
 // KI: die Komponente als externes Modul nutzbar machen
 export interface AddDateAndTimeProps {
@@ -245,11 +246,9 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
                 >
                   {/* Termin auflisten */}
                   <Typography variant="body1">
-                    {`${dayjs(appointment.appointmentDate).format(
-                      "DD.MM.YYYY HH:mm"
-                    )} - Terminname: ${appointment.appointmentName} - ID: ${
-                      appointment.appointmentId
-                    }`}
+                    {`${appointment.appointmentName} - ${parseDateToString(
+                      appointment.appointmentDate
+                    )}`}
                   </Typography>
                   {/* Bearbeiten und Löschen für jeden Termin ermöglichen */}
                   <TestButtonGroup

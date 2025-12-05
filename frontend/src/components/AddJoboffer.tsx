@@ -9,7 +9,6 @@
 import {
   Autocomplete,
   Box,
-  Container,
   InputAdornment,
   Paper,
   Stack,
@@ -25,7 +24,7 @@ import {
   type Appointment,
 } from "../functions/getJobofferById";
 import AddAppointments from "./AddAppointments";
-import { Padding, Send } from "@mui/icons-material";
+import { Send } from "@mui/icons-material";
 
 const TitleWidth = "20%";
 
