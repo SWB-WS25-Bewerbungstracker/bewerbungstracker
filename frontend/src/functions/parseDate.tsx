@@ -1,3 +1,15 @@
+// Funktion, um ein Iso-Timestamp in ein Date Objekt umzuwandeln
+export function parseIsoStringToDateObject(isoDate: string): Date | null {
+  // Funktioniert nur für Iso-Timestamps
+  if (isoDate) {
+    // Aus dem Iso-Timestamp ein Datum-Objekt erstellen
+    const date = new Date(isoDate);
+    return date;
+  } else {
+    return null;
+  }
+}
+
 // Funktion, um ein Iso-Timestamp in die Komponenten Wochentag, Datum und Uhrzeit zu zerlegen (basierend auf KI Vorschlag(?))
 export function parseDateFromIso(isoDate: string): string[] | null {
   // Funktioniert nur für Iso-Timestamps
@@ -25,6 +37,27 @@ export function parseDateFromIso(isoDate: string): string[] | null {
   }
 }
 
+// Funktion, um ein Datum in einen String für den nächsten Termin umzuwandeln
+export function parseDateToNextAppointmentString(
+  passedDate?: string
+): string | undefined {
+  // Versuchen, die Rückgabewerte der parseDatePassed-Funktion zu entpacken, falls dieser existiert
+  if (passedDate) {
+    const result = parseDateFromIso(passedDate);
+
+    // Überprüfen, ob das Ergebnis ein Array ist und es entpacken
+    if (result && result.length === 3) {
+      const [dayPart, datePart, timePart] = result;
+
+      // Wenn alle Teile vorhanden sind, erstelle den Terminstring
+      return `Nächster Termin: am ${dayPart} den ${datePart} um ${timePart} Uhr`;
+    } else {
+      // Wenn das Ergebnis nicht gültig ist, gib einen leeren String zurück
+      return "";
+    }
+  }
+}
+
 // Funktion, um ein Datum in einen String umzuwandeln
 export function parseDateToString(passedDate?: string): string | undefined {
   // Versuchen, die Rückgabewerte der parseDatePassed-Funktion zu entpacken, falls dieser existiert
@@ -36,7 +69,7 @@ export function parseDateToString(passedDate?: string): string | undefined {
       const [dayPart, datePart, timePart] = result;
 
       // Wenn alle Teile vorhanden sind, erstelle den Terminstring
-      return `Nächster Termin: am ${dayPart} den ${datePart} um ${timePart} Uhr`;
+      return `${dayPart} der ${datePart} um ${timePart} Uhr`;
     } else {
       // Wenn das Ergebnis nicht gültig ist, gib einen leeren String zurück
       return "";
