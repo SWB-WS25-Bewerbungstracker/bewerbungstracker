@@ -9,6 +9,7 @@
 import {
   Autocomplete,
   Box,
+  Container,
   InputAdornment,
   Paper,
   Stack,
@@ -24,7 +25,7 @@ import {
   type Appointment,
 } from "../functions/getJobofferById";
 import AddAppointments from "./AddAppointments";
-import { Send } from "@mui/icons-material";
+import { Padding, Send } from "@mui/icons-material";
 
 const TitleWidth = "20%";
 
@@ -308,27 +309,24 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
               <Typography>Stellenbezeichnung </Typography>
             </Box>
             {/* ---------------Textfeld Stelle--------------- */}
-            <TextField
-              // Darstellung
-              // KI: Textfeld soll flexibel groß sein, aber Umbruch bei kleinen Bildschirmen ermöglichen
-              sx={{
-                //Auf kleinen Bildschirmen nimmt das Textfeld maximal 100% der Breite ein, anonsten flexibel groß
-                width: { xs: "100%", sm: "auto" },
-                flexGrow: 1, // Textfeld nimmt den verbleibenden Platz ein
-                minWidth: 200, // verhindert, dass das Textfeld zu schmal wird
-              }}
-              id="JobofferName"
-              label="Titel der Stellenausschreibung"
-              variant="outlined"
-              // Zuweisung der Daten für Übergabe
-              name="jobofferName"
-              value={formData.jobofferName}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {},
-              }}
-            />
+            <Box flex={1}>
+              <TextField
+                // Darstellung
+                // KI: Textfeld soll flexibel groß sein, aber Umbruch bei kleinen Bildschirmen ermöglichen
+                fullWidth
+                id="JobofferName"
+                label="Titel der Stellenausschreibung"
+                variant="outlined"
+                // Zuweisung der Daten für Übergabe
+                name="jobofferName"
+                value={formData.jobofferName}
+                onChange={handleChange}
+                // Input
+                slotProps={{
+                  input: {},
+                }}
+              />
+            </Box>
           </Stack>
         </Paper>
 
@@ -344,75 +342,67 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
             </Box>
 
             {/* ---------------Autocomplete-Textfeld Unternehmen--------------- */}
-            {/* Während Unternehmensliste noch geladen wird: */}
-            {loadingCompanies ? (
-              <TextField
-                // KI: Textfeld soll flexibel groß sein, aber Umbruch bei kleinen Bildschirmen ermöglichen
-                sx={{
-                  //Auf kleinen Bildschirmen nimmt das Textfeld maximal 100% der Breite ein, anonsten flexibel groß
-                  width: { xs: "100%", sm: "auto" },
-                  flexGrow: 1, // Textfeld nimmt den verbleibenden Platz ein
-                  minWidth: 200, // verhindert, dass das Textfeld zu schmal wird
-                }}
-                label="Unternehmen"
-                placeholder="Lade Firmen..."
-                variant="outlined"
-                disabled
-              />
-            ) : (
-              /* Nachdem Unternehmensliste geladen wurde: */
-              // Darstellung Autocomplete
-              <Autocomplete
-                freeSolo // Benutzer kann auch eigene Eingaben machen
-                id="CompanyName"
-                // KI Fehlerverbesserung --------
-                // Dropdown Auswahl (Liste an Unternehmen)
-                options={listOfCompanies.map((company) => company.name)} // Nur die Namen der Unternehmen anzeigen
-                //getOptionLabel={(option) => option} // Einfach nur den Namen anzeigen
-                value={formData.companyName || ""} // Wenn es einen Wert gibt, zeige ihn an, sonst leer
-                onChange={(_event, newValue) => {
-                  // Wenn der Benutzer einen Namen auswählt
-                  const selectedName = newValue || ""; // Entweder den ausgewählten Wert nehmen oder sonst leer lassen
-                  // Finde das Unternehmen anhand des eingegebenen Namens (um Id wieder zu bekommen für Zuweisung)
-                  const selectedCompany = listOfCompanies.find(
-                    (c) => c.name === selectedName
-                  );
-                  // Zuweisen der Daten
-                  setFormData((prev) => ({
-                    ...prev,
-                    companyName: selectedName,
-                    companyId: selectedCompany ? selectedCompany.id : "", // Falls keine Firma gefunden, ID leer lassen
-                  }));
-                }}
-                // Ende Fehlerverbesserung -------
-                // KI: Textfeld soll flexibel groß sein, aber Umbruch bei kleinen Bildschirmen ermöglichen
-                sx={{
-                  //Auf kleinen Bildschirmen nimmt das Textfeld maximal 100% der Breite ein, anonsten flexibel groß
-                  width: { xs: "100%", sm: "auto" },
-                  flexGrow: 1, // Textfeld nimmt den verbleibenden Platz ein
-                  minWidth: 200, // verhindert, dass das Textfeld zu schmal wird
-                }}
-                // Wenn kein Unternehmen ausgewählt ist, soll eins eingegeben werden können
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    // Darstellung des Textfelds
-                    label="Unternehmen"
-                    // Zuweisung der Daten für Übergabe (falls Text eingegeben wurde und nicht mit Autocomplete ausgefüllt)
-                    name="companyName"
-                    value={formData.companyName}
-                    onChange={handleChange}
-                    // Input
-                    slotProps={{
-                      input: {
-                        ...params.InputProps,
-                        type: "search",
-                      },
-                    }}
-                  />
-                )}
-              />
-            )}
+            <Box flex={1}>
+              {/* Während Unternehmensliste noch geladen wird: */}
+              {loadingCompanies ? (
+                <TextField
+                  // KI: Textfeld soll flexibel groß sein, aber Umbruch bei kleinen Bildschirmen ermöglichen
+                  fullWidth
+                  label="Unternehmen"
+                  placeholder="Lade Firmen..."
+                  variant="outlined"
+                  disabled
+                />
+              ) : (
+                /* Nachdem Unternehmensliste geladen wurde: */
+                // Darstellung Autocomplete
+                <Autocomplete
+                  freeSolo // Benutzer kann auch eigene Eingaben machen
+                  id="CompanyName"
+                  // KI Fehlerverbesserung --------
+                  // Dropdown Auswahl (Liste an Unternehmen)
+                  options={listOfCompanies.map((company) => company.name)} // Nur die Namen der Unternehmen anzeigen
+                  //getOptionLabel={(option) => option} // Einfach nur den Namen anzeigen
+                  value={formData.companyName || ""} // Wenn es einen Wert gibt, zeige ihn an, sonst leer
+                  onChange={(_event, newValue) => {
+                    // Wenn der Benutzer einen Namen auswählt
+                    const selectedName = newValue || ""; // Entweder den ausgewählten Wert nehmen oder sonst leer lassen
+                    // Finde das Unternehmen anhand des eingegebenen Namens (um Id wieder zu bekommen für Zuweisung)
+                    const selectedCompany = listOfCompanies.find(
+                      (c) => c.name === selectedName
+                    );
+                    // Zuweisen der Daten
+                    setFormData((prev) => ({
+                      ...prev,
+                      companyName: selectedName,
+                      companyId: selectedCompany ? selectedCompany.id : "", // Falls keine Firma gefunden, ID leer lassen
+                    }));
+                  }}
+                  // Ende Fehlerverbesserung -------
+                  // KI: Textfeld soll flexibel groß sein, aber Umbruch bei kleinen Bildschirmen ermöglichen
+                  fullWidth
+                  // Wenn kein Unternehmen ausgewählt ist, soll eins eingegeben werden können
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      // Darstellung des Textfelds
+                      label="Unternehmen"
+                      // Zuweisung der Daten für Übergabe (falls Text eingegeben wurde und nicht mit Autocomplete ausgefüllt)
+                      name="companyName"
+                      value={formData.companyName}
+                      onChange={handleChange}
+                      // Input
+                      slotProps={{
+                        input: {
+                          ...params.InputProps,
+                          type: "search",
+                        },
+                      }}
+                    />
+                  )}
+                />
+              )}
+            </Box>
           </Stack>
         </Paper>
         {/* ----------------------------------Unternehmensbeschreibung---------------------------------- */}
@@ -426,138 +416,160 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
               <Typography>Kurzbeschriebung der Stelle</Typography>
             </Box>
             {/* ---------------Textfeld Beschriebung--------------- */}
-            <TextField
-              // Darstellung
-              id="JobofferDescription"
-              //label="Beschreibung der Stelle"
-              placeholder="Beschreibung der Stelle"
-              variant="outlined"
-              multiline
-              minRows={5}
-              sx={{
-                //Auf kleinen Bildschirmen nimmt das Textfeld maximal 100% der Breite ein, anonsten flexibel groß
-                width: { xs: "100%", sm: "auto" },
-                flexGrow: 1, // Textfeld nimmt den verbleibenden Platz ein
-                minWidth: 200, // verhindert, dass das Textfeld zu schmal wird
-              }}
-              // Zuweisung der Daten für Übergabe
-              name="jobofferDescription"
-              value={formData.jobofferDescription}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {},
-              }}
-            />
+            <Box flex={1}>
+              <TextField
+                // Darstellung
+                id="JobofferDescription"
+                //label="Beschreibung der Stelle"
+                placeholder="Beschreibung der Stelle"
+                variant="outlined"
+                multiline
+                minRows={5}
+                fullWidth
+                // Zuweisung der Daten für Übergabe
+                name="jobofferDescription"
+                value={formData.jobofferDescription}
+                onChange={handleChange}
+                // Input
+                slotProps={{
+                  input: {},
+                }}
+              />
+            </Box>
           </Stack>
         </Paper>
         {/* ----------------------------------Termine---------------------------------- */}
         <Paper component="form">
-          <Typography>Termine</Typography>
-          {/* ---------------Externe Komponente zur Datumserstellung--------------- */}
-          <AddAppointments
-            // Übergabe des Appointment Arrays
-            appointments={formData.appointments}
-            // KI: verarbeitet Änderungen der Daten der untergeordneten Lomponenete
-            // und ändert die Formular Daten hier dementsprechend ab
-            onAppointmentChange={(tmpAppointments) =>
-              setFormData({ ...formData, appointments: tmpAppointments })
-            }
-          />
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            sx={{ flexWrap: "wrap" }}
+          >
+            <Box minWidth={TitleWidth}>
+              <Typography>Termine</Typography>
+            </Box>
+            {/* ---------------Externe Komponente zur Datumserstellung--------------- */}
+            <Box flex={1}>
+              <AddAppointments
+                // Übergabe des Appointment Arrays
+                appointments={formData.appointments}
+                // KI: verarbeitet Änderungen der Daten der untergeordneten Lomponenete
+                // und ändert die Formular Daten hier dementsprechend ab
+                onAppointmentChange={(tmpAppointments) =>
+                  setFormData({ ...formData, appointments: tmpAppointments })
+                }
+              />
+            </Box>
+          </Stack>
         </Paper>
         {/* ----------------------------------Adresse---------------------------------- */}
         <Paper component="form">
-          <Typography paddingBottom={1}>Adresse</Typography>
-          {/* ---------------Textfelder--------------- */}
-          <Stack direction="row" spacing={1} paddingLeft={1} paddingBottom={1}>
-            {/* ---------------Straße--------------- */}
-            <TextField
-              // Darstellung
-              id="AddressStreet"
-              label="Straße"
-              //placeholder="Straße"
-              variant="outlined"
-              sx={{ m: 1, width: "79%" }}
-              // Zuweisung der Daten für Übergabe
-              name="addressStreet"
-              value={formData.addressStreet}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {},
-              }}
-            />
-            {/* ---------------Hausnummer--------------- */}
-            <TextField
-              // Darstellung
-              id="AddressStreetNumber"
-              label="Hausnummer"
-              //placeholder="Hausnummer"
-              variant="outlined"
-              sx={{ m: 1, width: "29%" }}
-              // Zuweisung der Daten für Übergabe
-              name="addressStreetNumber"
-              value={formData.addressStreetNumber}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {},
-              }}
-            />
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            sx={{ flexWrap: "wrap" }}
+          >
+            <Box minWidth={TitleWidth}>
+              <Typography paddingBottom={1}>Adresse</Typography>
+            </Box>
+            {/* ---------------Textfelder--------------- */}
+            <Box flex={1}>
+              <Stack
+                direction="row"
+                spacing={1}
+                paddingLeft={1}
+                paddingBottom={1}
+              >
+                {/* ---------------Straße--------------- */}
+                <TextField
+                  // Darstellung
+                  id="AddressStreet"
+                  label="Straße"
+                  //placeholder="Straße"
+                  variant="outlined"
+                  sx={{ m: 1, width: "80%" }}
+                  // Zuweisung der Daten für Übergabe
+                  name="addressStreet"
+                  value={formData.addressStreet}
+                  onChange={handleChange}
+                  // Input
+                  slotProps={{
+                    input: {},
+                  }}
+                />
+                {/* ---------------Hausnummer--------------- */}
+                <TextField
+                  // Darstellung
+                  id="AddressStreetNumber"
+                  label="Hausnummer"
+                  //placeholder="Hausnummer"
+                  variant="outlined"
+                  sx={{ m: 1, width: "20%" }}
+                  // Zuweisung der Daten für Übergabe
+                  name="addressStreetNumber"
+                  value={formData.addressStreetNumber}
+                  onChange={handleChange}
+                  // Input
+                  slotProps={{
+                    input: {},
+                  }}
+                />
+              </Stack>
+              {/* ---------------Postleitzahl--------------- */}
+              <Stack padding={1} direction="row" spacing={1} paddingLeft={1}>
+                <TextField
+                  // Darstellung
+                  id="AddressPostcode"
+                  label="Postleitzahl"
+                  //placeholder="Postleitzahl"
+                  variant="outlined"
+                  sx={{ m: 1, width: "20%" }}
+                  // Zuweisung der Daten für Übergabe
+                  name="addressPostcode"
+                  value={formData.addressZipCode}
+                  onChange={handleChange}
+                  // Input
+                  slotProps={{
+                    input: {},
+                  }}
+                />
+                {/* ---------------Stadt--------------- */}
+                <TextField
+                  // Darstellung
+                  id="AddressCity"
+                  label="Ort"
+                  //placeholder="Ort"
+                  variant="outlined"
+                  sx={{ m: 1, width: "80%" }}
+                  // Zuweisung der Daten für Übergabe
+                  name="addressCity"
+                  value={formData.addressCity}
+                  onChange={handleChange}
+                  // Input
+                  slotProps={{
+                    input: {},
+                  }}
+                />
+              </Stack>
+              {/* ---------------Land--------------- */}
+              <TextField
+                // Darstellung
+                id="AddressCountry"
+                label="Land"
+                //placeholder="Land"
+                variant="outlined"
+                sx={{ m: 1, width: "100%" }}
+                // Zuweisung der Daten für Übergabe
+                name="addressCountry"
+                value={formData.addressCountry}
+                onChange={handleChange}
+                // Input
+                slotProps={{
+                  input: {},
+                }}
+              />
+            </Box>
           </Stack>
-          {/* ---------------Postleitzahl--------------- */}
-          <Stack padding={1} direction="row" spacing={1} paddingLeft={1}>
-            <TextField
-              // Darstellung
-              id="AddressPostcode"
-              label="Postleitzahl"
-              //placeholder="Postleitzahl"
-              variant="outlined"
-              sx={{ m: 1, width: "29%" }}
-              // Zuweisung der Daten für Übergabe
-              name="addressPostcode"
-              value={formData.addressZipCode}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {},
-              }}
-            />
-            {/* ---------------Stadt--------------- */}
-            <TextField
-              // Darstellung
-              id="AddressCity"
-              label="Ort"
-              //placeholder="Ort"
-              variant="outlined"
-              sx={{ m: 1, width: "79%" }}
-              // Zuweisung der Daten für Übergabe
-              name="addressCity"
-              value={formData.addressCity}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {},
-              }}
-            />
-          </Stack>
-          {/* ---------------Land--------------- */}
-          <TextField
-            // Darstellung
-            id="AddressCountry"
-            label="Land"
-            //placeholder="Land"
-            variant="outlined"
-            sx={{ m: 1, width: "98%" }}
-            // Zuweisung der Daten für Übergabe
-            name="addressCountry"
-            value={formData.addressCountry}
-            onChange={handleChange}
-            // Input
-            slotProps={{
-              input: {},
-            }}
-          />
         </Paper>
 
         {/* ----------------------------------Distanz---------------------------------- */}
@@ -569,191 +581,228 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
             {/* ---------------Textfelder--------------- */}
 
             {/* ---------------Distanz als Strecke--------------- */}
-            <TextField
-              // Darstellung
-              id="AddressDistance"
-              label="Distanz"
-              variant="outlined"
-              sx={{ m: 1, width: "49%" }}
-              // Zuweisung der Daten für Übergabe
-              name="distanceLength"
-              value={formData.distanceLength}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">km</InputAdornment>
-                  ),
-                },
-              }}
-            />
-            {/* ---------------Distanz als Zeit--------------- */}
-            <TextField
-              // Darstellung
-              id="AddressDistanceTime"
-              label="Fahrtzeit"
-              variant="outlined"
-              sx={{ m: 1, width: "49%" }}
-              // Zuweisung der Daten für Übergabe
-              name="distanceTime"
-              value={formData.distanceTime}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">Stunden</InputAdornment>
-                  ),
-                },
-              }}
-            />
+            <Box flex={1}>
+              <TextField
+                // Darstellung
+                id="AddressDistance"
+                label="Distanz"
+                variant="outlined"
+                sx={{ m: 1, width: "48%" }}
+                // Zuweisung der Daten für Übergabe
+                name="distanceLength"
+                value={formData.distanceLength}
+                onChange={handleChange}
+                // Input
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">km</InputAdornment>
+                    ),
+                  },
+                }}
+              />
+              {/* ---------------Distanz als Zeit--------------- */}
+              <TextField
+                // Darstellung
+                id="AddressDistanceTime"
+                label="Fahrtzeit"
+                variant="outlined"
+                sx={{ m: 1, width: "49%" }}
+                // Zuweisung der Daten für Übergabe
+                name="distanceTime"
+                value={formData.distanceTime}
+                onChange={handleChange}
+                // Input
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">Stunden</InputAdornment>
+                    ),
+                  },
+                }}
+              />
+            </Box>
           </Stack>
         </Paper>
         {/* ----------------------------------Kontaktperson---------------------------------- */}
         <Paper component="form">
-          <Typography paddingBottom={1}>Kontaktperson</Typography>
-          {/* ---------------Textfelder--------------- */}
-          <Stack direction="row" spacing={1} paddingLeft={1} paddingBottom={1}>
-            {/* ---------------Vorname--------------- */}
-            <TextField
-              // Darstellung
-              id="ContactFirstName"
-              label="Vorname"
-              variant="outlined"
-              sx={{ m: 1, width: "49%" }}
-              // Zuweisung der Daten für Übergabe
-              name="contactFirstName"
-              value={formData.contactFirstName}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {},
-              }}
-            />
-            {/* ---------------Nachname--------------- */}
-            <TextField
-              // Darstellung
-              id="ContactLastName"
-              label="Nachname"
-              variant="outlined"
-              sx={{ m: 1, width: "49%" }}
-              // Zuweisung der Daten für Übergabe
-              name="contactLastName"
-              value={formData.contactLastName}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {},
-              }}
-            />
-          </Stack>
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            sx={{ flexWrap: "wrap" }}
+          >
+            <Box minWidth={TitleWidth}>
+              <Typography paddingBottom={1}>Kontaktperson</Typography>
+            </Box>
+            {/* ---------------Textfelder--------------- */}
+            <Box flex={1}>
+              <Stack
+                direction="row"
+                spacing={1}
+                paddingLeft={1}
+                paddingBottom={1}
+              >
+                {/* ---------------Vorname--------------- */}
+                <TextField
+                  // Darstellung
+                  id="ContactFirstName"
+                  label="Vorname"
+                  variant="outlined"
+                  sx={{ m: 1, width: "49%" }}
+                  // Zuweisung der Daten für Übergabe
+                  name="contactFirstName"
+                  value={formData.contactFirstName}
+                  onChange={handleChange}
+                  // Input
+                  slotProps={{
+                    input: {},
+                  }}
+                />
+                {/* ---------------Nachname--------------- */}
+                <TextField
+                  // Darstellung
+                  id="ContactLastName"
+                  label="Nachname"
+                  variant="outlined"
+                  sx={{ m: 1, width: "49%" }}
+                  // Zuweisung der Daten für Übergabe
+                  name="contactLastName"
+                  value={formData.contactLastName}
+                  onChange={handleChange}
+                  // Input
+                  slotProps={{
+                    input: {},
+                  }}
+                />
+              </Stack>
 
-          <Stack direction="row" spacing={1} paddingLeft={1} paddingTop={1}>
-            {/* ---------------Emails--------------- */}
-            <TextField
-              // Darstellung
-              id="ContactEmail"
-              label="Email"
-              variant="outlined"
-              sx={{ m: 1, width: "49%" }}
-              // Zuweisung der Daten für Übergabe
-              name="contactEmail"
-              value={formData.contactEmail}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {},
-              }}
-            />
-            {/* ---------------Telefonnummer--------------- */}
-            <TextField
-              // Darstellung
-              id="ContactPhoneNumber"
-              label="Telefonnummer"
-              variant="outlined"
-              sx={{ m: 1, width: "49%" }}
-              // Zuweisung der Daten für Übergabe
-              name="contactPhoneNumber"
-              value={formData.contactPhoneNumber}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {},
-              }}
-            />
+              <Stack direction="row" spacing={1} paddingLeft={1} paddingTop={1}>
+                {/* ---------------Emails--------------- */}
+                <TextField
+                  // Darstellung
+                  id="ContactEmail"
+                  label="Email"
+                  variant="outlined"
+                  sx={{ m: 1, width: "49%" }}
+                  // Zuweisung der Daten für Übergabe
+                  name="contactEmail"
+                  value={formData.contactEmail}
+                  onChange={handleChange}
+                  // Input
+                  slotProps={{
+                    input: {},
+                  }}
+                />
+                {/* ---------------Telefonnummer--------------- */}
+                <TextField
+                  // Darstellung
+                  id="ContactPhoneNumber"
+                  label="Telefonnummer"
+                  variant="outlined"
+                  sx={{ m: 1, width: "49%" }}
+                  // Zuweisung der Daten für Übergabe
+                  name="contactPhoneNumber"
+                  value={formData.contactPhoneNumber}
+                  onChange={handleChange}
+                  // Input
+                  slotProps={{
+                    input: {},
+                  }}
+                />
+              </Stack>
+            </Box>
           </Stack>
         </Paper>
         {/* ----------------------------------Gehalt---------------------------------- */}
         <Paper component="form">
-          <Typography paddingBottom={1}>Gehaltsspielraum</Typography>
-          {/* ---------------Textfelder--------------- */}
-          <Stack direction="row" spacing={1} paddingLeft={1}>
-            {/* ---------------Minimum Gehalt--------------- */}
-            <TextField
-              // Darstellung
-              id="SalaryMinimum"
-              label="Minimum"
-              variant="outlined"
-              sx={{ m: 1, width: "49%" }}
-              // Zuweisung der Daten für Übergabe
-              name="salaryMinimum"
-              value={formData.salaryMinimum}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">€</InputAdornment>
-                  ),
-                },
-              }}
-            />
-            <Typography alignContent="center">bis</Typography>
-            {/* ---------------Maximum Gehalt--------------- */}
-            <TextField
-              // Darstellung
-              id="SalaryMaximum"
-              label="Maximum"
-              variant="outlined"
-              sx={{ m: 1, width: "49%" }}
-              // Zuweisung der Daten für Übergabe
-              name="salaryMaximum"
-              value={formData.salaryMaximum}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">€</InputAdornment>
-                  ),
-                },
-              }}
-            />
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            sx={{ flexWrap: "wrap" }}
+          >
+            <Box minWidth={TitleWidth}>
+              <Typography paddingBottom={1}>Gehaltsspielraum</Typography>
+            </Box>
+            {/* ---------------Textfelder--------------- */}
+            <Box flex={1}>
+              <Stack direction="row" spacing={1} paddingLeft={1}>
+                {/* ---------------Minimum Gehalt--------------- */}
+                <TextField
+                  // Darstellung
+                  id="SalaryMinimum"
+                  label="Minimum"
+                  variant="outlined"
+                  sx={{ m: 1, width: "49%" }}
+                  // Zuweisung der Daten für Übergabe
+                  name="salaryMinimum"
+                  value={formData.salaryMinimum}
+                  onChange={handleChange}
+                  // Input
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">€</InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+                <Typography alignContent="center">bis</Typography>
+                {/* ---------------Maximum Gehalt--------------- */}
+                <TextField
+                  // Darstellung
+                  id="SalaryMaximum"
+                  label="Maximum"
+                  variant="outlined"
+                  sx={{ m: 1, width: "49%" }}
+                  // Zuweisung der Daten für Übergabe
+                  name="salaryMaximum"
+                  value={formData.salaryMaximum}
+                  onChange={handleChange}
+                  // Input
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">€</InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+              </Stack>
+            </Box>
           </Stack>
         </Paper>
         {/* ----------------------------------Perks---------------------------------- */}
         <Paper component="form">
-          <Typography>Perks und Benefits</Typography>
-          {/* ---------------Textfeld Perks--------------- */}
-          <TextField
-            // Darstellung
-            id="Perks"
-            //label="Perks"
-            placeholder="Perks"
-            variant="outlined"
-            multiline
-            minRows={5}
-            sx={{ m: 1, width: "98%" }}
-            // Zuweisung der Daten für Übergabe
-            name="perks"
-            value={formData.perks}
-            onChange={handleChange}
-            // Input
-            slotProps={{
-              input: {},
-            }}
-          />
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            sx={{ flexWrap: "wrap" }}
+          >
+            <Box minWidth={TitleWidth}>
+              <Typography>Perks und Benefits</Typography>
+            </Box>
+            {/* ---------------Textfeld Perks--------------- */}
+            <Box flex={1}>
+              <TextField
+                // Darstellung
+                id="Perks"
+                //label="Perks"
+                placeholder="Perks"
+                variant="outlined"
+                multiline
+                minRows={5}
+                sx={{ m: 1, width: "98%" }}
+                // Zuweisung der Daten für Übergabe
+                name="perks"
+                value={formData.perks}
+                onChange={handleChange}
+                // Input
+                slotProps={{
+                  input: {},
+                }}
+              />
+            </Box>
+          </Stack>
         </Paper>
         {/* ----------------------------------Mitarbeiteranzahl---------------------------------- */}
         <Paper component="form">
@@ -762,45 +811,53 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
               <Typography>Größe des Unternehmens</Typography>
             </Box>
             {/* ---------------Textfeld Mitarbeiter--------------- */}
-            <TextField
-              // Darstellung
-              id="NumberOfEmployees"
-              label="Anzahl Mitarbeiter"
-              variant="outlined"
-              sx={{ m: 1, width: "98%" }}
-              // Zuweisung der Daten für Übergabe
-              name="numberOfEmployees"
-              value={formData.companyEmployees}
-              onChange={handleChange}
-              // Input
-              slotProps={{
-                input: {},
-              }}
-            />
+            <Box flex={1}>
+              <TextField
+                // Darstellung
+                id="NumberOfEmployees"
+                label="Anzahl Mitarbeiter"
+                variant="outlined"
+                sx={{ m: 1, width: "98%" }}
+                // Zuweisung der Daten für Übergabe
+                name="numberOfEmployees"
+                value={formData.companyEmployees}
+                onChange={handleChange}
+                // Input
+                slotProps={{
+                  input: {},
+                }}
+              />
+            </Box>
           </Stack>
         </Paper>
         {/* ----------------------------------Notizen---------------------------------- */}
         <Paper component="form">
-          <Typography>Persönliche Notizen</Typography>
-          {/* ---------------Textfeld Notizen--------------- */}
-          <TextField
-            // Darstellung
-            id="PersonalNotes"
-            //label="Notizen"
-            placeholder="Notizen"
-            variant="outlined"
-            multiline
-            minRows={5}
-            sx={{ m: 1, width: "98%" }}
-            // Zuweisung der Daten für Übergabe
-            name="personalNotes"
-            value={formData.personalNotes}
-            onChange={handleChange}
-            // Input
-            slotProps={{
-              input: {},
-            }}
-          />
+          <Stack direction={"row"} alignItems={"center"}>
+            <Box minWidth={TitleWidth}>
+              <Typography>Persönliche Notizen</Typography>
+            </Box>
+            {/* ---------------Textfeld Notizen--------------- */}
+            <Box flex={1}>
+              <TextField
+                // Darstellung
+                id="PersonalNotes"
+                //label="Notizen"
+                placeholder="Notizen"
+                variant="outlined"
+                multiline
+                minRows={5}
+                sx={{ m: 1, width: "98%" }}
+                // Zuweisung der Daten für Übergabe
+                name="personalNotes"
+                value={formData.personalNotes}
+                onChange={handleChange}
+                // Input
+                slotProps={{
+                  input: {},
+                }}
+              />
+            </Box>
+          </Stack>
         </Paper>
 
         {/* ----------------------------------Senden Button---------------------------------- */}
