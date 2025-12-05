@@ -9,11 +9,6 @@ import { useCompanyData} from "../functions/getAllCompaniesAndId";
 import { Delete, Send } from "@mui/icons-material";
 import AddDateAndTime from "./AddDateAndTime";
 
-/* Vllt Später für gloables Axios Setup?
-axios.defaults.baseURL = "http://localhost:8080";
-axios.defaults.headers.post["Content-Type"] = "application/json";
- */
-
 export default function AddApplicationForm() {
 
     // Verwendung des Custom Hooks, um die Firmen- und Ladezustandsdaten zu holen
@@ -60,7 +55,7 @@ export default function AddApplicationForm() {
         setFormData(prevState => {
         const updatedAppointments = [...prevState.appointmentDate]; // Termine abrufen
         updatedAppointments.splice(index, 1);  // Termin an dem jeweiligen Index aus der Liste entfernen
-        return { ...prevState, appointmentDates: updatedAppointments }; // restliche Termine übergeben
+        return { ...prevState, appointmentDate: updatedAppointments }; // restliche Termine übergeben
         });
     };
 
@@ -126,6 +121,7 @@ export default function AddApplicationForm() {
         }}>
         <Paper component="form">
             <div>
+            <Stack direction={'row'}>
                 <Typography>
                     Wie heißt die Stelle bei der Sie sich bewerben wollen?
                 </Typography>
@@ -144,6 +140,8 @@ export default function AddApplicationForm() {
                     slotProps={{
                         input: {},
                     }} />
+            </Stack>
+                
             </div>
         </Paper>
         <Paper component="form">

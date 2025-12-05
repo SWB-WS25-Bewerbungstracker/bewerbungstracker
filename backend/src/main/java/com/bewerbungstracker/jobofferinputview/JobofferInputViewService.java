@@ -1,18 +1,13 @@
 package com.bewerbungstracker.jobofferinputview;
 
-import com.bewerbungstracker.entity.Address;
-import com.bewerbungstracker.entity.Company;
-import com.bewerbungstracker.entity.Contact;
-import com.bewerbungstracker.entity.Joboffer;
-import com.bewerbungstracker.repository.AddressRepository;
-import com.bewerbungstracker.repository.CompanyRepository;
-import com.bewerbungstracker.repository.ContactRepository;
-import com.bewerbungstracker.repository.JobofferRepository;
+import com.bewerbungstracker.entity.*;
+import com.bewerbungstracker.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -24,6 +19,7 @@ public class JobofferInputViewService {
     private final CompanyRepository companyRepository;
     private final ContactRepository contactRepository;
     private final AddressRepository addressRepository;
+    private final AppointmentRepository appointmentRepository;
 
     private static void assignIfNotNull(String value, Consumer<String> setter) {
         if (value != null && !value.isBlank()) {
@@ -37,9 +33,10 @@ public class JobofferInputViewService {
         }
     }
 
-    public Joboffer saveJobofferInput(JobofferInputDTO jobofferInput) {
+    public void saveJobofferInput(JobofferInputDTO jobofferInput) {
         Joboffer joboffer = convertInputToJoboffer(jobofferInput);
-        return jobofferRepository.save(joboffer);
+        jobofferRepository.save(joboffer);
+        convertInputToAppointment(jobofferInput, joboffer);
     }
 
     private Joboffer convertInputToJoboffer(JobofferInputDTO jobofferInput) {
@@ -50,6 +47,7 @@ public class JobofferInputViewService {
             throw new IllegalArgumentException("Name for joboffer is required!");
         }
 
+        /* -- Keeping Code in case requirements are changed, remove once they are set --
         Company company;
         if (jobofferInput.getCompanyId() != null) {
             company = companyRepository.findById(jobofferInput.getCompanyId()).orElse(null);
@@ -59,6 +57,11 @@ public class JobofferInputViewService {
                 companyRepository.save(company);
             }
         }
+        */
+
+        Company company = convertInputToCompany(jobofferInput);
+        companyRepository.save(company);
+
 
         Contact contact = convertInputToContact(jobofferInput);
         if (contact != null) {
@@ -83,10 +86,7 @@ public class JobofferInputViewService {
         Address address = convertInputToAddress(jobofferInput);
 
         if (jobofferInput.getCompanyName().isBlank()) {
-            if (jobofferInput.getNumberOfEmployees() != null || address != null) {
-                throw new IllegalArgumentException("Company name must be provided if other company-related information is given.");
-            }
-            return null;
+            throw new IllegalArgumentException("Company name must be provided.");
         }
 
         if (address != null) {
@@ -103,6 +103,8 @@ public class JobofferInputViewService {
     }
 
     private Address convertInputToAddress(JobofferInputDTO jobofferInput) {
+        /* -- Keeping Code in case requirements are changed, remove once they are set --
+
         boolean allNull = jobofferInput.getAddressStreetNumber().isBlank() &&
                 jobofferInput.getAddressStreet().isBlank() &&
                 jobofferInput.getAddressCity().isBlank() &&
@@ -122,19 +124,30 @@ public class JobofferInputViewService {
         if (!allNotNull) {
             throw new IllegalArgumentException("All address fields but country must be provided if other address related information is given.");
         }
+        */
+
+        // If all information is blank, don't create new address entity
+        if (jobofferInput.getAddressStreetNumber().isBlank() &&
+                jobofferInput.getAddressStreet().isBlank() &&
+                jobofferInput.getAddressCity().isBlank() &&
+                jobofferInput.getAddressPostcode().isBlank() &&
+                jobofferInput.getAddressCountry().isBlank()) {
+            return null;
+        }
 
         Address address = new Address();
 
-        address.setStreetno(jobofferInput.getAddressStreetNumber());
-        address.setStreet(jobofferInput.getAddressStreet());
-        address.setCity(jobofferInput.getAddressCity());
-        address.setZip(jobofferInput.getAddressPostcode());
+        assignIfNotNull(jobofferInput.getAddressStreetNumber(), address::setStreetno);
+        assignIfNotNull(jobofferInput.getAddressStreet(), address::setStreet);
+        assignIfNotNull(jobofferInput.getAddressCity(), address::setCity);
+        assignIfNotNull(jobofferInput.getAddressPostcode(), address::setZip);
         assignIfNotNull(jobofferInput.getAddressCountry(), address::setCountry);
 
         return address;
     }
 
     private Contact convertInputToContact(JobofferInputDTO jobofferInput) {
+        // If all information is blank, don't create new contact entity
         if (jobofferInput.getContactFirstName().isBlank() &&
                 jobofferInput.getContactLastName().isBlank() &&
                 jobofferInput.getContactEmail().isBlank() &&
@@ -152,5 +165,18 @@ public class JobofferInputViewService {
         return contact;
     }
 
+    private void convertInputToAppointment(JobofferInputDTO jobofferInput, Joboffer joboffer) {
+        if (jobofferInput.getAppointmentDate().isEmpty()) {
+            return;
+        }
 
+        for (LocalDateTime appointmentToStore : jobofferInput.getAppointmentDate()) {
+            Appointment appointment = new Appointment();
+
+            appointment.setAppointmentdate(appointmentToStore);
+            appointment.setJoboffer(joboffer);
+
+            appointmentRepository.save(appointment);
+        }
+    }
 }
