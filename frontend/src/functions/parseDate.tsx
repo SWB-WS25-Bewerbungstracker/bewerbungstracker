@@ -1,14 +1,8 @@
-// Funktion, um ein Iso-Timestamp in ein Date Objekt umzuwandeln
-export function parseIsoStringToDateObject(isoDate: string): Date | null {
-  // Funktioniert nur für Iso-Timestamps
-  if (isoDate) {
-    // Aus dem Iso-Timestamp ein Datum-Objekt erstellen
-    const date = new Date(isoDate);
-    return date;
-  } else {
-    return null;
-  }
-}
+export type Appointment = {
+  appointmentId: number | string;
+  appointmentDate: string;
+  appointmentName: string;
+};
 
 // Funktion, um ein Iso-Timestamp in die Komponenten Wochentag, Datum und Uhrzeit zu zerlegen (basierend auf KI Vorschlag(?))
 export function parseDateFromIso(isoDate: string): string[] | null {
@@ -74,5 +68,28 @@ export function parseDateToString(passedDate?: string): string | undefined {
       // Wenn das Ergebnis nicht gültig ist, gib einen leeren String zurück
       return "";
     }
+  }
+}
+
+/* ----------------------------------Funktionen zum Entfernen der Ids neu erstellter Termine ---------------------------------- */
+
+export function removeIdForNewAppointments(
+  tmpAppointments: Appointment[]
+): Appointment[] {
+  console.log("Funktion zum Entfernen neuer Appointment Ids aufgerufen");
+  if (!tmpAppointments) {
+    console.log("Keine Appointments gefunden");
+    return [];
+  } else {
+    return tmpAppointments.map((appointment: Appointment) => {
+      return {
+        // Behalte alle anderen Felder des Appointment-Objekts bei
+        ...appointment,
+        // Wenn die appointmentId mit 'new_' beginnt, auf einen leeren String setzen
+        appointmentId: /^new_/.test(appointment.appointmentId as string) // KI: Regex Test: /^new_/.test(value)
+          ? ""
+          : appointment.appointmentId,
+      };
+    });
   }
 }

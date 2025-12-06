@@ -19,12 +19,13 @@ import { useEffect, useState } from "react";
 import TestButtonGroup from "./TestButtonGroup";
 import axios from "axios";
 import { useCompanyData } from "../functions/getAllCompaniesAndId";
-import {
-  useJobofferDetails,
-  type Appointment,
-} from "../functions/getJobofferById";
+import { useJobofferDetails } from "../functions/getJobofferById";
 import AddAppointments from "./AddAppointments";
 import { Send } from "@mui/icons-material";
+import {
+  removeIdForNewAppointments,
+  type Appointment,
+} from "../functions/parseDate";
 
 const TitleWidth = "20%";
 
@@ -38,7 +39,7 @@ interface JobofferFormData {
 
   companyId: number | string;
   companyName: string;
-  companyEmployees: string;
+  companyEmployees: number | string;
   companyLogo: string; //!
 
   appointments: Appointment[]; // mehrere Termine können so als Array gespeichert und übergeben werden
@@ -46,7 +47,7 @@ interface JobofferFormData {
   addressId: number | string; //!
   addressStreet: string;
   addressStreetNumber: string;
-  addressZipCode: string;
+  addressZipCode: number | string;
   addressCity: string;
   addressCountry: string;
 
@@ -209,9 +210,31 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
   /* ----------------------------------Funktionen zum Senden der Daten---------------------------------- */
 
   // Wird beim Absenden der Daten ans Backend ausgeführt (an KI Bsp orientiert)
-  const handleSubmit = async (id?: number) => {
+  const handleSubmit = async (id?: string | number) => {
     // Wenn eine Id vorhanden ist: Bearbeiten der Daten
     if (id) {
+      // Debugging: Daten der Appointments vor bearbeiten der Ids
+      console.log(
+        "Appointments vor dem Entfernen der IDs: ",
+        formData.appointments
+      );
+
+      // Wenn neue Appointments enthalten sind, dann deren Ids auf leere Strings setzen:
+      // Ids neuer Appontments beginnen mit 'new_',
+      // die Ids alter Appointments (ohne 'new_') bleiben unverändert,
+      // damit kann im Backend unterschieden werden, welche Appointments zu bearbeiten sind und welche hinzugefügt werden müssen
+      const tmpAppointments = formData.appointments; // temporäre Kopie der Appointments mit der gearbeitet wird
+      formData.appointments = removeIdForNewAppointments(tmpAppointments); // setzen der geänderten Appointments
+
+      // Debugging: Appointments nach dem Entfernen der IDs
+      console.log(
+        "Appointments nach dem Entfernen der IDs: ",
+        formData.appointments
+      );
+
+      // Speichern der geänderten Daten (um sicher zu gehen dass Änderung gespeichert ist)
+      setFormData(formData);
+
       // Debugging
       console.log("Jobofferänderung: Daten an Backend: ", formData);
       // Versuch die Daten zu Senden
@@ -275,7 +298,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
   // Funktion, die beim Click auf den Senden Button ausgeführt wird
   const sendButtonClicked = () => {
     console.log("Senden-Button wurde geklickt!");
-    handleSubmit();
+    handleSubmit(id);
     // window.close();
   };
 
@@ -524,7 +547,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
                   variant="outlined"
                   sx={{ m: 1, width: "20%" }}
                   // Zuweisung der Daten für Übergabe
-                  name="addressPostcode"
+                  name="addressZipCode"
                   value={formData.addressZipCode}
                   onChange={handleChange}
                   // Input
@@ -818,7 +841,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
                 variant="outlined"
                 sx={{ m: 1, width: "98%" }}
                 // Zuweisung der Daten für Übergabe
-                name="numberOfEmployees"
+                name="companyEmployees"
                 value={formData.companyEmployees}
                 onChange={handleChange}
                 // Input

@@ -8,8 +8,7 @@ import { Box, Paper, Stack, TextField, Typography } from "@mui/material";
 import TestButtonGroup from "./TestButtonGroup";
 import { Save, Edit, Delete } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import type { Appointment } from "../functions/getJobofferById";
-import { parseDateToString } from "../functions/parseDate";
+import { parseDateToString, type Appointment } from "../functions/parseDate";
 
 // KI: die Komponente als externes Modul nutzbar machen
 export interface AddDateAndTimeProps {
