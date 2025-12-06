@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+import type { Appointment } from "./parseDate";
 
 //-------------------------------------Interface----------------------------------------------
 // Die Interface für das Konstrukt, in das die Daten der Joboffer Detailansicht gespeichert werden
@@ -30,12 +31,6 @@ export interface JobofferDetails {
   contactEmail: string;
   contactPhone: string;
 }
-
-export type Appointment = {
-  appointmentId: number | string;
-  appointmentDate: string;
-  appointmentName: string;
-};
 
 // Die Interface für die Daten, die von der Axios Anfrage zurückkommen sollten
 interface JobofferResponse {
