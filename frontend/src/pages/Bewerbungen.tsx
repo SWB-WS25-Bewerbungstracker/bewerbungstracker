@@ -2,12 +2,12 @@ import CardGrid from "../components/Grid";
 import TestButtonGroup from "../components/TestButtonGroup";
 import { Delete, Add } from "@mui/icons-material";
 import { Box, Stack } from "@mui/material";
-import { useJobofferData } from "../functions/getAllJoboffersForOverview";
+import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOverview";
 // axios: Bibliothek, um HTTP-Requests (GET, POST, PUT, DELETE …) zu machen
 
 //-------------------------------------Seite----------------------------------------------
 const Bewerbungen: React.FC = () => {
-  const { listOfJoboffers, loading, error } = useJobofferData();
+  const { listOfJoboffers, loading, error } = useOverviewOfAllJoboffers();
 
   // Umwandeln auf Typ den ActionAreaCard erwartet
   const listOfJoboffersForCard = listOfJoboffers.map((joboffer) => ({
@@ -41,14 +41,6 @@ const Bewerbungen: React.FC = () => {
           <TestButtonGroup
             buttons={[
               {
-                label: "Löschen",
-                icon: <Delete />,
-                iconPosition: "start",
-                onClick: () => {
-                  deleteButtonClicked();
-                },
-              },
-              {
                 label: "Hinzufügen",
                 icon: <Add />,
                 iconPosition: "start",
@@ -68,10 +60,6 @@ const Bewerbungen: React.FC = () => {
 export default Bewerbungen;
 
 //-------------------------------------Hilfsfunktionen----------------------------------------------
-// Funktion, die beim Click auf den Löschen Button ausgeführt wird
-const deleteButtonClicked = () => {
-  console.log("Löschen-Button wurde geklickt!");
-};
 
 // Funktion, die beim Click auf den Hinzufügen Button ausgeführt wird
 const addButtonClicked = () => {
