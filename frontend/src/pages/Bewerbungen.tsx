@@ -1,6 +1,6 @@
 import CardGrid from "../components/Grid";
 import TestButtonGroup from "../components/TestButtonGroup";
-import { Delete, Add } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 import { Box, Stack } from "@mui/material";
 import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOverview";
 // axios: Bibliothek, um HTTP-Requests (GET, POST, PUT, DELETE …) zu machen

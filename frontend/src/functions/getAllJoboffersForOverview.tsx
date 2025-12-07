@@ -12,18 +12,31 @@ import { parseDateToNextAppointmentString } from "./parseDate";
 export interface JobofferOverview {
   jobofferId: number;
   jobofferName: string;
-  companyID: number;
+  companyID?: number;
   companyName?: string;
   companyImage?: string;
   nextAppointment?: string;
 }
 
+// Typ für die Joboffer Daten
+export interface JobofferDropDownList {
+  jobofferId: number;
+  jobofferAndCompanyName: string;
+}
+
 //-------------------------------------Daten-API----------------------------------------------
 // Funktion zum Abrufen aller Jobofferdaten
-export async function getOverviewOfAllJoboffers() {
+export async function getOverviewOfAllJoboffers(use?: string) {
+  // Funktion für mehrere Zwecke verwendbak machen:
+  // use = 'addAppointment' ->  gibt Joboffer Id und JobofferName + CompanyName zurück
+  //                          für Dropdown Menü beim hinzufügen von Terminen
+  // use = '' -> gibt Daten für die Stellenübersicht-Cards zurück
   try {
     // Daten mit Axios holen
     const response = await axios.get("http://localhost:8080/joboffer");
+
+    // Debugging
+    console.log("Antwort vom Server zur API /joboffer: ", response);
 
     // KI Verbesserung: Prüfen, ob Daten vorhanden sind
     if (!response.data || !Array.isArray(response.data)) {
@@ -54,16 +67,25 @@ export async function getOverviewOfAllJoboffers() {
           "Next Apointment:",
           joboffer.nextapptdate
         ); // Zuweisen der Daten in den JobofferOverview Datentyp
-        return {
-          jobofferId: joboffer.jobofferid,
-          jobofferName: joboffer.joboffername,
-          companyID: joboffer.companyid,
-          companyName: joboffer.companyname,
-          companyImage: "", // Default: Leerer String, da momentan noch kein Bild mitgegeben wird
-          nextAppointment: parseDateToNextAppointmentString(
-            joboffer.nextapptdate
-          ),
-        };
+        // Wenn der Verwendungszweck das Hinzufügen eines Termins ist
+        if (use === "addAppointment") {
+          return {
+            jobofferId: joboffer.jobofferid,
+            jobofferAndCompanyName: `${joboffer.joboffername} + " - " + ${joboffer.companyname}`,
+          };
+        } else {
+          // Wenn der Verwendungszweck die Übersichtskarten sind
+          return {
+            jobofferId: joboffer.jobofferid,
+            jobofferName: joboffer.joboffername,
+            companyID: joboffer.companyid,
+            companyName: joboffer.companyname,
+            companyImage: "", // Default: Leerer String, da momentan noch kein Bild mitgegeben wird
+            nextAppointment: parseDateToNextAppointmentString(
+              joboffer.nextapptdate
+            ),
+          };
+        }
       }
     );
     // Liste der Joboffers zurückgeben
@@ -78,9 +100,12 @@ export async function getOverviewOfAllJoboffers() {
 
 //-------------------------------------Custom-Hook----------------------------------------------
 // Custom Hook, der die Joboffers abruft und den Ladezustand verwaltet sowie die Fehlerbehandlung übernimmt
-export function useOverviewOfAllJoboffers() {
+export function useOverviewOfAllJoboffers(use?: string) {
   // const [variableName, setMethodName] = useState<type>(initialState); // Element, dass das enthält, wird neu geladen, wenn sich die variable ändert
   const [listOfJoboffers, setJobofferList] = useState<JobofferOverview[]>([]); // Joboffers speichern
+  const [listOfJoboffersAndCompanyNames, setJobofferDropDownList] = useState<
+    JobofferDropDownList[]
+  >([]); // Joboffers speichern
   const [loading, setLoading] = useState<boolean>(true); // Ladezustand speichern
   const [error, setError] = useState<string | null>(null); // Fehlerbehandlung
 
@@ -100,8 +125,12 @@ export function useOverviewOfAllJoboffers() {
         if (response.length === 0) {
           setError("Es sind noch keine Stellenausschreibungen hinterlegt.");
         } else {
-          // // Wenn Joboffers vorhanden sind,die Joboffers speichern
-          setJobofferList(response);
+          // Wenn der Verwendungszweck das Hinzufügen eines Termins ist
+          if (use == "addAppointment") {
+            setJobofferDropDownList(response as JobofferDropDownList[]);
+          }
+          // Wenn der Verwendungszweck die Übersichtskarten sind
+          setJobofferList(response as JobofferOverview[]); // Joboffers speichern
         }
       } catch (err: unknown) {
         // Fehlerbehandlung im Falle eines Fehlers bei der API-Anfrage (basierend auf KI Troubleshooting Tips)
@@ -132,8 +161,12 @@ export function useOverviewOfAllJoboffers() {
 
     // Den Hook zum Abrufen der Joboffers ausführen
     loadJoboffers();
-  }, []); // Effekt läuft nur einmal beim ersten Laden, ansonsten hier die Abhängigkeiten angeben
+  }, [use]); // Effekt läuft nur einmal beim ersten Laden, ansonsten hier die Abhängigkeiten angeben
 
-  // Alle Werte übergeben
-  return { listOfJoboffers, loading, error };
+  // Wenn der Verwendungszweck das Hinzufügen eines Termins ist
+  if (use == "addAppointment") {
+    return { listOfJoboffersAndCompanyNames, loading, error };
+  }
+  // Wenn der Verwendungszweck die Übersichtskarten sind
+  return { listOfJoboffers, loading, error }; // Alle Werte übergeben
 }
