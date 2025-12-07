@@ -10,12 +10,12 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AppointmentCleanView {
     private Integer id;
-    private LocalDateTime appointmentdate;
-    private String appointmentname;
+    private LocalDateTime appointmentDate;
+    private String appointmentName;
 
     public AppointmentCleanView(Appointment appointment) {
         this.id = appointment.getId();
-        this.appointmentdate = appointment.getAppointmentdate();
-        this.appointmentname = appointment.getAppointmentname();
+        this.appointmentDate = appointment.getAppointmentdate();
+        this.appointmentName = appointment.getAppointmentname();
     }
 }
