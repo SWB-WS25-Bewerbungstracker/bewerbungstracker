@@ -1,12 +1,14 @@
 package com.bewerbungstracker.jobofferinputview;
 
-import com.bewerbungstracker.entity.Joboffer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -17,7 +19,7 @@ public class JobofferInputViewController {
 
     @PostMapping(path = "/inputForm", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> postJobofferInfo(@RequestBody JobofferInputDTO jobofferInfo) {            //should return success page
-        log.debug("jobofferInfo: {}", jobofferInfo);
+        log.info("jobofferInfo: {}", jobofferInfo);
         jobofferInputViewService.saveJobofferInput(jobofferInfo);
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Bewerbung erfolgreich erstellt!");

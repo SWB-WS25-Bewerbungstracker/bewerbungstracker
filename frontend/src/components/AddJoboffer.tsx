@@ -239,7 +239,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
       console.log("Jobofferänderung: Daten an Backend: ", formData);
       // Versuch die Daten zu Senden
       try {
-        const response = await axios.post(
+        const response = await axios.put(
           "http://localhost:8080/joboffer/editForm", // Backend Schnittstelle
           formData, // zu sendende Daten (automatisch als JSON)
           {
