@@ -2,7 +2,10 @@ import CardGrid from "../components/Grid";
 import TestButtonGroup from "../components/TestButtonGroup";
 import { Add } from "@mui/icons-material";
 import { Box, Stack } from "@mui/material";
-import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOverview";
+import {
+  useOverviewOfAllJoboffers,
+  type JobofferOverview,
+} from "../functions/getAllJoboffersForOverview";
 // axios: Bibliothek, um HTTP-Requests (GET, POST, PUT, DELETE …) zu machen
 
 //-------------------------------------Seite----------------------------------------------
@@ -10,13 +13,15 @@ const Bewerbungen: React.FC = () => {
   const { listOfJoboffers, loading, error } = useOverviewOfAllJoboffers();
 
   // Umwandeln auf Typ den ActionAreaCard erwartet
-  const listOfJoboffersForCard = listOfJoboffers.map((joboffer) => ({
-    id: joboffer.jobofferId,
-    title: joboffer.jobofferName,
-    description1: joboffer.companyName || "Kein Unternehmen angegeben", // Standardwert falls null, undefined order leerer String
-    description2: joboffer.nextAppointment || "Es steht kein Termin an.", // Standardwert falls null, undefined order leerer String
-    image: joboffer.companyImage || "", // Standardwert falls null, undefined order leerer String
-  }));
+  const listOfJoboffersForCard = (listOfJoboffers as JobofferOverview[]).map(
+    (joboffer) => ({
+      id: joboffer.jobofferId,
+      title: joboffer.jobofferName,
+      description1: joboffer.companyName || "Kein Unternehmen angegeben", // Standardwert falls null, undefined order leerer String
+      description2: joboffer.nextAppointment || "Es steht kein Termin an.", // Standardwert falls null, undefined order leerer String
+      image: joboffer.companyImage || "", // Standardwert falls null, undefined order leerer String
+    })
+  );
 
   // Falls noch Daten geladen werden, dies auf der Seite ausgeben
   if (loading) {
