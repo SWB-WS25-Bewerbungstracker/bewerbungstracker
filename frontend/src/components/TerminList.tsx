@@ -1,8 +1,23 @@
-import Box from '@mui/material/Box';
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import { parseDatePassed } from "../functions/parseDateFromIso";
 import axios from "axios"; // für HHTP Requests( PUT, GET, etc.)
 import { useEffect, useState } from "react";
+import { Box, Button} from '@mui/material';
+
+//*************** Toolbar function ****************
+
+function CustomToolbar(){
+    return(
+        <Box sx ={{
+                justifyContent: "flex",
+                display:"flex",
+                alignItems: "center",
+                padding: 1
+        }}>
+            <Button variant="contained">Termin hinzufügen</Button>
+        </Box>
+    )
+}
 
 //**************** INTERFACE *************************
 export interface terminListProps{
@@ -115,10 +130,11 @@ const TerminList: React.FC = () => {
                     '& .MuiDataGrid-columnHeaders': {
                         backgroundColor: 'transparent',
                     },
+                    
                     '& .MuiDataGrid-columnHeader': {    //die einzelnen überschriften
                         backgroundColor: 'transparent',
                         color: 'black',
-                        fontWeight: 'bold',
+
                     },
 
 
@@ -142,6 +158,8 @@ const TerminList: React.FC = () => {
                 }}
                 pageSizeOptions={[5]}
                 disableRowSelectionOnClick
+                slots={{ toolbar: CustomToolbar }}
+                showToolbar
             />
         </Box>
     );
