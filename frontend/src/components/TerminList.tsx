@@ -4,7 +4,7 @@ import axios from "axios"; // für HHTP Requests( PUT, GET, etc.)
 import { useEffect, useState } from "react";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Save, Delete } from "@mui/icons-material";
+import {Save, Delete, Send} from "@mui/icons-material";
 import { getLang} from "../functions/getLanguage";
 import 'dayjs/locale/de';
 import 'dayjs/locale/en';
@@ -15,6 +15,7 @@ import {Box,
     DialogTitle,
     DialogContent,
     Select,
+    TextField,
     MenuItem,
     FormControl,
     InputLabel
@@ -22,6 +23,7 @@ import {Box,
 import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOverview";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import TestButtonGroup from "./TestButtonGroup.tsx";
 
 const Lang=getLang();
 
@@ -145,7 +147,7 @@ const TerminList: React.FC = () => {
             {
                 const today = new Date(); //erstellt ein neues Objekt mit dem heuigen Datum.
 
-                const appointmentDataMapped = response.data
+                const appointmentList = response.data
                     .map((t: BackendTermin): terminListProps => {
                         const parsed = parseDatePassed(t.appointmentdate);
                         return{
@@ -166,7 +168,7 @@ const TerminList: React.FC = () => {
                     })
 
 
-                setRows(appointmentDataMapped)
+                setRows(appointmentList)
             });
     },[]);
 
@@ -217,11 +219,11 @@ const TerminList: React.FC = () => {
                     }}>
                 <DialogTitle>Neuer Termin</DialogTitle>
                 <DialogContent>
-                                            {/* hier muss margin top 1 gemacht werden, damit die schrift nicht abgeschnitten wird*/}
+
                     <FormControl fullWidth sx={{marginTop:1}}>
-                        <InputLabel id="company-selected-label">Firma - Bewerbung</InputLabel>
+                        <InputLabel id="companySelect">Firma - Bewerbung</InputLabel>
                         <Select
-                            labelID="company-selected-label"
+                            labelID="companySelect"
                             value={selectedJoboffer}
                             label="Firma - Bewerbung"
                             onChange={handleJobofferChange}
@@ -251,6 +253,15 @@ const TerminList: React.FC = () => {
                         </Select>
                     </FormControl>
 
+                    <FormControl sx={{marginTop:1}}>
+                        <InputLabel id="appointmanetName"></InputLabel>
+                        <TextField
+                            labelid="appointmentName"
+
+
+                            />
+                    </FormControl>
+
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
                         <Box sx={{display:"flex", marginTop:2, gap:2}}>
                             <DatePicker
@@ -265,7 +276,20 @@ const TerminList: React.FC = () => {
                             />
                         </Box>
                     </LocalizationProvider>
-
+                    <Box sx={{display:"flex", justifyContent: "center", marginTop:1}}>
+                        <TestButtonGroup
+                            buttons={[
+                                {
+                                    label: "Senden",
+                                    icon: <Send />,
+                                    iconPosition: "end",
+                                    onClick: () => {
+                                        sendButtonClicked();
+                                    },
+                                },
+                            ]}
+                        />
+                    </Box>
                 </DialogContent>
             </Dialog>
 
