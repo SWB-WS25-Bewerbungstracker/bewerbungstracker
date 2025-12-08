@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+import applicationTrackerApi from "../services/api.ts";
 import { parseDateToNextAppointmentString } from "./parseDate";
 
 /* Modul, dass die Liste an Joboffer-Daten holt */
@@ -33,7 +34,7 @@ export async function getOverviewOfAllJoboffers(use?: string) {
   // use = '' -> gibt Daten für die Stellenübersicht-Cards zurück
   try {
     // Daten mit Axios holen
-    const response = await axios.get("http://localhost:8080/joboffer");
+    const response = await applicationTrackerApi.get("http://localhost:8080/joboffer");
 
     // Debugging
     console.log("Antwort vom Server zur API /joboffer: ", response);
