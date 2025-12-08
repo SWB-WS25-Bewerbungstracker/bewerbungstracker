@@ -212,6 +212,25 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
 
   // Wird beim Absenden der Daten ans Backend ausgeführt (an KI Bsp orientiert)
   const handleSubmit = async (id?: string | number) => {
+    // Wenn neue Appointments enthalten sind, dann deren Ids auf leere Strings setzen:
+    // Ids neuer Appontments beginnen mit 'new_',
+    // die Ids alter Appointments (ohne 'new_') bleiben unverändert,
+    // damit kann im Backend unterschieden werden, welche Appointments zu bearbeiten sind und welche hinzugefügt werden müssen
+    const tmpAppointments = formData.appointments; // temporäre Kopie der Appointments mit der gearbeitet wird
+    formData.appointments = removeIdForNewAppointments(tmpAppointments); // setzen der geänderten Appointments
+
+    // Debugging: Appointments nach dem Entfernen der IDs
+    console.log(
+      "Appointments nach dem Entfernen der IDs: ",
+      formData.appointments
+    );
+
+    // Speichern der geänderten Daten (um sicher zu gehen dass Änderung gespeichert ist)
+    setFormData(formData);
+
+    // Debugging
+    console.log("Joboffer gesendet: Daten an Backend: ", formData);
+
     // Wenn eine Id vorhanden ist: Bearbeiten der Daten
     if (id) {
       // Debugging: Daten der Appointments vor bearbeiten der Ids
@@ -220,24 +239,6 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
         formData.appointments
       );
 
-      // Wenn neue Appointments enthalten sind, dann deren Ids auf leere Strings setzen:
-      // Ids neuer Appontments beginnen mit 'new_',
-      // die Ids alter Appointments (ohne 'new_') bleiben unverändert,
-      // damit kann im Backend unterschieden werden, welche Appointments zu bearbeiten sind und welche hinzugefügt werden müssen
-      const tmpAppointments = formData.appointments; // temporäre Kopie der Appointments mit der gearbeitet wird
-      formData.appointments = removeIdForNewAppointments(tmpAppointments); // setzen der geänderten Appointments
-
-      // Debugging: Appointments nach dem Entfernen der IDs
-      console.log(
-        "Appointments nach dem Entfernen der IDs: ",
-        formData.appointments
-      );
-
-      // Speichern der geänderten Daten (um sicher zu gehen dass Änderung gespeichert ist)
-      setFormData(formData);
-
-      // Debugging
-      console.log("Jobofferänderung: Daten an Backend: ", formData);
       // Versuch die Daten zu Senden
       try {
         const response = await applicationTrackerApi.put(

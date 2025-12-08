@@ -75,8 +75,8 @@ type Address = {
 
 type Appointments = {
   id: number;
-  appointmentdate: string;
-  appointmentname: string;
+  appointmentDate: string;
+  appointmentName: string;
 };
 
 //-------------------------------------Daten-API----------------------------------------------
@@ -126,13 +126,13 @@ export async function getAllJobofferDetailsById(id?: string) {
         // KI Bug Fix: nicht auf appointments = undefinded gecheckt, und daher hat map nicht funktioniert
         (appointment: {
           id: number;
-          appointmentdate: string;
-          appointmentname: string;
+          appointmentDate: string;
+          appointmentName: string;
         }) => {
           return {
             appointmentId: appointment.id,
-            appointmentDate: appointment.appointmentdate,
-            appointmentName: appointment.appointmentname,
+            appointmentDate: appointment.appointmentDate,
+            appointmentName: appointment.appointmentName,
           };
         }
       ),
