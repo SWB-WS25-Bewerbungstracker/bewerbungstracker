@@ -43,7 +43,7 @@ const Stellenansicht: React.FC = () => {
         <TestButtonGroup
           buttons={[
             {
-              label: "Zurück zu Übersicht",
+              label: "Zurück zur Übersicht",
               icon: <ArrowBack />,
               iconPosition: "start",
               onClick: () => {
@@ -129,85 +129,119 @@ const Stellenansicht: React.FC = () => {
               <Typography> Noch keine Beschreibung angegeben </Typography>
             )}
           </Paper>
+          {/* ----------------------------Rating---------------------------- */}
           <Paper>
             <Stack alignItems={"baseline"}>
               <Box minWidth={TitleWidth}>
                 <Typography variant="h5"> Rating </Typography>
               </Box>
-              <Typography variant="body1">
-                {jobofferDetails.jobofferRating}
-              </Typography>
-            </Stack>
-          </Paper>
-          <Paper>
-            <Stack direction={"column"} spacing={0}>
-              <Typography variant="h5">
-                {jobofferDetails.companyName}
-              </Typography>
-              <Stack alignItems={"baseline"}>
-                <Box minWidth={TitleWidth}>
-                  <Typography variant="body1"> Mitarbeiteranzahl: </Typography>
-                </Box>
+              {jobofferDetails.jobofferRating ? (
                 <Typography variant="body1">
-                  {jobofferDetails.companyEmployees}
+                  {jobofferDetails.jobofferRating}
                 </Typography>
-              </Stack>
+              ) : (
+                <Typography> Noch kein Rating angegeben</Typography>
+              )}
             </Stack>
           </Paper>
+          {/* ----------------------------Unternehmen und Mitarbeiteranzahl---------------------------- */}
+          <Paper>
+            {jobofferDetails.companyName ? (
+              <Stack direction={"row"}>
+                <Box minWidth={TitleWidth}>
+                  <Typography variant="h5">
+                    {jobofferDetails.companyName}
+                  </Typography>
+                </Box>
+
+                {jobofferDetails.companyEmployees ? (
+                  <Stack alignItems={"baseline"}>
+                    <Box minWidth={TitleWidth}>
+                      <Typography variant="body1">
+                        Mitarbeiteranzahl:
+                      </Typography>
+                    </Box>
+                    <Typography variant="body1">
+                      {jobofferDetails.companyEmployees}
+                    </Typography>
+                  </Stack>
+                ) : (
+                  <Typography></Typography>
+                )}
+              </Stack>
+            ) : (
+              <Typography> Noch kein Unternehmen angegeben</Typography>
+            )}
+          </Paper>
+          {/* ----------------------------Adresse---------------------------- */}
           <Paper>
             <Stack direction={"row"} spacing={2} alignItems={"center"}>
               <Box minWidth={TitleWidth}>
                 <Typography variant="h5"> Adresse </Typography>
               </Box>
-              <Stack direction={"column"} spacing={0}>
-                <Stack direction={"row"}>
-                  <Typography variant="body1">
-                    {jobofferDetails.addressStreet}
-                  </Typography>
-                  <Typography variant="body1">
-                    {jobofferDetails.addressStreetNumber}
-                  </Typography>
+              {jobofferDetails.addressId ? (
+                <Stack direction={"column"} spacing={0}>
+                  <Stack direction={"row"}>
+                    <Typography variant="body1">
+                      {jobofferDetails.addressStreet}
+                    </Typography>
+                    <Typography variant="body1">
+                      {jobofferDetails.addressStreetNumber}
+                    </Typography>
+                  </Stack>
+                  <Stack direction={"row"}>
+                    <Typography variant="body1">
+                      {jobofferDetails.addressZipCode}
+                    </Typography>
+                    <Typography variant="body1">
+                      {jobofferDetails.addressCity}
+                    </Typography>
+                    <Typography variant="body1">
+                      {jobofferDetails.addressCountry}
+                    </Typography>
+                  </Stack>
                 </Stack>
-                <Stack direction={"row"}>
-                  <Typography variant="body1">
-                    {jobofferDetails.addressZipCode}
-                  </Typography>
-                  <Typography variant="body1">
-                    {jobofferDetails.addressCity}
-                  </Typography>
-                  <Typography variant="body1">
-                    {jobofferDetails.addressCountry}
-                  </Typography>
-                </Stack>
-              </Stack>
+              ) : (
+                <Typography> Noch keine Adresse angegeben</Typography>
+              )}
             </Stack>
           </Paper>
+          {/* ----------------------------Adresse---------------------------- */}
           <Paper>
             <Stack direction={"row"} spacing={2} alignItems={"center"}>
               <Box minWidth={TitleWidth}>
                 <Typography variant="h5"> Kontaktperson </Typography>
               </Box>
-              <Stack direction={"column"} spacing={0}>
-                <Typography variant="body1">
-                  {jobofferDetails.contactFirstName +
-                    " " +
-                    jobofferDetails.contactLastName}
-                </Typography>
-                <Typography variant="body1">
-                  {jobofferDetails.contactPhone}
-                </Typography>
-                <Typography variant="body1">
-                  {jobofferDetails.contactEmail}
-                </Typography>
-              </Stack>
+              {jobofferDetails.contactId ? (
+                <Stack direction={"column"} spacing={0}>
+                  <Typography variant="body1">
+                    {jobofferDetails.contactFirstName +
+                      " " +
+                      jobofferDetails.contactLastName}
+                  </Typography>
+                  <Typography variant="body1">
+                    {jobofferDetails.contactPhone}
+                  </Typography>
+                  <Typography variant="body1">
+                    {jobofferDetails.contactEmail}
+                  </Typography>
+                </Stack>
+              ) : (
+                <Typography> Noch keine Kontaktperson angegeben</Typography>
+              )}
             </Stack>
           </Paper>
+          {/* ----------------------------Adresse---------------------------- */}
           <Paper>
             <Stack direction={"column"}>
               <Typography variant="h5">Notizen: </Typography>
-              <Typography variant="body1">
-                {jobofferDetails.jobofferNotes}
-              </Typography>
+              {jobofferDetails.jobofferNotes ? (
+                <Typography variant="body1">
+                  {jobofferDetails.jobofferNotes}
+                </Typography>
+              ) : (
+                <Typography> Noch keine Notizen vermerkt</Typography>
+              )}
             </Stack>
           </Paper>
         </Stack>

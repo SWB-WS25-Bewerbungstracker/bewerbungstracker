@@ -33,37 +33,37 @@ const TitleWidth = "20%";
 interface JobofferFormData {
   jobofferId: number | string; //!
   jobofferName: string;
-  jobofferRating: number | string;
-  jobofferDescription: string;
-  personalNotes: string;
+  jobofferRating?: number | string;
+  jobofferDescription?: string;
+  personalNotes?: string;
 
-  companyId: number | string;
-  companyName: string;
-  companyEmployees: number | string;
-  companyLogo: string; //!
+  companyId?: number | string;
+  companyName?: string;
+  companyEmployees?: number | string;
+  companyLogo?: string; //!
 
-  appointments: Appointment[]; // mehrere Termine können so als Array gespeichert und übergeben werden
+  appointments?: Appointment[]; // mehrere Termine können so als Array gespeichert und übergeben werden
 
-  addressId: number | string; //!
-  addressStreet: string;
-  addressStreetNumber: string;
-  addressZipCode: number | string;
-  addressCity: string;
-  addressCountry: string;
+  addressId?: number | string; //!
+  addressStreet?: string;
+  addressStreetNumber?: string;
+  addressZipCode?: number | string;
+  addressCity?: string;
+  addressCountry?: string;
 
-  distanceLength: string;
-  distanceTime: string;
+  distanceLength?: string;
+  distanceTime?: string;
 
-  contactId: number | string; //!
-  contactFirstName: string;
-  contactLastName: string;
-  contactEmail: string;
-  contactPhoneNumber: string;
+  contactId?: number | string; //!
+  contactFirstName?: string;
+  contactLastName?: string;
+  contactEmail?: string;
+  contactPhoneNumber?: string;
 
-  salaryMinimum: string;
-  salaryMaximum: string;
+  salaryMinimum?: string;
+  salaryMaximum?: string;
 
-  perks: string;
+  perks?: string;
 }
 /* type Appointment = {
   appointmentId: number | string;
@@ -155,7 +155,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
 
         companyId: jobofferDetails.companyId,
         companyName: jobofferDetails.companyName,
-        companyEmployees: jobofferDetails.companyEmployees.toString(),
+        companyEmployees: jobofferDetails.companyEmployees?.toString(),
         companyLogo: "", // Existiert noch nicht in der Datenbank
 
         appointments: jobofferDetails.appointments,
@@ -163,7 +163,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
         addressId: jobofferDetails.addressId,
         addressStreet: jobofferDetails.addressStreet,
         addressStreetNumber: jobofferDetails.addressStreetNumber,
-        addressZipCode: jobofferDetails.addressZipCode.toString(),
+        addressZipCode: jobofferDetails.addressZipCode?.toString(),
         addressCity: jobofferDetails.addressCity,
         addressCountry: jobofferDetails.addressCountry,
 
@@ -216,7 +216,9 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
     // die Ids alter Appointments (ohne 'new_') bleiben unverändert,
     // damit kann im Backend unterschieden werden, welche Appointments zu bearbeiten sind und welche hinzugefügt werden müssen
     const tmpAppointments = formData.appointments; // temporäre Kopie der Appointments mit der gearbeitet wird
-    formData.appointments = removeIdForNewAppointments(tmpAppointments); // setzen der geänderten Appointments
+    if (tmpAppointments) {
+      formData.appointments = removeIdForNewAppointments(tmpAppointments); // setzen der geänderten Appointments
+    }
 
     // Debugging: Appointments nach dem Entfernen der IDs
     console.log(
@@ -475,7 +477,9 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
             <Box flex={1}>
               <AddAppointments
                 // Übergabe des Appointment Arrays
-                appointments={formData.appointments}
+                appointments={
+                  formData.appointments ? formData.appointments : []
+                }
                 // KI: verarbeitet Änderungen der Daten der untergeordneten Lomponenete
                 // und ändert die Formular Daten hier dementsprechend ab
                 onAppointmentChange={(tmpAppointments) =>
