@@ -21,10 +21,10 @@ Schema for Bewerbungstracker database
 CREATE TABLE IF NOT EXISTS address
 (
     AddressID SERIAL PRIMARY KEY,
-    Street TEXT NOT NULL,
-    StreetNo TEXT NOT NULL,
-    City TEXT NOT NULL,
-    ZIP TEXT NOT NULL,
+    Street   TEXT,
+    StreetNo TEXT,
+    City     TEXT,
+    ZIP      TEXT,
     Country TEXT
 );
 

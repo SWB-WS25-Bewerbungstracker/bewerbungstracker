@@ -1,82 +1,28 @@
 import CardGrid from "../components/Grid";
-import TestButtonGroup from "../components/TestButtonGroup"
-import { Delete, Add } from '@mui/icons-material';
-import keycloak from "../keycloak"
-import applicationTrackerApi from "../services/api.ts"
-
-import { useEffect, useState } from "react"; 
-// useState: für den internen Zustand der Komponente (Unternehmensliste)
-// useEffect: führt Code nach dem Rendern aus (z. B. Daten vom Backend laden)
-import axios from "axios"; 
-import { parseDatePassed } from "../functions/parseDateFromIso";
-import { Box, Container, Stack } from "@mui/material";
+import TestButtonGroup from "../components/TestButtonGroup";
+import { Add } from "@mui/icons-material";
+import { Box, Stack } from "@mui/material";
+import {
+  useOverviewOfAllJoboffers,
+  type JobofferOverview,
+} from "../functions/getAllJoboffersForOverview";
 // axios: Bibliothek, um HTTP-Requests (GET, POST, PUT, DELETE …) zu machen
-
-//-------------------------------------Interface----------------------------------------------
-// Die Interface für die Daten, die von der Axios Anfrage zurückkommen sollten
-interface JobofferData {
-  id: number;
-  title: string;
-  image?: string;
-  description_1?: string;
-  description_2?: string;
-}
 
 //-------------------------------------Seite----------------------------------------------
 const Bewerbungen: React.FC = () => {
-  
-  // An früherem KI-Bsp orientiert
-  // useState-Hooks
-  // const [variableName, setMethodName] = useState<type>(initialState); // Element, dass das enthält, wird neu geladen, wenn sich die variable ändert
-  const [joboffer, setJoboffer] = useState<JobofferData[]>([]); // Hält die Unternehmensdaten, die von der API abgerufen werden
-  const [loading, setLoading] = useState<boolean>(true); // Zustand, der anzeigt, ob die Daten noch geladen werden
-  const [error, setError] = useState<string | null>(null); // Fehlerbeschreibung
+  const { listOfJoboffers, loading, error } = useOverviewOfAllJoboffers();
 
-  // useEffect-Hook
-  // wird ausgeführt, wenn die Komponente zum ersten Mal gerendert wird
-  useEffect(() => {
-    if(!keycloak || !keycloak.token) return;
+  // Umwandeln auf Typ den ActionAreaCard erwartet
+  const listOfJoboffersForCard = (listOfJoboffers as JobofferOverview[]).map(
+    (joboffer) => ({
+      id: joboffer.jobofferId,
+      title: joboffer.jobofferName,
+      description1: joboffer.companyName || "Kein Unternehmen angegeben", // Standardwert falls null, undefined order leerer String
+      description2: joboffer.nextAppointment || "Es steht kein Termin an.", // Standardwert falls null, undefined order leerer String
+      image: joboffer.companyImage || "", // Standardwert falls null, undefined order leerer String
+    })
+  );
 
-    if(!keycloak.token) return;
-    // Axios GET-Anfrage an das Backend senden
-    applicationTrackerApi
-      // GET an Endpunkt mit Authentifizierungs-Cookie (wichtig: erst in http://localhost:8080/ einloggen)
-      .get('/joboffer')
-      // Verarbeiten der Antwort vom Backend
-      .then((response) => {
-        console.log('Antwort vom Server:', response.data); // Debugging
-        // Umwandlung der Unternehmensnamen in das benötigte Format (durgehen des JSON Arrays und Zuweisen der Daten)
-        const transformedData = response.data.map((joboffer: { jobofferid: number; joboffername:string, companyid: number, companyname: string, nextapptdate: string}) => {
-          console.log('ID:', joboffer.jobofferid, 'Name:', joboffer.joboffername, 'Company ID:', joboffer.companyid, 'Company:', joboffer.companyname, 'Next Apointment:', joboffer.nextapptdate); // Debugging
-          return { // Zuweisung der Daten 
-            id: joboffer.jobofferid,
-            title: joboffer.joboffername,
-            description_1: joboffer.companyname,
-            description_2: parseDateToString(joboffer.nextapptdate)            
-          };
-        });
-        // Speichern der Daten in eine Konstante außerhalb des Axios Blocks, damit diese danach an CardGrid übergeben werden kann
-        setJoboffer(transformedData); 
-        // Ladezustand beenden
-        setLoading(false);
-      })
-      .catch((err) => {
-        // Fehlerbehandlung
-        console.error('Fehler beim Laden der Unternehmensdaten:', err);
-        console.log('Error Details:', err);
-        if (err.response) {
-          // Fehlerantwort vom Server (z.B. 404, 500)
-          setError(`Fehler vom Server: ${err.response.status} - ${err.response.statusText}`);
-        } else if (err.request) {
-          // Keine Antwort vom Server (z.B. Netzwerkprobleme)
-          setError('Keine Antwort vom Server erhalten.');
-        } else {
-          // Fehler in der Anfrage selbst
-          setError('Fehler bei der Anfrage.');
-        }
-        setLoading(false);
-      });
-  }, []);
   // Falls noch Daten geladen werden, dies auf der Seite ausgeben
   if (loading) {
     return <div>Loading...</div>;
@@ -88,16 +34,30 @@ const Bewerbungen: React.FC = () => {
 
   return (
     <div>
-      <Stack padding={2} direction={'row'} spacing={'auto'} width={'100%'} alignItems={'center'}>
+      <Stack
+        padding={2}
+        direction={"row"}
+        spacing={"auto"}
+        width={"100%"}
+        alignItems={"center"}
+      >
         <h1>Bewerbungen</h1>
         <Box>
-          <TestButtonGroup buttons={[
-              { label: "Löschen", icon: <Delete />, iconPosition:'start', onClick: () => {deleteButtonClicked()} },
-              { label: "Hinzufügen", icon: <Add />, iconPosition:'start', onClick: () => {addButtonClicked()}}
-          ]}/>
+          <TestButtonGroup
+            buttons={[
+              {
+                label: "Hinzufügen",
+                icon: <Add />,
+                iconPosition: "start",
+                onClick: () => {
+                  addButtonClicked();
+                },
+              },
+            ]}
+          />
         </Box>
       </Stack>
-      <CardGrid data={joboffer}/>
+      <CardGrid data={listOfJoboffersForCard} />
     </div>
   );
 };
@@ -105,33 +65,10 @@ const Bewerbungen: React.FC = () => {
 export default Bewerbungen;
 
 //-------------------------------------Hilfsfunktionen----------------------------------------------
-// Funktion, um ein Datum in einen String umzuwandeln 
-function parseDateToString (passedDate?: string) : string | undefined{
-  // Versuchen, die Rückgabewerte der parseDatePassed-Funktion zu entpacken, falls dieser existiert
-  if (passedDate){
-    const result = parseDatePassed(passedDate); 
-    // Überprüfen, ob das Ergebnis ein Array ist und es entpacken
-    if (result && result.length === 3) {
-      const [dayPart, datePart, timePart] = result;
-
-      // Wenn alle Teile vorhanden sind, erstelle den Terminstring
-      return `Nächster Termin: am ${dayPart} den ${datePart} um ${timePart} Uhr`;
-    } else {
-      // Wenn das Ergebnis nicht gültig ist, gib einen leeren String zurück
-      return '';
-    }
-  }
-}
-
-// Funktion, die beim Click auf den Löschen Button ausgeführt wird
-const deleteButtonClicked = () => {
-    console.log('Löschen-Button wurde geklickt!');
-  };
 
 // Funktion, die beim Click auf den Hinzufügen Button ausgeführt wird
-const addButtonClicked  = () => {
-    console.log('Hinzufügen-Button wurde geklickt!');
-    window.open('/formular'); // Zum öffnen in einer anderen Seite
-    //window.location.replace('/home'); // Zum öffnen auf dieser Seite
-  }; 
-
+const addButtonClicked = () => {
+  console.log("Hinzufügen-Button wurde geklickt!");
+  window.open("/formular"); // Zum öffnen in einer anderen Seite
+  //window.location.replace('/home'); // Zum öffnen auf dieser Seite
+};

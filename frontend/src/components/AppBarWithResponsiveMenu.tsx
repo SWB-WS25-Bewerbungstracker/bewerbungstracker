@@ -1,36 +1,40 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import { Link, useNavigate } from 'react-router-dom';  
-import keycloak from '../keycloak';
-import SvgIcon from '@mui/icons-material/Menu';
-import BusinessIcon from '@mui/icons-material/Business';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import { Link, useNavigate } from "react-router-dom";
+import keycloak from "../keycloak";
+import SvgIcon from "@mui/icons-material/Menu";
+import BusinessIcon from "@mui/icons-material/Business";
 
 // Tabs und Links dazu
 const pages = [
-    {name: 'Termine', path: '/termine'},
-    {name: 'Bewerbungen', path: '/bewerbungen'},
-    {name: 'Dokumente', path: '/dokumente'}
+  { name: "Termine", path: "/termine" },
+  { name: "Bewerbungen", path: "/bewerbungen" },
+  { name: "Dokumente", path: "/dokumente" },
 ];
 // Optionen bei Clicken auf Profilbild und Links dazu
 const settings = [
-  { name: 'Profil', path: '/profil' },
-  { name: 'Einstellungen', path: '/einstellungen' }
+  { name: "Profil", path: "/profil" },
+  { name: "Einstellungen", path: "/einstellungen" },
 ];
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null
+  );
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null
+  );
   const navigate = useNavigate();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -56,17 +60,24 @@ function ResponsiveAppBar() {
     // - Zurücksetzen des Auth-Status im Zustand
     // - Weiterleitung zur Login-Seite
     keycloak.logout();
-    navigate('/login');     
-    console.log('User logged out');
+    navigate("/login");
+    console.log("User logged out");
   };
 
   return (
-    <AppBar position="sticky" sx={{ 
-      //boxShadow: 'none' 
-      }}>
+    <AppBar
+      position="sticky"
+      sx={{
+        //boxShadow: 'none'
+        backgroundColor: (theme) => theme.palette.primary.main, // KI: Hintergrundfarbe explizit setzen
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <SvgIcon component={BusinessIcon} sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <SvgIcon
+            component={BusinessIcon}
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+          />
           <Typography
             variant="h6"
             component={Link}
@@ -74,24 +85,27 @@ function ResponsiveAppBar() {
             noWrap
             sx={{
               mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
             }}
           >
             BEWERBUNGSTRACKER
           </Typography>
 
-          <Box sx={{ 
-            flexGrow: 1, 
-            display: { 
-              xs: 'flex', 
-              md: 'none', 
-              //boxShadow: 'none' 
-              } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: {
+                xs: "flex",
+                md: "none",
+                //boxShadow: 'none'
+              },
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -106,36 +120,46 @@ function ResponsiveAppBar() {
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "bottom",
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { 
-                xs: 'block', 
-                md: 'none', 
-                //boxShadow: 'none'
-              } }}
+              sx={{
+                display: {
+                  xs: "block",
+                  md: "none",
+                  //boxShadow: 'none'
+                },
+              }}
             >
               {pages.map((page) => (
                 <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                    <Link to={page.path} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <Typography sx={{ textAlign: 'center' }}>{page.name}</Typography>
-                    </Link>
+                  <Link
+                    to={page.path}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography sx={{ textAlign: "center" }}>
+                      {page.name}
+                    </Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <SvgIcon component={BusinessIcon} sx={{ 
-            display: { xs: 'flex', md: 'none' }, 
-            mr: 1 , 
-            //boxShadow: 'none'
-            }} />
+          <SvgIcon
+            component={BusinessIcon}
+            sx={{
+              display: { xs: "flex", md: "none" },
+              mr: 1,
+              //boxShadow: 'none'
+            }}
+          />
           <Typography
             variant="h5"
             noWrap
@@ -143,26 +167,31 @@ function ResponsiveAppBar() {
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
-              display: { xs: 'flex', md: 'none' },
+              display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
               //boxShadow: 'none'
             }}
           >
             BEWERBUNGSTRACKER
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page.name}
                 component={Link}
                 to={page.path}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' , boxShadow: 'none'}}
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "block",
+                  boxShadow: "none",
+                }}
               >
                 {page.name}
               </Button>
@@ -175,33 +204,37 @@ function ResponsiveAppBar() {
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: "45px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
                 <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                    <Link to={setting.path} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <Typography sx={{ textAlign: 'center' }}>{setting.name}</Typography>
-                    </Link>
+                  <Link
+                    to={setting.path}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography sx={{ textAlign: "center" }}>
+                      {setting.name}
+                    </Typography>
+                  </Link>
                 </MenuItem>
               ))}
-            {/* Logout Menü-Item */}
+              {/* Logout Menü-Item */}
               <MenuItem onClick={handleLogout}>
-                <Typography sx={{ textAlign: 'center' }}>Logout</Typography>
+                <Typography sx={{ textAlign: "center" }}>Logout</Typography>
               </MenuItem>
-
             </Menu>
           </Box>
         </Toolbar>

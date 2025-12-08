@@ -15,27 +15,29 @@ export interface Company {
 
 // KI (Abfrage von Seite Bewerbungen übernommen und angepasst)
 export async function getAllCompanies(): Promise<Company[]> {
-    try {
-        const response = await applicationTrackerApi.get('http://localhost:8080/companies');
-    
-        // Umwandlung der Daten in ein Array von Firmennamen
-        const companyData = response.data.map((company: { id: number; companyname: string}) => ({
-            id: company.id, 
-            name: company.companyname,    
-        }));
+  try {
+    const response = await applicationTrackerApi.get("http://localhost:8080/companies");
 
-        // Liste der Firmennamen zurückgeben
-        return companyData; 
-    } catch (err) {
-        console.log('Fehler beim Laden der Unternehmensdaten:', err);
-        return [];
-    }
+    // Umwandlung der Daten in ein Array von Firmennamen
+    const companyData = response.data.map(
+      (company: { id: number; companyname: string }) => ({
+        id: company.id,
+        name: company.companyname,
+      })
+    );
+
+    // Liste der Firmennamen zurückgeben
+    return companyData;
+  } catch (err) {
+    console.log("Fehler beim Laden der Unternehmensdaten:", err);
+    return [];
+  }
 }
 
 // KI: Custom Hook, der die Firmen abruft und den Ladezustand verwaltet
 export function useCompanyData() {
   const [listOfCompanies, setCompanyList] = useState<Company[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingCompanies, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const loadCompanies = async () => {
@@ -44,10 +46,9 @@ export function useCompanyData() {
       setCompanyList(companies);
       setLoading(false);
     };
-    
+
     loadCompanies();
   }, []); // Effekt läuft nur einmal beim ersten Laden
 
-  return { listOfCompanies, loading };
+  return { listOfCompanies, loadingCompanies };
 }
-

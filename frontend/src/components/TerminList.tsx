@@ -1,9 +1,24 @@
-import Box from '@mui/material/Box';
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import { parseDatePassed } from "../functions/parseDateFromIso";
-import axios from "axios"; // für HHTP Requests( PUT, GET, etc.)
+//import axios from "axios"; // für HHTP Requests( PUT, GET, etc.)
 import applicationTrackerApi from "../services/api.ts";
 import { useEffect, useState } from "react";
+import { Box, Button} from '@mui/material';
+
+//*************** Toolbar function ****************
+
+function CustomToolbar(){
+    return(
+        <Box sx ={{
+                justifyContent: "flex",
+                display:"flex",
+                alignItems: "center",
+                padding: 1
+        }}>
+            <Button variant="contained">Termin hinzufügen</Button>
+        </Box>
+    )
+}
 
 //**************** INTERFACE *************************
 export interface terminListProps{
@@ -36,7 +51,7 @@ const TerminList: React.FC = () => {
             field: 'firmaName',
             headerName: 'Unternehmen',
             maxWidth: 150,
-            editable: true,
+            editable: false,
             align: 'left',
         },
         {
@@ -67,7 +82,7 @@ const TerminList: React.FC = () => {
         {
             field: 'toDo',
             headerName: 'To-Do',
-            width: 160,
+            flex: 1, // soll die restliche Zeile auffüllen
             align: 'left',
             headerAlign: 'left',
             editable: true,
@@ -80,8 +95,10 @@ const TerminList: React.FC = () => {
             .get('/appointments')
             .then((response) =>
         {
-            const appointmentDataMapped = response.data.map(
-                (t: BackendTermin): terminListProps => {
+            const today = new Date(); //erstellt ein neues Objekt mit dem heuigen Datum.
+
+            const appointmentDataMapped = response.data
+                .map((t: BackendTermin): terminListProps => {
                     const parsed = parseDatePassed(t.appointmentdate);
                     return{
                         id: t.appointmentID,
@@ -92,8 +109,15 @@ const TerminList: React.FC = () => {
                         //oDo: t.oDo,
                         //contact: t.contact
                     };
-                }
-            );
+                })
+                //Filter erstellen, damit nur Termine Heute oder in Zukunft angezeigt werden
+                .filter((t: terminListProps) => {
+                    const [day, month, year] = t.datum.split('.').map(Number); //trennt string bei jedem Punkt, wandelt dann string in Zahlen um
+                    const date = new Date(year, month - 1, day);
+                    return date >= today;
+                })
+
+
             setRows(appointmentDataMapped)
         });
     },[]);
@@ -103,14 +127,30 @@ const TerminList: React.FC = () => {
     return (
         <Box sx={{ height: 370, width: '100%' }}>
             <DataGrid
-                sx={{
-                    background: '',
+                sx={{ background: 'transparent',
+
+                    '& .MuiDataGrid-columnHeaders': {
+                        backgroundColor: 'transparent',
+                    },
+
+                    '& .MuiDataGrid-columnHeader': {    //die einzelnen überschriften
+                        backgroundColor: 'transparent',
+                        color: 'black',
+
+                    },
+
+
                     '& .MuiDataGrid-row': {
-                        marginBottom: '0px',
+                    marginBottom: '0px',
+                        '&:hover': {
+                            backgroundColor: 'lightblue'  // Beispiel-Hover-Farbe
+                        }
                     },
+
                     '& .MuiDataGrid-row:last-child': {
-                        marginBottom: 0,
+                    marginBottom: 0,
                     },
+
                 }}
                 rows={rows}
                 columns={columns}
@@ -120,6 +160,8 @@ const TerminList: React.FC = () => {
                 }}
                 pageSizeOptions={[5]}
                 disableRowSelectionOnClick
+                slots={{ toolbar: CustomToolbar }}
+                showToolbar
             />
         </Box>
     );
