@@ -78,41 +78,56 @@ const Stellenansicht: React.FC = () => {
         />
       </Stack>
 
-      {/* Daten anzeigen */}
+      {/* ----------------------------Daten anzeigen---------------------------- */}
       <Box padding={2}>
+        {/* ----------------------------Stellenname---------------------------- */}
         <Stack direction="column" spacing={2}>
           <Paper>
             <Typography variant="h1">{jobofferDetails.jobofferName}</Typography>
           </Paper>
+          {/* ----------------------------Termine---------------------------- */}
           <Paper>
             <Stack direction={"row"} spacing={2} alignItems={"center"}>
               <Box minWidth={TitleWidth}>
                 <Typography variant="h5"> Termine </Typography>
               </Box>
               {/* Termien als Liste */}
-              <ul>
-                {jobofferDetails.appointments.map((appointments) => {
-                  return (
-                    <li key={appointments.appointmentId}>
-                      <Stack>
-                        <Typography>{appointments.appointmentName}</Typography>
-                        <Typography> {" am "}</Typography>
-                        <Typography>
-                          {parseDateToString(appointments.appointmentDate)}
-                        </Typography>
-                      </Stack>
-                    </li>
-                  );
-                })}
-              </ul>
+              {/* Wenn Termine vorhanden sind, dann diese anzeigen, sonst drauf hinweisen, dass noch keine vermerkt wurden */}
+              {jobofferDetails.appointments &&
+              jobofferDetails.appointments.length > 0 ? (
+                // KI Bugfixing: map läuft auch bei leerem Array, daher Prüfen ob Array Länge > 0 hat
+                <ul>
+                  {jobofferDetails.appointments.map((appointment) => {
+                    return (
+                      <li key={appointment.appointmentId}>
+                        <Stack>
+                          <Typography>{appointment.appointmentName}</Typography>
+                          <Typography> {" am "}</Typography>
+                          <Typography>
+                            {parseDateToString(appointment.appointmentDate)}
+                          </Typography>
+                        </Stack>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <div>
+                  <Typography> keine Termine vermerkt </Typography>
+                </div>
+              )}
             </Stack>
           </Paper>
+          {/* ----------------------------Beschreibung---------------------------- */}
           <Paper>
             <Typography variant="h5">Beschreibung</Typography>
-            <Typography variant="body1">
-              {" "}
-              {jobofferDetails.jobofferDescription}{" "}
-            </Typography>
+            {jobofferDetails.jobofferDescription ? (
+              <Typography variant="body1">
+                {jobofferDetails.jobofferDescription}
+              </Typography>
+            ) : (
+              <Typography> Noch keine Beschreibung angegeben </Typography>
+            )}
           </Paper>
           <Paper>
             <Stack alignItems={"baseline"}>
