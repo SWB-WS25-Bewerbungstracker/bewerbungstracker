@@ -7,9 +7,10 @@ import { Box } from '@mui/material';
 
 import 'dayjs/locale/de';
 import 'dayjs/locale/en';
+import {getLang} from "../functions/getLanguage.tsx";
 
 export default function CalendarAllDates() {
-    const Lang = navigator.language.startsWith('en') ? 'en' : 'de';
+    const Lang=getLang();
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
             <Box sx={{ width: '100%', height: '100%', background:'' }}>

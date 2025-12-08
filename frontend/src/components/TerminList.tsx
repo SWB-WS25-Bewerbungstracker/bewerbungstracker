@@ -12,7 +12,7 @@ import {Box,
     FormControl,
     InputLabel
 } from '@mui/material';
-
+import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOverview";
 //*************** Toolbar function ****************
 
 function CustomToolbar({onAddClick}:{onAddClick:()=>void}){
@@ -57,10 +57,11 @@ const TerminList: React.FC = () => {
     const handleClose= ()=> setOpen(false)
 
     //***************** const für dropdown in Hinzufügen *************
-    const [selectedCompany, setSelectedCompany]= useState<string>('');
-    const handleCompanyChange = (event:React.ChangeEvent<{value: unknown}>) =>{
-        setSelectedCompany(event.target.value as string);
+    const [selectedJoboffer, setSelectedJoboffer]= useState<number | "">("");
+    const handleJobofferChange = (event:React.ChangeEvent<{value: unknown}>) =>{
+        setSelectedJoboffer(event.target.value as number);
     };
+    const{listOfJoboffers, loading, error} = useOverviewOfAllJoboffers();
 
     const [rows, setRows] = useState<terminListProps[]>([])
     const columns: GridColDef<(typeof rows)[number]>[] = [
@@ -193,12 +194,13 @@ const TerminList: React.FC = () => {
                 <DialogTitle>Neuer Termin</DialogTitle>
                 <DialogContent>
                     <FormControl fullWidth>
-                        <InputLabel id="company-selected-label">Firma</InputLabel>
+                        <InputLabel id="company-selected-label">Firma - Bewerbung</InputLabel>
                         <Select
                             labelID="company-selected-label"
-                            value={selectedCompany}
-                            label="Firma"
-                            onChange={handleCompanyChange}
+                            value={selectedJoboffer}
+                            label="Firma - Bewerbung"
+                            onChange={handleJobofferChange}
+                            sx={{minHeight:50}}
                             MenuProps={{
                                 PaperProps: {
                                     style: {
@@ -207,11 +209,21 @@ const TerminList: React.FC = () => {
                                     },
                                 },
                             }}>
-                            {rows.map((row)=>(
-                                <MenuItem key={row.id} value={row.firmaName}>
-                                    {row.firmaName}
-                                </MenuItem>
-                            ))}
+                            {loading?(
+                                <MenuItem disabled>Lade Daten...</MenuItem>
+                            ):error ?(
+                                <MenuItem disabled>Der code ist perfekt. DU hast mist gebaut...</MenuItem>
+                            ): (
+                                listOfJoboffers
+                                    .slice()
+                                    .sort((a,b)=>a.companyName!.localeCompare(b.companyName!)) //sortiere dropdown alphabetisch nach company name
+                                    .map((offer)=>(
+                                   <MenuItem key={offer.jobofferId} value={offer.jobofferId}>
+                                       {offer.companyName} - {offer.jobofferName}
+                                   </MenuItem>
+                                ))
+                            )
+                            }
                         </Select>
                     </FormControl>
                 </DialogContent>
