@@ -2,6 +2,13 @@ import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import { parseDatePassed } from "../functions/parseDateFromIso";
 import axios from "axios"; // für HHTP Requests( PUT, GET, etc.)
 import { useEffect, useState } from "react";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Save, Delete } from "@mui/icons-material";
+import { getLang} from "../functions/getLanguage";
+import 'dayjs/locale/de';
+import 'dayjs/locale/en';
+import dayjs, { Dayjs } from "dayjs";
 import {Box,
     Button,
     Dialog,
@@ -13,6 +20,12 @@ import {Box,
     InputLabel
 } from '@mui/material';
 import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOverview";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+
+const Lang=getLang();
+
+
 //*************** Toolbar function ****************
 
 function CustomToolbar({onAddClick}:{onAddClick:()=>void}){
@@ -51,6 +64,17 @@ export interface BackendTermin {
 
 
 const TerminList: React.FC = () => {
+
+    // Datum Input speichern (kopie aus AddAppointment)
+    const [date, setDate] = useState<Dayjs | null>(dayjs());
+    // Zeit Input speichern
+    const [time, setTime] = useState<Dayjs | null>(dayjs());
+
+    //********** onChange Handler ************
+    const onDateChange =(newDate:Dayjs | null) => setDate(newDate);
+    const onTimeChange =(newTime:Dayjs | null) => setTime(newTime);
+
+
     //************ const für Popup "Hinzufügen"
     const [open, setOpen] = useState(false);
     const handleOpen= ()=> setOpen(true)
@@ -193,19 +217,19 @@ const TerminList: React.FC = () => {
                     }}>
                 <DialogTitle>Neuer Termin</DialogTitle>
                 <DialogContent>
-                    <FormControl fullWidth>
+                                            {/* hier muss margin top 1 gemacht werden, damit die schrift nicht abgeschnitten wird*/}
+                    <FormControl fullWidth sx={{marginTop:1}}>
                         <InputLabel id="company-selected-label">Firma - Bewerbung</InputLabel>
                         <Select
                             labelID="company-selected-label"
                             value={selectedJoboffer}
                             label="Firma - Bewerbung"
                             onChange={handleJobofferChange}
-                            sx={{minHeight:50}}
                             MenuProps={{
                                 PaperProps: {
                                     style: {
                                         maxHeight: 200,
-                                        width:300,
+                                        width:200
                                     },
                                 },
                             }}>
@@ -226,6 +250,22 @@ const TerminList: React.FC = () => {
                             }
                         </Select>
                     </FormControl>
+
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
+                        <Box sx={{display:"flex", marginTop:2, gap:2}}>
+                            <DatePicker
+                                label="Datum"
+                                value={date}
+                                onChange={onDateChange}
+                            />
+                            <TimePicker
+                            label="Uhrzeit"
+                            value={time}
+                            onChange={onTimeChange}
+                            />
+                        </Box>
+                    </LocalizationProvider>
+
                 </DialogContent>
             </Dialog>
 
