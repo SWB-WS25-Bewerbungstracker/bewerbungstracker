@@ -19,6 +19,9 @@ const Stellenansicht: React.FC = () => {
   // Daten mithilfe externer Funktion laden
   const { jobofferDetails, loadingJoboffer, errorRetrievingJoboffer } =
     useJobofferDetails(id);
+
+  console.log(JSON.stringify(jobofferDetails?.appointments, null, 2));
+
   // Prüfen ob überhaupt Daten empfangen wurden
   if (!jobofferDetails) {
     // sollte ein Leeres Array sein wenn keine Id mitgegeben wurde
@@ -90,8 +93,8 @@ const Stellenansicht: React.FC = () => {
               <ul>
                 {jobofferDetails.appointments.map((appointments) => {
                   return (
-                    <li>
-                      <Stack key={appointments.appointmentId}>
+                    <li key={appointments.appointmentId}>
+                      <Stack>
                         <Typography>{appointments.appointmentName}</Typography>
                         <Typography> {" am "}</Typography>
                         <Typography>

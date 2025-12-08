@@ -81,7 +81,7 @@ function ResponsiveAppBar() {
           <Typography
             variant="h6"
             component={Link}
-            to="/home"
+            to="/"
             noWrap
             sx={{
               mr: 2,
