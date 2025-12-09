@@ -2,12 +2,12 @@ package com.bewerbungstracker.jobofferinputview;
 
 import com.bewerbungstracker.entity.*;
 import com.bewerbungstracker.repository.*;
+import com.bewerbungstracker.singlejobofferview.AppointmentCleanView;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -46,7 +46,7 @@ public class JobofferInputViewService {
         if (jobofferInput.getJobofferName().isBlank()) {
             throw new IllegalArgumentException("Name for joboffer is required!");
         }
-
+        
         /* -- Keeping Code in case requirements are changed, remove once they are set --
         Company company;
         if (jobofferInput.getCompanyId() != null) {
@@ -74,7 +74,7 @@ public class JobofferInputViewService {
         assignIfNotNull(jobofferInput.getJobofferDescription(), joboffer::setDescription);
         assignIfNotNull(jobofferInput.getSalaryMinimum(), joboffer::setWagemin);
         assignIfNotNull(jobofferInput.getSalaryMaximum(), joboffer::setWagemax);
-        assignIfNotNull(jobofferInput.getPersonalNotes(), joboffer::setNotes);
+        assignIfNotNull(jobofferInput.getJobofferNotes(), joboffer::setNotes);
         assignIfNotNull(company, joboffer::setCompany);
         assignIfNotNull(contact, joboffer::setContact);
         log.info("joboffer value is {}", joboffer);
@@ -96,7 +96,7 @@ public class JobofferInputViewService {
         Company company = new Company();
 
         assignIfNotNull(jobofferInput.getCompanyName(), company::setCompanyname);
-        assignIfNotNull(jobofferInput.getNumberOfEmployees(), company::setEmpcount);
+        assignIfNotNull(jobofferInput.getCompanyEmployees(), company::setEmpcount);
         assignIfNotNull(address, company::setAddress);
 
         return company;
@@ -130,7 +130,7 @@ public class JobofferInputViewService {
         if (jobofferInput.getAddressStreetNumber().isBlank() &&
                 jobofferInput.getAddressStreet().isBlank() &&
                 jobofferInput.getAddressCity().isBlank() &&
-                jobofferInput.getAddressPostcode().isBlank() &&
+                jobofferInput.getAddressZipCode().isBlank() &&
                 jobofferInput.getAddressCountry().isBlank()) {
             return null;
         }
@@ -140,7 +140,7 @@ public class JobofferInputViewService {
         assignIfNotNull(jobofferInput.getAddressStreetNumber(), address::setStreetno);
         assignIfNotNull(jobofferInput.getAddressStreet(), address::setStreet);
         assignIfNotNull(jobofferInput.getAddressCity(), address::setCity);
-        assignIfNotNull(jobofferInput.getAddressPostcode(), address::setZip);
+        assignIfNotNull(jobofferInput.getAddressZipCode(), address::setZip);
         assignIfNotNull(jobofferInput.getAddressCountry(), address::setCountry);
 
         return address;
@@ -166,17 +166,22 @@ public class JobofferInputViewService {
     }
 
     private void convertInputToAppointment(JobofferInputDTO jobofferInput, Joboffer joboffer) {
-        if (jobofferInput.getAppointmentDate().isEmpty()) {
+        if (jobofferInput.getAppointments() == null) {
             return;
         }
 
-        for (LocalDateTime appointmentToStore : jobofferInput.getAppointmentDate()) {
-            Appointment appointment = new Appointment();
-
-            appointment.setAppointmentdate(appointmentToStore);
-            appointment.setJoboffer(joboffer);
-
-            appointmentRepository.save(appointment);
+        for (AppointmentCleanView appointmentToStore : jobofferInput.getAppointments()) {
+            appointmentRepository.save(appointmentDTOToEntity(appointmentToStore, joboffer));
         }
+    }
+
+    private Appointment appointmentDTOToEntity(AppointmentCleanView appointmentToStore, Joboffer joboffer) {
+        Appointment appointment = new Appointment();
+
+        appointment.setAppointmentdate(appointmentToStore.getAppointmentDate());
+        appointment.setAppointmentname(appointmentToStore.getAppointmentName());
+        appointment.setJoboffer(joboffer);
+
+        return appointment;
     }
 }
