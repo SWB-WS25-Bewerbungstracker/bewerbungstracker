@@ -258,6 +258,11 @@ const TerminList: React.FC = () => {
                 columnVisibilityModel={{ id: false }}
                 initialState={{
                     pagination: { paginationModel: { pageSize: 5 } },
+                    sorting: {                  //wir initialisieren die Tabelle am anfang Sortiert nach Terminen
+                        sortModel: [
+                            {field: 'datumSort', sort: 'asc'}
+                        ]
+                    }
                 }}
                 pageSizeOptions={[5]}
                 disableRowSelectionOnClick
