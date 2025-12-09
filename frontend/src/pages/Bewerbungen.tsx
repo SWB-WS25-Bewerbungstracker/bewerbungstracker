@@ -23,15 +23,6 @@ const Bewerbungen: React.FC = () => {
     })
   );
 
-  // Falls noch Daten geladen werden, dies auf der Seite ausgeben
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  // Falls ein Fehler auftrat, den auf der Seite ausgeben
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
     <div>
       <Stack
@@ -57,7 +48,13 @@ const Bewerbungen: React.FC = () => {
           />
         </Box>
       </Stack>
-      <CardGrid data={listOfJoboffersForCard} />
+      {loading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div>{error}</div>
+      ) : (
+        <CardGrid data={listOfJoboffersForCard} />
+      )}
     </div>
   );
 };
