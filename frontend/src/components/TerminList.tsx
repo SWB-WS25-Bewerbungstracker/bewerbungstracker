@@ -204,7 +204,7 @@ const TerminList: React.FC = () => {
                     })
                     //Filter erstellen, damit nur Termine Heute oder in Zukunft angezeigt werden
                     .filter((t: terminListProps) => {
-                        const [day, month, year] = t.datum.split('.').map(Number); //trennt string bei jedem Punkt, wandelt dann string in Zahlen um
+                        const [day, month, year] = (t.datum as string).split('.').map(Number); //trennt string bei jedem Punkt, wandelt dann string in Zahlen um
                         const date = new Date(year, month - 1, day);
                         return date >= today;
                     })
