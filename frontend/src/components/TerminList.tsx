@@ -19,7 +19,7 @@ import {Box,
     TextField,
     MenuItem,
     FormControl,
-    InputLabel
+    InputLabel,
 } from '@mui/material';
 import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOverview";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
@@ -124,9 +124,6 @@ const TerminList: React.FC = () => {
 
     //***************** const für dropdown in Hinzufügen *************
     const [selectedJoboffer, setSelectedJoboffer]= useState<number | "">(""); //Ausgewähltes Jobangebot
-    const handleJobofferChange = (event:React.ChangeEvent<{value: unknown}>) =>{
-        setSelectedJoboffer(event.target.value as number);
-    };
 
     //hier wird das array erstellt für Popup um alle daten anzuzeigen
     const{listOfJoboffers, loading, error} = useOverviewOfAllJoboffers();
@@ -284,7 +281,7 @@ const TerminList: React.FC = () => {
                             labelId="companySelect"
                             value={selectedJoboffer}
                             label="Firma - Bewerbung"
-                            onChange={handleJobofferChange}
+                            onChange={(event)=>setSelectedJoboffer(event.target.value as number)}
                             MenuProps={{
                                 PaperProps: {
                                     style: {
@@ -314,7 +311,7 @@ const TerminList: React.FC = () => {
                     <FormControl fullWidth sx={{marginTop:1}}>
                         <InputLabel id="appointmanetName"></InputLabel>
                         <TextField
-                            labelid="appointmentName"
+                            label="appointmentName"
                             value={appointmentName}
                             onChange={(rabbit)=>setAppointmentName(rabbit.target.value)}
 
