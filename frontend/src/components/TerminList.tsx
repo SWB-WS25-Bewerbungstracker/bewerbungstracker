@@ -82,7 +82,8 @@ async function sendButtonClicked(date, time, appointmentName,selectedJoboffer, c
 //**************** INTERFACE *************************
 export interface terminListProps{
     id : number,
-    datum : Date | string,
+    datumSort: string, //datum als ISO string um soriteren zu können.
+    datum : string,
     uhrzeit: string,
     firmaName? : string,
     terminName? : string,
@@ -155,9 +156,12 @@ const TerminList: React.FC = () => {
             align: 'left',
         },
         {
-            field: 'datum',
+            //Problem: datum kann nicht sortiert werden, wenn es parsed ist. also speichern wir datumSort als original ISO und lassen es dann danach Sortieren,
+            //aber rendern die Zelle trotzdem mit datum, was das parsed Datum ist.
+            field: 'datumSort',
             headerName: 'Datum',
-            type: 'number',
+            renderCell: (params)=> params.row.datum,
+            type: 'string',
             width: 110,
             editable: true,
             align: 'center',
@@ -194,8 +198,9 @@ const TerminList: React.FC = () => {
                         const parsed = parseDatePassed(t.appointmentdate);
                         return{
                             id: t.appointmentID,
-                            datum: parsed[1],
-                            uhrzeit: parsed[2],
+                            datumSort: t.appointmentdate,
+                            datum: parsed?.[1]??'',     //hier mache ich selben fix wie bei list unten. falls parsed[1/2] null/undefiined ist schreiben wir ein leeres array
+                            uhrzeit: parsed?.[2]??'',
                             firmaName: t.companyname,
                             terminName: t.appointmentname,
                             //oDo: t.oDo,
@@ -246,6 +251,7 @@ const TerminList: React.FC = () => {
                 }}
                 rows={rows}
                 columns={columns}
+                getRowId={(row)=>row.id}
                 columnVisibilityModel={{ id: false }}
                 initialState={{
                     pagination: { paginationModel: { pageSize: 5 } },
@@ -267,7 +273,7 @@ const TerminList: React.FC = () => {
                     <FormControl fullWidth sx={{marginTop:1}}>
                         <InputLabel id="companySelect">Firma - Bewerbung</InputLabel>
                         <Select
-                            labelID="companySelect"
+                            labelId="companySelect"
                             value={selectedJoboffer}
                             label="Firma - Bewerbung"
                             onChange={handleJobofferChange}
@@ -284,7 +290,7 @@ const TerminList: React.FC = () => {
                             ):error ?(
                                 <MenuItem disabled>Der code ist perfekt. DU hast mist gebaut...</MenuItem>
                             ): (
-                                listOfJoboffers
+                                (listOfJoboffers??[]) // fix: wir schauen ob listOfJoboffers NULL/undefined ist. wenn nicht nutzen wir es. wenn doch, geben wir leeres array.
                                     .slice()                    //hier machen wir eine Kopie um original array nicht zu ändern... und sortieren anschließend mit .sort alphgabeetisch für die ausgabe
                                     .sort((a,b)=>a.companyName!.localeCompare(b.companyName!)) //sortiere dropdown alphabetisch nach company name
                                     .map((offer)=>(
