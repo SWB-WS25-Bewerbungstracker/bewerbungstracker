@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import type { Appointment } from "./parseDate";
+import applicationTrackerApi from "../services/api.ts";
 
 //-------------------------------------Interface----------------------------------------------
 // Die Interface für das Konstrukt, in das die Daten der Joboffer Detailansicht gespeichert werden
@@ -92,7 +93,7 @@ export async function getAllJobofferDetailsById(id?: string) {
   }
   try {
     // Daten mit Axios holen
-    const response = await axios.get<JobofferResponse>(
+    const response = await applicationTrackerApi.get<JobofferResponse>(
       `http://localhost:8080/joboffer/${id}`
     );
 
