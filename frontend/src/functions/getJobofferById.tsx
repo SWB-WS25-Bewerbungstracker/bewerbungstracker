@@ -7,29 +7,31 @@ import type { Appointment } from "./parseDate";
 export interface JobofferDetails {
   jobofferId: number;
   jobofferName: string;
-  jobofferDescription: string;
-  jobofferRating: number;
-  jobofferNotes: string;
+  jobofferDescription?: string;
+  jobofferRating?: number;
+  jobofferMinimumWage?: number | string;
+  jobofferMaximumWage?: number | string;
+  jobofferNotes?: string;
 
-  companyId: number;
-  companyName: string;
-  companyEmployees: number;
-  companyLogo: string;
+  companyId?: number;
+  companyName?: string;
+  companyEmployees?: number;
+  companyLogo?: string;
 
-  appointments: Appointment[];
+  appointments?: Appointment[];
 
-  addressId: number;
-  addressStreet: string;
-  addressStreetNumber: string;
-  addressZipCode: number;
-  addressCity: string;
-  addressCountry: string;
+  addressId?: number;
+  addressStreet?: string;
+  addressStreetNumber?: string;
+  addressZipCode?: number;
+  addressCity?: string;
+  addressCountry?: string;
 
-  contactId: number;
-  contactFirstName: string;
-  contactLastName: string;
-  contactEmail: string;
-  contactPhone: string;
+  contactId?: number;
+  contactFirstName?: string;
+  contactLastName?: string;
+  contactEmail?: string;
+  contactPhone?: string;
 }
 
 // Die Interface für die Daten, die von der Axios Anfrage zurückkommen sollten
@@ -43,6 +45,8 @@ type Joboffer = {
   jobtitle: string;
   description: string;
   rating: number;
+  wagemin: number | string;
+  wagemax: number | string;
   notes: string;
   contact: Contact;
   company: Company;
@@ -106,22 +110,24 @@ export async function getAllJobofferDetailsById(id?: string) {
       jobofferName: response.data.joboffer?.jobtitle,
       jobofferDescription: response.data.joboffer?.description,
       jobofferRating: response.data.joboffer?.rating,
+      jobofferMinimumWage: response.data.joboffer?.wagemin,
+      jobofferMaximumWage: response.data.joboffer?.wagemax,
       jobofferNotes: response.data.joboffer?.notes,
-      contactId: response.data.joboffer?.contact.id,
-      contactFirstName: response.data.joboffer?.contact.firstname,
-      contactLastName: response.data.joboffer?.contact.lastname,
-      contactEmail: response.data.joboffer?.contact.email,
-      contactPhone: response.data.joboffer?.contact.phoneno,
-      companyId: response.data.joboffer?.company.id,
-      companyName: response.data.joboffer?.company.companyname,
-      companyEmployees: response.data.joboffer?.company.empcount,
-      companyLogo: response.data.joboffer?.company.logo,
-      addressId: response.data.joboffer?.company.address.id,
-      addressStreet: response.data.joboffer?.company.address.street,
-      addressStreetNumber: response.data.joboffer?.company.address.streetno,
-      addressCity: response.data.joboffer?.company.address.city,
-      addressZipCode: response.data.joboffer?.company.address.zip,
-      addressCountry: response.data.joboffer?.company.address.country,
+      contactId: response.data.joboffer?.contact?.id,
+      contactFirstName: response.data.joboffer?.contact?.firstname,
+      contactLastName: response.data.joboffer?.contact?.lastname,
+      contactEmail: response.data.joboffer?.contact?.email,
+      contactPhone: response.data.joboffer?.contact?.phoneno,
+      companyId: response.data.joboffer?.company?.id,
+      companyName: response.data.joboffer?.company?.companyname,
+      companyEmployees: response.data.joboffer?.company?.empcount,
+      companyLogo: response.data.joboffer?.company?.logo,
+      addressId: response.data.joboffer?.company?.address?.id,
+      addressStreet: response.data.joboffer?.company?.address?.street,
+      addressStreetNumber: response.data.joboffer?.company?.address?.streetno,
+      addressCity: response.data.joboffer?.company?.address?.city,
+      addressZipCode: response.data.joboffer?.company?.address?.zip,
+      addressCountry: response.data.joboffer?.company?.address?.country,
       appointments: (response.data.appointments || []).map(
         // KI Bug Fix: nicht auf appointments = undefinded gecheckt, und daher hat map nicht funktioniert
         (appointment: {

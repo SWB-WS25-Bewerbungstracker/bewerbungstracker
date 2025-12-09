@@ -7,6 +7,7 @@ import { Box } from '@mui/material';
 import { PickersDay } from '@mui/x-date-pickers/PickersDay';
 import { Tooltip } from "@mui/material";
 
+import { getLang} from "../functions/getLanguage";
 import 'dayjs/locale/de';
 import 'dayjs/locale/en';
 
@@ -63,7 +64,7 @@ function AppointmentDate(props: any) {
 }
 
 export default function CalendarAllDates() {
-    const Lang = navigator.language.startsWith('en') ? 'en' : 'de'; //Liest Sprache vom browser für Kalender layout
+    const Lang=getLang(); //Liest Sprache vom browser für Kalender layout
     const [events, setEvents] = useState<CalendarDate[]>([]);
 
     //Wenn möglich extern lagern um daten nur einmal aufrufen zu müssen

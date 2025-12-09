@@ -9,6 +9,9 @@ import TestButtonGroup from "./TestButtonGroup";
 import { Save, Edit, Delete } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { parseDateToString, type Appointment } from "../functions/parseDate";
+import { getLang} from "../functions/getLanguage";
+import 'dayjs/locale/de';
+import 'dayjs/locale/en';
 
 // KI: die Komponente als externes Modul nutzbar machen
 export interface AddDateAndTimeProps {
@@ -18,6 +21,8 @@ export interface AddDateAndTimeProps {
   // -> Änderungen werden an die übergeordnete Komponente gemeldet
   onAppointmentChange: (appointments: Appointment[]) => void;
 }
+//Sprache des Browsers auslesen und in Lang speichern
+const Lang=getLang();
 
 // Komponente, die seperate Datum und Zeiteingabe erlaubt und diese kombiniert
 const AddAppointments: React.FC<AddDateAndTimeProps> = ({
@@ -182,7 +187,7 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
 
   return (
     <Paper>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
         <Stack direction={"row"} spacing={2} alignItems={"center"}>
           <DatePicker
             fixedWeekNumber={6}

@@ -17,7 +17,7 @@ const FormularBewerbungHinzufuegen: React.FC = () => {
         <TestButtonGroup
           buttons={[
             {
-              label: "Abbrechen und zurück zu Übersicht",
+              label: "Abbrechen und zurück zur Übersicht",
               icon: <ArrowBack />,
               iconPosition: "start",
               onClick: () => {
