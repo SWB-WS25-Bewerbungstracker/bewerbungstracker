@@ -162,9 +162,9 @@ function ResponsiveAppBar() {
           />
           <Typography
             variant="h5"
+            component={Link}
+            to={"/"}
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
