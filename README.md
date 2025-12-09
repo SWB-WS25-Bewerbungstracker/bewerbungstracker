@@ -5,7 +5,7 @@
 ##### Beschreibung
 Dieses Projekt stellt eine Bewerbungsverwaltung für bewerbende zur Verfügung. \
 Zusätzlich können Termine verwaltet werden. \
-Hierfür werden Funktionen zum Anzeigen, Anlegen, Bearbeitung und Löschen von Bewerbungen bereitgestellt.
+Hierfür werden Funktionen zum Anzeigen, Anlegen, Bearbeitung und Löschen von Bewerbungen und Terminen bereitgestellt.
 
 ##### Technologien
 - Backend: Springboot (Java), Maven
