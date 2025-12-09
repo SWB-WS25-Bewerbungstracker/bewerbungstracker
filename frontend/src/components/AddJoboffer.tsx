@@ -18,6 +18,7 @@ import {
 import { useEffect, useState } from "react";
 import TestButtonGroup from "./TestButtonGroup";
 import axios from "axios";
+import applicationTrackerApi from "../services/api.ts";
 import { useCompanyData } from "../functions/getAllCompaniesAndId";
 import { useJobofferDetails } from "../functions/getJobofferById";
 import AddAppointments from "./AddAppointments";
@@ -242,7 +243,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
 
       // Versuch die Daten zu Senden
       try {
-        const response = await axios.put(
+        const response = await applicationTrackerApi.put(
           "http://localhost:8080/joboffer/editForm", // Backend Schnittstelle
           formData, // zu sendende Daten (automatisch als JSON)
           {
@@ -272,7 +273,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
       console.log("Daten an Backend: ", formData);
       // Versuch die Daten zu Senden
       try {
-        const response = await axios.post(
+        const response = await applicationTrackerApi.post(
           "http://localhost:8080/joboffer/inputForm", // Backend Schnittstelle
           formData, // zu sendende Daten (automatisch als JSON)
           {

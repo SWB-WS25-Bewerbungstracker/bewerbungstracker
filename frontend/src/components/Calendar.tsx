@@ -11,7 +11,7 @@ import { getLang} from "../functions/getLanguage";
 import 'dayjs/locale/de';
 import 'dayjs/locale/en';
 
-import axios from 'axios';
+import applicationTrackerApi from "../services/api.ts";
 import { useEffect, useState } from "react";
 import {parseDatePassed} from "../functions/parseDateFromIso.tsx";
 /***************************
@@ -69,7 +69,7 @@ export default function CalendarAllDates() {
 
     //Wenn möglich extern lagern um daten nur einmal aufrufen zu müssen
     useEffect(()=>{
-        axios   .get('http://localhost:8080/appointments')
+        applicationTrackerApi   .get('http://localhost:8080/appointments')
                 .then((response) =>{
                     const mappedCalemndar = response.data
                         .map((t: any)=>{

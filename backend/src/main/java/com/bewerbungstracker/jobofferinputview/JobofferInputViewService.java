@@ -20,6 +20,7 @@ public class JobofferInputViewService {
     private final ContactRepository contactRepository;
     private final AddressRepository addressRepository;
     private final AppointmentRepository appointmentRepository;
+    private final AppuserRepository appuserRepository;
 
     private static void assignIfNotNull(String value, Consumer<String> setter) {
         if (value != null && !value.isBlank()) {
@@ -33,8 +34,11 @@ public class JobofferInputViewService {
         }
     }
 
-    public void saveJobofferInput(JobofferInputDTO jobofferInput) {
+    public void saveJobofferInput(JobofferInputDTO jobofferInput, String userEmail) {
         Joboffer joboffer = convertInputToJoboffer(jobofferInput);
+        Appuser appuser = appuserRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Authenticated user not found: " + userEmail));
+        joboffer.setAppuser(appuser);
         jobofferRepository.save(joboffer);
         convertInputToAppointment(jobofferInput, joboffer);
     }
@@ -46,7 +50,7 @@ public class JobofferInputViewService {
         if (jobofferInput.getJobofferName().isBlank()) {
             throw new IllegalArgumentException("Name for joboffer is required!");
         }
-        
+
         /* -- Keeping Code in case requirements are changed, remove once they are set --
         Company company;
         if (jobofferInput.getCompanyId() != null) {
@@ -120,9 +124,11 @@ public class JobofferInputViewService {
             return null;
         }
 
-        // If only some values contain data, then throw error due to missing required information
+        // If only some values contain data, then throw error due to missing required
+        // information
         if (!allNotNull) {
-            throw new IllegalArgumentException("All address fields but country must be provided if other address related information is given.");
+            throw new IllegalArgumentException(
+                    "All address fields but country must be provided if other address related information is given.");
         }
         */
 

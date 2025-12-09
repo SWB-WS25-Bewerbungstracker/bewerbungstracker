@@ -1,53 +1,82 @@
 #!/bin/bash
 
-# Start two terminal windows:
-#  - first:  sudo docker compose up --build  (in repo root)
-#  - second: npm run dev                      (in frontend/)
-#
-# The script prefers xfce4-terminal, falls back to gnome-terminal, mate-terminal, konsole or xterm.
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 CMD1="cd \"$SCRIPT_DIR\" && sudo docker compose up --build"
 CMD2="cd \"$SCRIPT_DIR/frontend\" && npm run dev"
 
-# detect terminal
-if command -v xfce4-terminal >/dev/null 2>&1; then
-  xfce4-terminal --hold -x bash -lc "$CMD1" &
-  sleep 0.4
-  xfce4-terminal --hold -x bash -lc "$CMD2" &
-  exit 0
+# -------------------------------
+# Spinner while checking services
+# -------------------------------
+spinner() {
+  local pid=$1
+  local delay=0.1
+  local spin='|/-\'
+  while kill -0 $pid 2>/dev/null; do
+     for i in $(seq 0 3); do
+        printf "\rStarting environments... %c" "${spin:$i:1}"
+        sleep $delay
+     done
+  done
+  printf "\rStarting environments... done!      \n"
+}
+
+# -------------------------------
+# Launch terminal windows
+# -------------------------------
+launch_terminal() {
+  local term=$1
+  local cmd=$2
+
+  case "$term" in
+    xfce4-terminal)
+      xfce4-terminal --hold -x bash -lc "$cmd" 2>/dev/null &
+      ;;
+    gnome-terminal)
+      gnome-terminal -- bash -lc "$cmd; exec bash" &
+      ;;
+    mate-terminal)
+      mate-terminal -- bash -lc "$cmd; exec bash" &
+      ;;
+    konsole)
+      konsole -e bash -lc "$cmd; exec bash" &
+      ;;
+    xterm)
+      xterm -hold -e bash -lc "$cmd" &
+      ;;
+  esac
+}
+
+# Detect usable terminal
+TERMINAL=""
+for t in xfce4-terminal gnome-terminal mate-terminal konsole xterm; do
+  if command -v "$t" >/dev/null 2>&1; then
+    TERMINAL="$t"
+    break
+  fi
+done
+
+if [ -z "$TERMINAL" ]; then
+  echo "No supported terminal emulator found."
+  exit 1
 fi
 
-if command -v gnome-terminal >/dev/null 2>&1; then
-  gnome-terminal -- bash -lc "$CMD1; exec bash" &
-  sleep 0.4
-  gnome-terminal -- bash -lc "$CMD2; exec bash" &
-  exit 0
-fi
+# -------------------------------
+# Start terminals
+# -------------------------------
+launch_terminal "$TERMINAL" "$CMD1"
+sleep 0.4
+launch_terminal "$TERMINAL" "$CMD2"
 
-if command -v mate-terminal >/dev/null 2>&1; then
-  mate-terminal -- bash -lc "$CMD1; exec bash" &
-  sleep 0.4
-  mate-terminal -- bash -lc "$CMD2; exec bash" &
-  exit 0
-fi
+# -------------------------------
+# Start spinner while waiting
+# -------------------------------
+(
+  # Wait until docker & npm dev are actually running
+  until docker ps >/dev/null 2>&1; do sleep 1; done
+  until lsof -i :5173 >/dev/null 2>&1; do sleep 1; done # typical Vite port
+) &
+spinner $!
 
-if command -v konsole >/dev/null 2>&1; then
-  konsole -e bash -lc "$CMD1; exec bash" &
-  sleep 0.4
-  konsole -e bash -lc "$CMD2; exec bash" &
-  exit 0
-fi
+exit 0
 
-if command -v xterm >/dev/null 2>&1; then
-  xterm -hold -e bash -lc "$CMD1" &
-  sleep 0.4
-  xterm -hold -e bash -lc "$CMD2" &
-  exit 0
-fi
-
-echo "No supported terminal emulator found. Install xfce4-terminal or gnome-terminal (or another supported terminal)."
-exit 1
-
-Make the script executable: chmod +x /home/nutzer/bewerbungstracker/start.sh// filepath: /home/nutzer/bewerbungstracker/start.sh

@@ -2,5 +2,6 @@
 #IntelliJ
 .idea/*
 !.idea/runConfigurations
+*.iml
 
 *.log

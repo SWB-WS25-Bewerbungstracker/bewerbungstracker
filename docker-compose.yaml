@@ -24,7 +24,7 @@ services:
       SPRING_DATASOURCE_USERNAME: testU
       SPRING_DATASOURCE_PASSWORD: pass
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://authentication:7080/realms/myrealm
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://authentication:7080/realms/bt-realm
     ports:
       - "8080:8080"
     networks:
@@ -34,7 +34,7 @@ services:
     image: quay.io/keycloak/keycloak:24.0
     container_name: keycloak
     environment:
-      KC_HOSTNAME: localhost
+      KC_HOSTNAME: authentication
       KC_HOSTNAME_PORT: 7080
       KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
 

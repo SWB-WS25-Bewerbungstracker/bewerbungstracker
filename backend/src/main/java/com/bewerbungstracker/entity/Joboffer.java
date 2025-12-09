@@ -38,8 +38,8 @@ public class Joboffer {
     @JoinColumn(name = "company")
     private Company company;
 
-    /*
-    @ManyToOne
+    @ManyToOne()
+    @JoinColumn(name = "appuser")
     private Appuser appuser;
-    */
+
 }
