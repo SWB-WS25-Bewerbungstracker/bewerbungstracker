@@ -43,6 +43,42 @@ function CustomToolbar({onAddClick}:{onAddClick:()=>void}){
     )
 }
 
+//***************** Send Button function ***********************************
+
+async function sendButtonClicked(date, time, appointmentName,selectedJoboffer, closeDialog)
+{
+    if (!date || !time || !appointmentName || selectedJoboffer === "") {
+        alert("BIDDÄÄÄ FÜLL ALLE FELDER AUS!!")
+        return
+    }
+
+    const carrotForRabbit= date .hour(time.hour()) .minute(time.minute()) .second(0) .toISOString();
+
+    console.log("Ich sende ans Backend:",{
+        appointmentdate: carrotForRabbit,
+        appointmentname: appointmentName,
+        jobofferID: selectedJoboffer
+    });
+
+ /*   try{
+        await axios.post("http://localhost:8080/MyRabbitWantsToSafeAppointment",{
+            appointmentdate: carrotForRabbit,
+            appointmentname: appointmentName,
+            jobofferID: selectedJoboffer
+        });
+
+        closeDialog();
+        window.location.reload();
+
+    }   catch(err) {
+            console.log(err)
+            alert("Der Hase hat die Karotte nicht geliefert :(")
+        }
+
+  */
+}
+
+
 //**************** INTERFACE *************************
 export interface terminListProps{
     id : number,
@@ -63,31 +99,37 @@ export interface BackendTermin {
     companyname: string,
 }
 
-
+//************ MUI Komponente mit einigen anpassungen beginnt ****************
 
 const TerminList: React.FC = () => {
 
     // Datum Input speichern (kopie aus AddAppointment)
-    const [date, setDate] = useState<Dayjs | null>(dayjs());
+    const [date, setDate] = useState<Dayjs | null>(dayjs());  //ausgewähltes Datum
     // Zeit Input speichern
-    const [time, setTime] = useState<Dayjs | null>(dayjs());
+    const [time, setTime] = useState<Dayjs | null>(dayjs());   //ausgewählte Zeit
 
-    //********** onChange Handler ************
+    //************* AppointmentName ****************
+    const[appointmentName, setAppointmentName] = useState("");
+
+    //********** onChange Handler für popup "Hinzufügen" ************
     const onDateChange =(newDate:Dayjs | null) => setDate(newDate);
     const onTimeChange =(newTime:Dayjs | null) => setTime(newTime);
 
-
-    //************ const für Popup "Hinzufügen"
+    //************ const für Popup "Hinzufügen" *******************
     const [open, setOpen] = useState(false);
     const handleOpen= ()=> setOpen(true)
     const handleClose= ()=> setOpen(false)
 
     //***************** const für dropdown in Hinzufügen *************
-    const [selectedJoboffer, setSelectedJoboffer]= useState<number | "">("");
+    const [selectedJoboffer, setSelectedJoboffer]= useState<number | "">(""); //Ausgewähltes Jobangebot
     const handleJobofferChange = (event:React.ChangeEvent<{value: unknown}>) =>{
         setSelectedJoboffer(event.target.value as number);
     };
+
+    //hier wird das array erstellt für Popup um alle daten anzuzeigen
     const{listOfJoboffers, loading, error} = useOverviewOfAllJoboffers();
+
+
 
     const [rows, setRows] = useState<terminListProps[]>([])
     const columns: GridColDef<(typeof rows)[number]>[] = [
@@ -213,8 +255,10 @@ const TerminList: React.FC = () => {
                 slots={{ toolbar:()=> <CustomToolbar onAddClick={handleOpen}/> }}
                 showToolbar
             />
+
+
             <Dialog open={open}
-                    onClose={handleClose}
+                    onClose={handleClose} //wenn man neben das Fenster klickt, schließt sich das Fenster
                     PaperProps={{sx:{minWidth:10, minHeight:10,}
                     }}>
                 <DialogTitle>Neuer Termin</DialogTitle>
@@ -241,11 +285,11 @@ const TerminList: React.FC = () => {
                                 <MenuItem disabled>Der code ist perfekt. DU hast mist gebaut...</MenuItem>
                             ): (
                                 listOfJoboffers
-                                    .slice()
+                                    .slice()                    //hier machen wir eine Kopie um original array nicht zu ändern... und sortieren anschließend mit .sort alphgabeetisch für die ausgabe
                                     .sort((a,b)=>a.companyName!.localeCompare(b.companyName!)) //sortiere dropdown alphabetisch nach company name
                                     .map((offer)=>(
-                                   <MenuItem key={offer.jobofferId} value={offer.jobofferId}>
-                                       {offer.companyName} - {offer.jobofferName}
+                                   <MenuItem key={offer.jobofferId} value={offer.jobofferId}> {/*Joboffer ID ist einzigartig also nutzzen wir ihn als key und value sagt: das ist die ID für selectedJoboffer... also welches Jobangebot wurde ausgewählt*/}
+                                       {offer.companyName} - {offer.jobofferName}             {/*das ist, was im Feld steht*/}
                                    </MenuItem>
                                 ))
                             )
@@ -253,13 +297,14 @@ const TerminList: React.FC = () => {
                         </Select>
                     </FormControl>
 
-                    <FormControl sx={{marginTop:1}}>
+                    <FormControl fullWidth sx={{marginTop:1}}>
                         <InputLabel id="appointmanetName"></InputLabel>
                         <TextField
                             labelid="appointmentName"
+                            value={appointmentName}
+                            onChange={(rabbit)=>setAppointmentName(rabbit.target.value)}
 
-
-                            />
+                        />
                     </FormControl>
 
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
@@ -284,7 +329,7 @@ const TerminList: React.FC = () => {
                                     icon: <Send />,
                                     iconPosition: "end",
                                     onClick: () => {
-                                        sendButtonClicked();
+                                        sendButtonClicked(date,time,appointmentName,selectedJoboffer,handleClose);
                                     },
                                 },
                             ]}
