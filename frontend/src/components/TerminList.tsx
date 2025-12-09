@@ -45,7 +45,7 @@ function CustomToolbar({onAddClick}:{onAddClick:()=>void}){
 
 //***************** Send Button function ***********************************
 
-async function sendButtonClicked(date, time, appointmentName,selectedJoboffer, closeDialog)
+async function sendButtonClicked(date, time, appointmentName ,selectedJoboffer, closeDialog)
 {
     if (!date || !time || !appointmentName || selectedJoboffer === "") {
         alert("BIDDÄÄÄ FÜLL ALLE FELDER AUS!!")
@@ -175,6 +175,7 @@ const TerminList: React.FC = () => {
             align: 'center',
             headerAlign: 'center',
             editable: true,
+            sortable: false,
         },
         {
             field: 'toDo',
