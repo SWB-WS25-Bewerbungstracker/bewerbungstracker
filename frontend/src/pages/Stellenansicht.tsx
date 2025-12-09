@@ -1,10 +1,12 @@
 import { useParams } from "react-router-dom"; // Zum Verarbeiten der mitgegeben Parameter
-import { Box, Paper, Stack, Typography } from "@mui/material";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Box, Paper, Stack, SvgIcon, Typography } from "@mui/material";
 import { useJobofferDetails } from "../functions/getJobofferById";
 import { parseDateToString } from "../functions/parseDate";
 import TestButtonGroup from "../components/TestButtonGroup";
 import { ArrowBack, Delete, Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+// import BusinessIcon from "@mui/icons-material/Business";
 
 const TitleWidth = "20%";
 
@@ -80,6 +82,30 @@ const Stellenansicht: React.FC = () => {
 
       {/* ----------------------------Daten anzeigen---------------------------- */}
       <Box padding={2}>
+        {/* ----------------------------Unternehmenslogo---------------------------- */}
+        {/*
+        <Box
+          sx={{
+            display: "flex",
+            flexGrow: 1,
+            justifyContent: "center",
+            marginBottom: 2,
+          }}
+        >
+          {jobofferDetails.companyLogo ? (
+            <img
+              src={jobofferDetails.companyLogo}
+              alt="Bild des Unternehmens"
+            />
+          ) : (
+            <SvgIcon
+              component={BusinessIcon}
+              sx={{ fontSize: "100px", color: "primary" }}
+            />
+          )}
+        </Box>
+        */}
+
         {/* ----------------------------Stellenname---------------------------- */}
         <Stack direction="column" spacing={2}>
           <Paper>
@@ -141,6 +167,32 @@ const Stellenansicht: React.FC = () => {
                 </Typography>
               ) : (
                 <Typography> Noch kein Rating angegeben</Typography>
+              )}
+            </Stack>
+          </Paper>
+          {/* ----------------------------Gehalt---------------------------- */}
+          <Paper>
+            <Stack alignItems={"baseline"}>
+              <Box minWidth={TitleWidth}>
+                <Typography variant="h5"> Gehalt </Typography>
+              </Box>
+              {jobofferDetails.jobofferMinimumWage &&
+              jobofferDetails.jobofferMaximumWage ? (
+                <Typography variant="body1">
+                  {jobofferDetails.jobofferMinimumWage}
+                  {"€ bis "}
+                  {jobofferDetails.jobofferMaximumWage}
+                  {"€"}
+                </Typography>
+              ) : jobofferDetails.jobofferMinimumWage ||
+                jobofferDetails.jobofferMaximumWage ? (
+                <Typography variant="body1">
+                  {jobofferDetails.jobofferMinimumWage ||
+                    jobofferDetails.jobofferMaximumWage}
+                  €
+                </Typography>
+              ) : (
+                <Typography> Noch kein Gehaltsspielraum angegeben</Typography>
               )}
             </Stack>
           </Paper>

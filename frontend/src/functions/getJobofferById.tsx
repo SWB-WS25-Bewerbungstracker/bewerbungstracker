@@ -9,6 +9,8 @@ export interface JobofferDetails {
   jobofferName: string;
   jobofferDescription?: string;
   jobofferRating?: number;
+  jobofferMinimumWage?: number | string;
+  jobofferMaximumWage?: number | string;
   jobofferNotes?: string;
 
   companyId?: number;
@@ -43,6 +45,8 @@ type Joboffer = {
   jobtitle: string;
   description: string;
   rating: number;
+  wagemin: number | string;
+  wagemax: number | string;
   notes: string;
   contact: Contact;
   company: Company;
@@ -106,6 +110,8 @@ export async function getAllJobofferDetailsById(id?: string) {
       jobofferName: response.data.joboffer?.jobtitle,
       jobofferDescription: response.data.joboffer?.description,
       jobofferRating: response.data.joboffer?.rating,
+      jobofferMinimumWage: response.data.joboffer?.wagemin,
+      jobofferMaximumWage: response.data.joboffer?.wagemax,
       jobofferNotes: response.data.joboffer?.notes,
       contactId: response.data.joboffer?.contact?.id,
       contactFirstName: response.data.joboffer?.contact?.firstname,

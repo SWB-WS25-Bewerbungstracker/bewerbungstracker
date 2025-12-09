@@ -60,8 +60,8 @@ interface JobofferFormData {
   contactEmail?: string;
   contactPhoneNumber?: string;
 
-  salaryMinimum?: string;
-  salaryMaximum?: string;
+  salaryMinimum?: number | string;
+  salaryMaximum?: number | string;
 
   perks?: string;
 }
@@ -176,8 +176,8 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
         contactEmail: jobofferDetails.contactEmail,
         contactPhoneNumber: jobofferDetails.contactPhone,
 
-        salaryMinimum: "", // Wird aktuell bei getJobofferById noch nicht bereitgestellt
-        salaryMaximum: "", // Wird aktuell bei getJobofferById noch nicht bereitgestellt
+        salaryMinimum: jobofferDetails.jobofferMinimumWage,
+        salaryMaximum: jobofferDetails.jobofferMaximumWage,
 
         perks: "", // Wird aktuell bei getJobofferById noch nicht bereitgestellt
       });
