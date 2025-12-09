@@ -1,6 +1,7 @@
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import { parseDatePassed } from "../functions/parseDateFromIso";
-import axios from "axios"; // für HHTP Requests( PUT, GET, etc.)
+//import axios from "axios"; // für HHTP Requests( PUT, GET, etc.)
+import applicationTrackerApi from "../services/api.ts";
 import { useEffect, useState } from "react";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -189,10 +190,11 @@ const TerminList: React.FC = () => {
 
 // use Effect wird immer aufgerufen beim ersten rendern.
     useEffect(() => {
-        axios   .get('http://localhost:8080/appointments')
+        applicationTrackerApi
+            .get('/appointments')
             .then((response) =>
-            {
-                const today = new Date(); //erstellt ein neues Objekt mit dem heuigen Datum.
+        {
+            const today = new Date(); //erstellt ein neues Objekt mit dem heuigen Datum.
 
                 const appointmentList = response.data
                     .map((t: BackendTermin): terminListProps => {
