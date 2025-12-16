@@ -15,7 +15,7 @@ export interface TestButtonGroupProps {
   }[];
 }
 
-export default function TestButtonGroup({ buttons }: TestButtonGroupProps) {
+export default function ButtonGroup({ buttons }: TestButtonGroupProps) {
   return (
     <Stack direction={"row"} spacing={1}>
       {/* Flexible Anzahl an Buttons */}

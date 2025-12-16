@@ -24,7 +24,7 @@ import {Box,
 import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOverview";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import TestButtonGroup from "./TestButtonGroup.tsx";
+import ButtonGroup from "./ButtonGroup.tsx";
 
 const Lang=getLang();
 
@@ -333,7 +333,7 @@ const TerminList: React.FC = () => {
                         </Box>
                     </LocalizationProvider>
                     <Box sx={{display:"flex", justifyContent: "center", marginTop:1}}>
-                        <TestButtonGroup
+                        <ButtonGroup
                             buttons={[
                                 {
                                     label: "Senden",

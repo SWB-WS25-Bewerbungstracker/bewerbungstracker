@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import TestButtonGroup from "./TestButtonGroup";
+import ButtonGroup from "./ButtonGroup.tsx";
 import axios from "axios";
 import applicationTrackerApi from "../services/api.ts";
 import { useCompanyData } from "../functions/getAllCompaniesAndId";
@@ -900,7 +900,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
             },
           }}
         >
-          <TestButtonGroup
+          <ButtonGroup
             buttons={[
               {
                 label: "Senden",

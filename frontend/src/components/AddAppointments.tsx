@@ -5,7 +5,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box, Paper, Stack, TextField, Typography } from "@mui/material";
-import TestButtonGroup from "./TestButtonGroup";
+import ButtonGroup from "./ButtonGroup.tsx";
 import { Save, Edit, Delete } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { parseDateToString, type Appointment } from "../functions/parseDate";
@@ -215,7 +215,7 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
             }}
           />
           <Box>
-            <TestButtonGroup
+            <ButtonGroup
               buttons={[
                 {
                   label: "",
@@ -255,7 +255,7 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
                     )}`}
                   </Typography>
                   {/* Bearbeiten und Löschen für jeden Termin ermöglichen */}
-                  <TestButtonGroup
+                  <ButtonGroup
                     buttons={[
                       /* Bearbeiten Button für jeden Termin anzeigen*/
                       {

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"; // Zum Verarbeiten der mitgegeben 
 import { Box, Paper, Stack, SvgIcon, Typography } from "@mui/material";
 import { useJobofferDetails } from "../functions/getJobofferById";
 import { parseDateToString } from "../functions/parseDate";
-import TestButtonGroup from "../components/TestButtonGroup";
+import ButtonGroup from "../components/ButtonGroup.tsx";
 import { ArrowBack, Delete, Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 // import BusinessIcon from "@mui/icons-material/Business";
@@ -42,7 +42,7 @@ const Stellenansicht: React.FC = () => {
     <>
       {/* Daten bearbeiten können */}
       <Stack padding={2} justifyContent={"space-between"}>
-        <TestButtonGroup
+        <ButtonGroup
           buttons={[
             {
               label: "Zurück zur Übersicht",
@@ -56,7 +56,7 @@ const Stellenansicht: React.FC = () => {
             },
           ]}
         />
-        <TestButtonGroup
+        <ButtonGroup
           buttons={[
             {
               label: "Bearbeiten",

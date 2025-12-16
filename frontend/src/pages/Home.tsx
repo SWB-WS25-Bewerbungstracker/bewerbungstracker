@@ -1,6 +1,6 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import CardGrid from "../components/Grid";
-import TestButtonGroup from "../components/TestButtonGroup";
+import ButtonGroup from "../components/ButtonGroup.tsx";
 import { Add } from "@mui/icons-material";
 import {
   useOverviewOfAllJoboffers,
@@ -57,7 +57,7 @@ const Home: React.FC = () => {
             Übersicht aller Stellenausschreibungen
           </Typography>
           <Box>
-            <TestButtonGroup
+            <ButtonGroup
               buttons={[
                 {
                   label: "Hinzufügen",

@@ -1,6 +1,6 @@
 import AddJobofferForm from "../components/AddJoboffer";
 import { useParams } from "react-router-dom";
-import TestButtonGroup from "../components/TestButtonGroup";
+import ButtonGroup from "../components/ButtonGroup.tsx";
 import { Stack } from "@mui/material";
 import { ArrowBack, Delete } from "@mui/icons-material";
 
@@ -14,7 +14,7 @@ const FormularBewerbungHinzufuegen: React.FC = () => {
   return (
     <div>
       <Stack padding={2} justifyContent={"space-between"}>
-        <TestButtonGroup
+        <ButtonGroup
           buttons={[
             {
               label: "Abbrechen und zurück zur Übersicht",
@@ -28,7 +28,7 @@ const FormularBewerbungHinzufuegen: React.FC = () => {
             },
           ]}
         />
-        <TestButtonGroup
+        <ButtonGroup
           buttons={[
             {
               label: "Löschen",
