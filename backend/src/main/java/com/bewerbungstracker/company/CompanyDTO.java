@@ -1,4 +1,4 @@
-package com.bewerbungstracker.companyviews;
+package com.bewerbungstracker.company;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

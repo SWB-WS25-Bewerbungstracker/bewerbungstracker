@@ -1,7 +1,6 @@
 package com.bewerbungstracker.appointment;
 
 
-import com.bewerbungstracker.repository.AppointmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

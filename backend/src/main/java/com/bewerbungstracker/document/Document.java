@@ -1,5 +1,6 @@
-package com.bewerbungstracker.entity;
+package com.bewerbungstracker.document;
 
+import com.bewerbungstracker.joboffer.Joboffer;
 import jakarta.persistence.*;
 import lombok.Data;
 

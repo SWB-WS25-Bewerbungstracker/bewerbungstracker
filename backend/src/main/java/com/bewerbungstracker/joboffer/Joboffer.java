@@ -1,5 +1,8 @@
-package com.bewerbungstracker.entity;
+package com.bewerbungstracker.joboffer;
 
+import com.bewerbungstracker.appuser.Appuser;
+import com.bewerbungstracker.company.Company;
+import com.bewerbungstracker.joboffer.contact.Contact;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,7 +15,7 @@ public class Joboffer {
     @Column(name = "jobofferid")
     private Integer id;
 
-    @Column
+    @Column()
     private String jobtitle;
 
     @Column

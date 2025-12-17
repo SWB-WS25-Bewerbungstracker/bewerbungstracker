@@ -1,26 +1,70 @@
-package com.bewerbungstracker.jobofferinputview;
+package com.bewerbungstracker.joboffer;
 
-import com.bewerbungstracker.entity.*;
-import com.bewerbungstracker.repository.*;
-import com.bewerbungstracker.singlejobofferview.AppointmentCleanView;
+
+import com.bewerbungstracker.address.Address;
+import com.bewerbungstracker.address.AddressRepository;
+import com.bewerbungstracker.appointment.Appointment;
+import com.bewerbungstracker.appointment.AppointmentRepository;
+import com.bewerbungstracker.appuser.Appuser;
+import com.bewerbungstracker.appuser.AppuserRepository;
+import com.bewerbungstracker.company.Company;
+import com.bewerbungstracker.company.CompanyRepository;
+import com.bewerbungstracker.joboffer.contact.Contact;
+import com.bewerbungstracker.joboffer.contact.ContactRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional
-public class JobofferInputViewService {
+@RequiredArgsConstructor
+public class JobofferService {
     private final JobofferRepository jobofferRepository;
     private final CompanyRepository companyRepository;
     private final ContactRepository contactRepository;
     private final AddressRepository addressRepository;
     private final AppointmentRepository appointmentRepository;
     private final AppuserRepository appuserRepository;
+
+    public List<JobofferCardDTO> getAllJoboffers(String email) {
+        System.out.println("Email vom Token: " + email);
+        List<JobofferCardDTO> result = jobofferRepository.getAllJoboffers(email);
+        System.out.println("Size: " + result.size());
+        return result;
+    }
+
+    public JobofferDTO getJobofferById(Integer offerid) {
+        Joboffer joboffer = jobofferRepository.getJobofferById(offerid);
+
+        if (joboffer == null) {
+            return null;
+        }
+
+        List<Appointment> appointments = jobofferRepository.getAppointmentsByJobofferId(offerid);
+
+        List<AppointmentCleanView> appointmentCleanViews = new ArrayList<>();
+        for (Appointment appointment : appointments) {
+            appointmentCleanViews.add(new AppointmentCleanView(appointment));
+        }
+
+        return new JobofferDTO(joboffer, appointmentCleanViews);
+    }
+
+    public void saveJobofferInput(JobofferInputDTO jobofferInput, String userEmail) {
+        Joboffer joboffer = convertInputToJoboffer(jobofferInput);
+        Appuser appuser = appuserRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Authenticated user not found: " + userEmail));
+        joboffer.setAppuser(appuser);
+        jobofferRepository.save(joboffer);
+        convertInputToAppointment(jobofferInput, joboffer);
+    }
 
     private static void assignIfNotNull(String value, Consumer<String> setter) {
         if (value != null && !value.isBlank()) {
@@ -32,15 +76,6 @@ public class JobofferInputViewService {
         if (value != null) {
             setter.accept(value);
         }
-    }
-
-    public void saveJobofferInput(JobofferInputDTO jobofferInput, String userEmail) {
-        Joboffer joboffer = convertInputToJoboffer(jobofferInput);
-        Appuser appuser = appuserRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalArgumentException("Authenticated user not found: " + userEmail));
-        joboffer.setAppuser(appuser);
-        jobofferRepository.save(joboffer);
-        convertInputToAppointment(jobofferInput, joboffer);
     }
 
     private Joboffer convertInputToJoboffer(JobofferInputDTO jobofferInput) {
@@ -73,7 +108,7 @@ public class JobofferInputViewService {
         }
 
         Joboffer joboffer = new Joboffer();
-
+        Objects.requireNonNull(jobofferInput.getJobofferName());
         assignIfNotNull(jobofferInput.getJobofferName(), joboffer::setJobtitle);
         assignIfNotNull(jobofferInput.getJobofferDescription(), joboffer::setDescription);
         assignIfNotNull(jobofferInput.getSalaryMinimum(), joboffer::setWagemin);
@@ -172,10 +207,6 @@ public class JobofferInputViewService {
     }
 
     private void convertInputToAppointment(JobofferInputDTO jobofferInput, Joboffer joboffer) {
-        if (jobofferInput.getAppointments() == null) {
-            return;
-        }
-
         for (AppointmentCleanView appointmentToStore : jobofferInput.getAppointments()) {
             appointmentRepository.save(appointmentDTOToEntity(appointmentToStore, joboffer));
         }

@@ -1,6 +1,6 @@
-package com.bewerbungstracker.singlejobofferview;
+package com.bewerbungstracker.joboffer;
 
-import com.bewerbungstracker.entity.Appointment;
+import com.bewerbungstracker.appointment.Appointment;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

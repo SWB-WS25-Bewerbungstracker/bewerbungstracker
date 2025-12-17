@@ -1,6 +1,5 @@
-package com.bewerbungstracker.singlejobofferview;
+package com.bewerbungstracker.joboffer;
 
-import com.bewerbungstracker.entity.Joboffer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,7 +7,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class SingleJobofferViewDetails {
+public class JobofferDTO {
     private Joboffer joboffer;
     private List<AppointmentCleanView> appointments;
 }

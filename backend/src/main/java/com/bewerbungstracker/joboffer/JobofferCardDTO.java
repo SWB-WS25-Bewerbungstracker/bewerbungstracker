@@ -1,6 +1,5 @@
-package com.bewerbungstracker.joboffercardview;
+package com.bewerbungstracker.joboffer;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class JobofferCardViewDTO {
+public class JobofferCardDTO {
     private Integer jobofferid;
     private String joboffername;
     private Integer companyid;

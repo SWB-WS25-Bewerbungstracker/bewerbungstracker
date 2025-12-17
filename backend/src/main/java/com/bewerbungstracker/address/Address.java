@@ -1,4 +1,4 @@
-package com.bewerbungstracker.entity;
+package com.bewerbungstracker.address;
 
 import jakarta.persistence.*;
 import lombok.Data;

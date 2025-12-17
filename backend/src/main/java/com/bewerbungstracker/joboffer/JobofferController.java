@@ -1,4 +1,4 @@
-package com.bewerbungstracker.jobofferinputview;
+package com.bewerbungstracker.joboffer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,24 +7,34 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("/joboffer")
 @RequiredArgsConstructor
-public class JobofferInputViewController {
-    private final JobofferInputViewService jobofferInputViewService;
+public class JobofferController {
+    private final JobofferService jobofferService;
+
+    @GetMapping
+    public List<JobofferCardDTO> getAllJoboffers(@AuthenticationPrincipal Jwt jwt) {
+        String email = jwt.getClaimAsString("email");
+        return jobofferService.getAllJoboffers(email);
+    }
+
+    @GetMapping("/{id}")
+    public JobofferDTO getJobofferById(@PathVariable Integer id) {
+        return jobofferService.getJobofferById(id);
+    }
 
     @PostMapping(path = "/inputForm", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> postJobofferInfo(@RequestBody JobofferInputDTO jobofferInfo,
-            @AuthenticationPrincipal Jwt jwt) {
+                                                   @AuthenticationPrincipal Jwt jwt) {
         String email = jwt.getClaimAsString("email");
         log.info("jobofferInfo: {} user: {}", jobofferInfo, email);
-        jobofferInputViewService.saveJobofferInput(jobofferInfo, email);
+        jobofferService.saveJobofferInput(jobofferInfo, email);
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Bewerbung erfolgreich erstellt!");
     }

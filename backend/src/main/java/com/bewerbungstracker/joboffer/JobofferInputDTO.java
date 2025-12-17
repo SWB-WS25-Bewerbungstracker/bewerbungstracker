@@ -1,9 +1,9 @@
-package com.bewerbungstracker.jobofferinputview;
+package com.bewerbungstracker.joboffer;
 
-import com.bewerbungstracker.singlejobofferview.AppointmentCleanView;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -42,5 +42,5 @@ public class JobofferInputDTO {
     private String contactPhoneNumber;
 
     // Appointment related information
-    private List<AppointmentCleanView> appointments;
+    private List<AppointmentCleanView> appointments = new ArrayList<>();
 }

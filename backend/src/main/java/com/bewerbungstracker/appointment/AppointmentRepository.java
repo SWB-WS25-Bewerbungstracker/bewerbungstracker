@@ -1,7 +1,5 @@
-package com.bewerbungstracker.repository;
+package com.bewerbungstracker.appointment;
 
-import com.bewerbungstracker.appointment.AppointmentDTO;
-import com.bewerbungstracker.entity.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,8 +1,6 @@
-package com.bewerbungstracker.repository;
+package com.bewerbungstracker.joboffer;
 
-import com.bewerbungstracker.entity.Appointment;
-import com.bewerbungstracker.entity.Joboffer;
-import com.bewerbungstracker.joboffercardview.JobofferCardViewDTO;
+import com.bewerbungstracker.appointment.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,7 +25,7 @@ public interface JobofferRepository extends JpaRepository<Joboffer, Integer> {
                 GROUP BY jo.id, jo.jobtitle, c.id, c.companyname
                 ORDER BY jo.id
            """)
-    List<JobofferCardViewDTO> getAllJoboffers(String email);
+    List<JobofferCardDTO> getAllJoboffers(String email);
 
     @Query("SELECT jo FROM Joboffer jo WHERE jo.id=:id")
     Joboffer getJobofferById(@Param("id") Integer id);

@@ -1,6 +1,5 @@
-package com.bewerbungstracker.repository;
+package com.bewerbungstracker.document;
 
-import com.bewerbungstracker.entity.Document;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DocumentRepository extends JpaRepository<Document, Integer> {

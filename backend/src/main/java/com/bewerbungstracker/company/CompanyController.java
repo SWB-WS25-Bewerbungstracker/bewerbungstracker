@@ -1,7 +1,6 @@
-package com.bewerbungstracker.companyviews;
+package com.bewerbungstracker.company;
 
 
-import com.bewerbungstracker.entity.Company;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +12,8 @@ import java.util.List;
 // Um Zugriff von anderem Port zu erlauben
 @RequestMapping("/companies")
 @RequiredArgsConstructor
-public class CompanyViewsController {
-    private final CompanyViewsService companyViewsService;
+public class CompanyController {
+    private final CompanyService companyViewsService;
 
     //Stellt Namen aller Firmen bereit
     @GetMapping("/names")

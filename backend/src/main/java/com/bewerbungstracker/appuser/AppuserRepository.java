@@ -1,6 +1,5 @@
-package com.bewerbungstracker.repository;
+package com.bewerbungstracker.appuser;
 
-import com.bewerbungstracker.entity.Appuser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

@@ -1,7 +1,5 @@
-package com.bewerbungstracker.companyviews;
+package com.bewerbungstracker.company;
 
-import com.bewerbungstracker.entity.Company;
-import com.bewerbungstracker.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +8,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CompanyViewsService {
+public class CompanyService {
     private final CompanyRepository companyRepository;
 
     //Gibt die Namen aller Firmen aus der Datenbank zurück
