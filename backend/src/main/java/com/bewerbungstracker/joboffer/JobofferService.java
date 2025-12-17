@@ -4,17 +4,21 @@ package com.bewerbungstracker.joboffer;
 import com.bewerbungstracker.address.Address;
 import com.bewerbungstracker.address.AddressRepository;
 import com.bewerbungstracker.appointment.Appointment;
+import com.bewerbungstracker.appointment.AppointmentCleanView;
 import com.bewerbungstracker.appointment.AppointmentRepository;
+import com.bewerbungstracker.appointment.AppointmentService;
 import com.bewerbungstracker.appuser.Appuser;
 import com.bewerbungstracker.appuser.AppuserRepository;
 import com.bewerbungstracker.company.Company;
 import com.bewerbungstracker.company.CompanyRepository;
+import com.bewerbungstracker.company.CompanyService;
 import com.bewerbungstracker.joboffer.contact.Contact;
 import com.bewerbungstracker.joboffer.contact.ContactRepository;
-import jakarta.transaction.Transactional;
+import com.bewerbungstracker.joboffer.contact.ContactService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +36,10 @@ public class JobofferService {
     private final AddressRepository addressRepository;
     private final AppointmentRepository appointmentRepository;
     private final AppuserRepository appuserRepository;
+    private final CompanyService companyService;
+    private final AppointmentService appointmentService;
+    private final ContactService contactService;
+    private final JobofferConverter jobofferConverter;
 
     public List<JobofferCardDTO> getAllJoboffers(String email) {
         System.out.println("Email vom Token: " + email);
@@ -58,14 +66,20 @@ public class JobofferService {
     }
 
     public void saveJobofferInput(JobofferInputDTO jobofferInput, String userEmail) {
-        Joboffer joboffer = convertInputToJoboffer(jobofferInput);
+        //Joboffer joboffer = convertInputToJoboffer(jobofferInput);
         Appuser appuser = appuserRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Authenticated user not found: " + userEmail));
+        Company company = companyService.createCompany(jobofferInput.getCompanyName(), jobofferInput.getCompanyEmployees(), jobofferInput.getCompanyLogo(), null);
+        Contact contact = contactService.createContact(jobofferInput.getContactFirstName(), jobofferInput.getContactLastName(), jobofferInput.getContactEmail(), jobofferInput.getContactPhoneNumber());
+        Joboffer joboffer = jobofferConverter.toEntity(jobofferInput, company, contact);
         joboffer.setAppuser(appuser);
         jobofferRepository.save(joboffer);
-        convertInputToAppointment(jobofferInput, joboffer);
+        for(AppointmentCleanView a : jobofferInput.getAppointments()) {
+            appointmentService.createAppointment(a, joboffer);
+        }
+        //convertInputToAppointment(jobofferInput, joboffer);
     }
-
+/*
     private static void assignIfNotNull(String value, Consumer<String> setter) {
         if (value != null && !value.isBlank()) {
             setter.accept(value);
@@ -85,7 +99,7 @@ public class JobofferService {
         if (jobofferInput.getJobofferName().isBlank()) {
             throw new IllegalArgumentException("Name for joboffer is required!");
         }
-
+*/
         /* -- Keeping Code in case requirements are changed, remove once they are set --
         Company company;
         if (jobofferInput.getCompanyId() != null) {
@@ -97,7 +111,7 @@ public class JobofferService {
             }
         }
         */
-
+/*
         Company company = convertInputToCompany(jobofferInput);
         companyRepository.save(company);
 
@@ -141,7 +155,7 @@ public class JobofferService {
         return company;
     }
 
-    private Address convertInputToAddress(JobofferInputDTO jobofferInput) {
+    private Address convertInputToAddress(JobofferInputDTO jobofferInput) { */
         /* -- Keeping Code in case requirements are changed, remove once they are set --
 
         boolean allNull = jobofferInput.getAddressStreetNumber().isBlank() &&
@@ -168,7 +182,7 @@ public class JobofferService {
         */
 
         // If all information is blank, don't create new address entity
-        if (jobofferInput.getAddressStreetNumber().isBlank() &&
+/*        if (jobofferInput.getAddressStreetNumber().isBlank() &&
                 jobofferInput.getAddressStreet().isBlank() &&
                 jobofferInput.getAddressCity().isBlank() &&
                 jobofferInput.getAddressZipCode().isBlank() &&
@@ -220,5 +234,5 @@ public class JobofferService {
         appointment.setJoboffer(joboffer);
 
         return appointment;
-    }
+    }*/
 }

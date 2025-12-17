@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class AppointmentDTO {
+public class AppointmentDetailDTO {
 
     Integer appointmentID;
 

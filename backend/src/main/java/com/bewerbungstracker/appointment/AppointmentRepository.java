@@ -8,7 +8,7 @@ import java.util.List;
 public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
 
     @Query("""
-        SELECT new com.bewerbungstracker.appointment.AppointmentDTO(
+        SELECT new com.bewerbungstracker.appointment.AppointmentDetailDTO(
             appt.id,
             appt.appointmentdate, 
             appt.appointmentname, 
@@ -17,5 +17,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             appt.joboffer.company.companyname)
         FROM Appointment appt
         """)
-    List<AppointmentDTO> getAppointments();
+    List<AppointmentDetailDTO> getAppointments();
 }

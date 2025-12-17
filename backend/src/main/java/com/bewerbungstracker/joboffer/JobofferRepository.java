@@ -11,7 +11,7 @@ public interface JobofferRepository extends JpaRepository<Joboffer, Integer> {
 
     // Alle Joboffers für die Kartenansicht
     @Query("""
-            SELECT new com.bewerbungstracker.joboffercardview.JobofferCardViewDTO(
+            SELECT new com.bewerbungstracker.joboffer.JobofferCardDTO(
                     jo.id,
                     jo.jobtitle,
                     c.id,

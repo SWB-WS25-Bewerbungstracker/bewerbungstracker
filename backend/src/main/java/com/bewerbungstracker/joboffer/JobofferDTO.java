@@ -1,5 +1,6 @@
 package com.bewerbungstracker.joboffer;
 
+import com.bewerbungstracker.appointment.AppointmentCleanView;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

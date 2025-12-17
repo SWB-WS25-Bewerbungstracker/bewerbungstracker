@@ -1,5 +1,6 @@
 package com.bewerbungstracker.company;
 
+import com.bewerbungstracker.address.Address;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CompanyService {
     private final CompanyRepository companyRepository;
+    private final CompanyConverter companyConverter;
 
     //Gibt die Namen aller Firmen aus der Datenbank zurück
     public List<String> getCompanyNames() {
@@ -26,6 +28,14 @@ public class CompanyService {
 
     public Company getCompanyById(Integer id) {
         return companyRepository.getCompanyById(id);
+    }
+
+    public Company createCompany(String companyName, Integer empcount, String logo, Address address ){
+        if(companyName == null || companyName.isEmpty()) {
+            throw new IllegalArgumentException("Company name cannot be null or empty");
+        }
+        Company company = companyConverter.toEntity(companyName, empcount, logo, address);
+        return companyRepository.save(company);
     }
 }
 
