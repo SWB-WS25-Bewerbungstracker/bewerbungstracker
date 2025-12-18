@@ -15,7 +15,7 @@ public class Joboffer {
     @Column(name = "jobofferid")
     private Integer id;
 
-    @Column()
+    @Column(nullable = false)
     private String jobtitle;
 
     @Column

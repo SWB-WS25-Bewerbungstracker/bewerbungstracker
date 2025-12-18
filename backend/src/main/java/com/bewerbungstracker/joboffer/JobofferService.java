@@ -68,14 +68,27 @@ public class JobofferService {
 
     public void saveJobofferInput(JobofferInputDTO jobofferInput, String userEmail) {
         //Joboffer joboffer = convertInputToJoboffer(jobofferInput);
+        Company company;
+
         Appuser appuser = appuserRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Authenticated user not found: " + userEmail));
         JobofferNestedInputDTO input = jobofferInputMapper.map(jobofferInput);
-        Company company = companyService.createCompany(input.getCompany());
+
+        if(input.getCompany().getCompanyId() != null) {
+            company = companyRepository
+                    .findById(input.getCompany().getCompanyId())
+                    .orElseThrow(()-> new IllegalArgumentException("Company not found: " + input.getCompany().getCompanyId()));
+        }
+        else {
+            company = companyService.createCompany(input.getCompany());
+        }
         Contact contact = contactService.createContact(input.getContact());
+
         Joboffer joboffer = jobofferConverter.toEntity(input, company, contact);
         joboffer.setAppuser(appuser);
         jobofferRepository.save(joboffer);
+
+        //Save Appointments
         for(AppointmentCleanView a : jobofferInput.getAppointments()) {
             appointmentService.createAppointment(a, joboffer);
         }

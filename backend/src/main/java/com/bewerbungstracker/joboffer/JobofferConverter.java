@@ -1,6 +1,5 @@
 package com.bewerbungstracker.joboffer;
 
-import com.bewerbungstracker.appointment.Appointment;
 import com.bewerbungstracker.company.Company;
 import com.bewerbungstracker.joboffer.contact.Contact;
 import lombok.RequiredArgsConstructor;

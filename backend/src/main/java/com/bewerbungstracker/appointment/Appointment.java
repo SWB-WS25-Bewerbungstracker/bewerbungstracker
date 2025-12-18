@@ -15,7 +15,7 @@ public class Appointment {
     @Column(name = "appointmentid")
     private Integer id;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime appointmentdate;
 
     @Column

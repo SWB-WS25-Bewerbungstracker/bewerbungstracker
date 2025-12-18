@@ -13,7 +13,7 @@ public class Company {
     @Column(name = "companyid")
     private Integer id;
 
-    @Column
+    @Column(nullable = false)
     private String companyname;
 
     @Column
