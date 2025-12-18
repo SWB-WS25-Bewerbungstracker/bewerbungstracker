@@ -62,7 +62,7 @@ async function sendButtonClicked(date, time, appointmentName ,selectedJoboffer, 
     });
 
  /*   try{
-        await axios.post("http://localhost:8080/MyRabbitWantsToSafeAppointment",{
+        await axios.post("http://localhost:8080/MyRabbitWantsToSaveAppointment",{
             appointmentdate: carrotForRabbit,
             appointmentname: appointmentName,
             jobofferID: selectedJoboffer
@@ -83,7 +83,6 @@ async function sendButtonClicked(date, time, appointmentName ,selectedJoboffer, 
 //**************** INTERFACE *************************
 export interface terminListProps{
     id : number,
-    datumSort: string, //datum als ISO string um soriteren zu können.
     datum : string,
     uhrzeit: string,
     firmaName? : string,
@@ -106,10 +105,8 @@ export interface BackendTermin {
 const TerminList: React.FC = () => {
 
     // Datum Input speichern (kopie aus AddAppointment)
-    const [date, setDate] = useState<Dayjs | null>(dayjs());  //ausgewähltes Datum
-    // Zeit Input speichern
-    const [time, setTime] = useState<Dayjs | null>(dayjs());   //ausgewählte Zeit
-
+    const [date, setDate] = useState<Dayjs | null>(dayjs());
+    const [time, setTime] = useState<Dayjs | null>(dayjs());
     //************* AppointmentName ****************
     const[appointmentName, setAppointmentName] = useState("");
 
@@ -130,6 +127,7 @@ const TerminList: React.FC = () => {
 
 
 
+
     const [rows, setRows] = useState<terminListProps[]>([])
     const columns: GridColDef<(typeof rows)[number]>[] = [
         {   field: 'id',
@@ -139,7 +137,7 @@ const TerminList: React.FC = () => {
         {
             field: 'firmaName',
             headerName: 'Unternehmen',
-            maxWidth: 150,
+            width: 120,
             editable: false,
             align: 'left',
             renderCell: params => (
@@ -154,16 +152,17 @@ const TerminList: React.FC = () => {
             align: 'left',
         },
         {
-            //Problem: datum kann nicht sortiert werden, wenn es parsed ist. also speichern wir datumSort als original ISO und lassen es dann danach Sortieren,
-            //aber rendern die Zelle trotzdem mit datum, was das parsed Datum ist.
-            field: 'datumSort',
+            field: 'datum',
             headerName: 'Datum',
-            renderCell: (params)=> params.row.datum,
-            type: 'string',
             width: 110,
-            editable: true,
-            align: 'center',
-            headerAlign: 'left',
+            editable: false,
+            sortable: true,
+
+            renderCell: (params) => {
+                const parsed = parseDatePassed(params.value as string);
+                return <span>{parsed?.[1]}</span>;
+            }
+
         },
         {
             field: 'uhrzeit',
@@ -172,8 +171,12 @@ const TerminList: React.FC = () => {
             width: 100,
             align: 'center',
             headerAlign: 'center',
-            editable: true,
+            editable: false,
             sortable: false,
+
+            renderCell: (params) => {
+                const parsed = parseDatePassed(params.value as string);
+                return <span>{parsed?.[2]}</span>;}
         },
         {
             field: 'toDo',
@@ -195,23 +198,22 @@ const TerminList: React.FC = () => {
 
                 const appointmentList = response.data
                     .map((t: BackendTermin): terminListProps => {
-                        const parsed = parseDatePassed(t.appointmentdate);
+                        //const parsed = parseDatePassed(t.appointmentdate);
+
                         return{
                             id: t.appointmentID,
-                            datumSort: t.appointmentdate,
-                            datum: parsed?.[1]??'',     //hier mache ich selben fix wie bei list unten. falls parsed[1/2] null/undefiined ist schreiben wir ein leeres array
-                            uhrzeit: parsed?.[2]??'',
+                            datum: t.appointmentdate,
+                            uhrzeit: t.appointmentdate,
                             firmaName: t.companyname,
                             terminName: t.appointmentname,
                             //oDo: t.oDo,
                             //contact: t.contact
                         };
                     })
+
                     //Filter erstellen, damit nur Termine Heute oder in Zukunft angezeigt werden
                     .filter((t: terminListProps) => {
-                        const [day, month, year] = (t.datum as string).split('.').map(Number); //trennt string bei jedem Punkt, wandelt dann string in Zahlen um
-                        const date = new Date(year, month - 1, day);
-                        return date >= today;
+                        return new Date(t.datum) >= today;
                     })
 
 
@@ -222,9 +224,11 @@ const TerminList: React.FC = () => {
 
 
     return (
-        <Box sx={{ height: 370, width: '100%' }}>
+        <Box sx={{ height: 375, width: '100%' }}>
             <DataGrid
-                sx={{ background: 'transparent',
+
+                sx={{
+                    background: 'transparent',
 
                     '& .MuiDataGrid-columnHeaders': {
                         backgroundColor: 'transparent',
@@ -249,19 +253,19 @@ const TerminList: React.FC = () => {
                     },
 
                 }}
+
                 rows={rows}
                 columns={columns}
-                getRowId={(row)=>row.id}
                 columnVisibilityModel={{ id: false }}
                 initialState={{
-                    pagination: { paginationModel: { pageSize: 5 } },
+                    pagination: { paginationModel: { pageSize: 4 } },
                     sorting: {                  //wir initialisieren die Tabelle am anfang Sortiert nach Terminen
                         sortModel: [
-                            {field: 'datumSort', sort: 'asc'}
+                            {field: 'datum', sort: 'asc'}
                         ]
                     }
                 }}
-                pageSizeOptions={[5]}
+                pageSizeOptions={[4]}
                 disableRowSelectionOnClick
                 slots={{ toolbar:()=> <CustomToolbar onAddClick={handleOpen}/> }}
                 showToolbar
