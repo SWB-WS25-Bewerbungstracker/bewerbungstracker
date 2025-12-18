@@ -6,7 +6,7 @@ import lombok.Data;
 //Datenklasse die and Frontend weitergegeben wird
 @Data
 @AllArgsConstructor
-public class CompanyDTO {
+public class CompanySelectDTO {
     private Integer id;
     private String companyname;
 }

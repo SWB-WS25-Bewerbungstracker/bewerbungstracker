@@ -40,6 +40,7 @@ public class JobofferService {
     private final AppointmentService appointmentService;
     private final ContactService contactService;
     private final JobofferConverter jobofferConverter;
+    private final JobofferInputMapper jobofferInputMapper;
 
     public List<JobofferCardDTO> getAllJoboffers(String email) {
         System.out.println("Email vom Token: " + email);
@@ -69,9 +70,10 @@ public class JobofferService {
         //Joboffer joboffer = convertInputToJoboffer(jobofferInput);
         Appuser appuser = appuserRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Authenticated user not found: " + userEmail));
-        Company company = companyService.createCompany(jobofferInput.getCompanyName(), jobofferInput.getCompanyEmployees(), jobofferInput.getCompanyLogo(), null);
-        Contact contact = contactService.createContact(jobofferInput.getContactFirstName(), jobofferInput.getContactLastName(), jobofferInput.getContactEmail(), jobofferInput.getContactPhoneNumber());
-        Joboffer joboffer = jobofferConverter.toEntity(jobofferInput, company, contact);
+        JobofferNestedInputDTO input = jobofferInputMapper.map(jobofferInput);
+        Company company = companyService.createCompany(input.getCompany());
+        Contact contact = contactService.createContact(input.getContact());
+        Joboffer joboffer = jobofferConverter.toEntity(input, company, contact);
         joboffer.setAppuser(appuser);
         jobofferRepository.save(joboffer);
         for(AppointmentCleanView a : jobofferInput.getAppointments()) {

@@ -19,8 +19,8 @@ public class CompanyService {
     }
 
     //Gibt Liste aller Firmen in der Datenbak als DTO zurück
-    public List<CompanyDTO> getCompany() {
-        return companyRepository.findAll().stream().map(c -> new CompanyDTO(
+    public List<CompanySelectDTO> getCompany() {
+        return companyRepository.findAll().stream().map(c -> new CompanySelectDTO(
                 c.getId(),
                 c.getCompanyname())
         ).collect(Collectors.toList());
@@ -30,11 +30,12 @@ public class CompanyService {
         return companyRepository.getCompanyById(id);
     }
 
-    public Company createCompany(String companyName, Integer empcount, String logo, Address address ){
-        if(companyName == null || companyName.isEmpty()) {
+    public Company createCompany(CompanyInputDTO input ){
+        if(input.getCompanyName() == null || input.getCompanyName().isEmpty()) {
             throw new IllegalArgumentException("Company name cannot be null or empty");
         }
-        Company company = companyConverter.toEntity(companyName, empcount, logo, address);
+        //TODO: add input logic for adress and call here
+        Company company = companyConverter.toEntity(input, null);
         return companyRepository.save(company);
     }
 }

@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ContactConverter {
-    Contact toEntity(String firstname, String lastname,  String email, String phoneNo) {
+    Contact toEntity(ContactInputDTO input) {
         Contact contact = new Contact();
-        contact.setFirstname(firstname);
-        contact.setLastname(lastname);
-        contact.setEmail(email);
-        contact.setPhoneno(phoneNo);
+        contact.setFirstname(input.getContactFirstName());
+        contact.setLastname(input.getContactLastName());
+        contact.setEmail(input.getContactEmail());
+        contact.setPhoneno(input.getContactPhoneNumber());
         return contact;
     }
 }

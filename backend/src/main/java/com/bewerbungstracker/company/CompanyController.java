@@ -21,7 +21,7 @@ public class CompanyController {
 
     //Stellt Firmendaten bereit
     @GetMapping()
-    public List<CompanyDTO> companies() {
+    public List<CompanySelectDTO> companies() {
         return companyService.getCompany();
     }
 

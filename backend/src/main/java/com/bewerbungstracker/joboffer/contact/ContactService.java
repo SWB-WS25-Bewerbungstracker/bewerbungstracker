@@ -10,20 +10,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class ContactService {
     private final ContactRepository contactRepository;
     private final ContactConverter contactConverter;
-    public Contact createContact(String firstname, String lastname,  String email, String phoneNo){
+    public Contact createContact(ContactInputDTO input) {
         Contact contact;
         //Frontend gives blank strings: If everything is blank nothing is saved.
-        if(firstname.isBlank() && lastname.isBlank() && email.isBlank() && phoneNo.isBlank()){
+        if(input.getContactFirstName().isBlank() && input.getContactLastName().isBlank() && input.getContactEmail().isBlank() && input.getContactPhoneNumber().isBlank()){
             return null;
         }
 
         //Instead of blank strings safe null in Entity
-        firstname = (firstname.isBlank() ? null : firstname);
-        lastname = (lastname.isBlank() ? null : lastname);
-        email = (email.isBlank() ? null : email);
-        phoneNo = (phoneNo.isBlank() ? null : phoneNo);
+        input.setContactFirstName((input.getContactFirstName().isBlank() ? null : input.getContactFirstName()));
+        input.setContactLastName((input.getContactLastName().isBlank() ? null : input.getContactLastName()));
+        input.setContactEmail((input.getContactEmail().isBlank() ? null : input.getContactEmail()));
+        input.setContactPhoneNumber((input.getContactPhoneNumber().isBlank() ? null : input.getContactPhoneNumber()));
 
-        contact = contactConverter.toEntity(firstname, lastname, email, phoneNo);
+
+        contact = contactConverter.toEntity(input);
         return contactRepository.save(contact);
     }
 }

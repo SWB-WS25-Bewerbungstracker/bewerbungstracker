@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 public class CompanyConverter {
 
 
-    public Company toEntity(String companyName, Integer empcount, String logo, Address address ) {
+    public Company toEntity(CompanyInputDTO input, Address address) {
         Company company = new Company();
-        company.setCompanyname(companyName);
-        company.setEmpcount(empcount);
-        company.setLogo(logo);
+        company.setCompanyname(input.getCompanyName());
+        company.setEmpcount(input.getCompanyEmployees());
+        company.setLogo(input.getCompanyLogo());
         company.setAddress(address);
         return company;
     }
