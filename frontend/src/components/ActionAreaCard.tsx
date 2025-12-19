@@ -27,9 +27,10 @@ export default function ActionAreaCard({
   title,
   description1 = "",
   description2 = "",
-  image,
+  image = "",
 }: ActionAreaCardProps) {
   // Debugging
+
   console.log(
     "Daten an ActionAreaCard: ",
     "ID: ",

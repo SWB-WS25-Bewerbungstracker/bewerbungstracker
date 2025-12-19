@@ -124,7 +124,8 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
     loadingStateJoboffer,
     errorRetrievingJoboffer,
   } = useCompleteJobofferInformation(id);
-  // Um welchen Vorgang handelt es sich? (Bearbeiten oder Hinzufügen (default)?)
+
+  // Um welchen Vorgang handelt es sich? (Bearbeiten oder Hinzufügen (default))
   const [action, setAction] = useState<string>("Stellenangaben hinzufügen");
 
   // KI Tipp: Zuweisung der Daten im useEffect um die Daten nach dem erfolgreichen Laden zu setzen

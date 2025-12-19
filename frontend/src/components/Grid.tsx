@@ -27,19 +27,24 @@ export default function CardGrid({ data }: CardGridProps) {
       >
         {/* Grid-Element für Karten */}
         {/* Durchlaufen des übergebenen Daten-Array und erstellen der Karten */}
-        {data.map((item, index) => (
+        {data.map((item) => (
           <Grid
-            key={index} // Schlüssel für jedes Grid-Element
+            key={item.id} // Schlüssel für jedes Grid-Element
             size={{ xs: 12, sm: 6, md: 4 }} // Größe des Grids je nach Bildschirmgröße
             padding={1} // Padding für jedes einzelne Grid-Element
           >
-            <ActionAreaCard // eine Komponente, die eine Karte darstellt
-              key={index} // Schlüssel für jede Karte
+            <ActionAreaCard // Komponente, die eine Karte darstellt
+              /*
               id={item.id}
               title={item.title} // Titel der Karte
               image={item.image} // Bild-URL für die Karte
               description1={item.description1} // Datum für die Beschreibung in der Karte
               description2={item.description2} // Datum für die Beschreibung in der Karte
+              */
+
+              // Kürzer: Spread Operator (macht das selbe wie die direkte Zuweisung;
+              //         funktioniert da Daten bereits als Array an ActionAreaCardProps übergeben wurden)
+              {...item}
             />
           </Grid>
         ))}
