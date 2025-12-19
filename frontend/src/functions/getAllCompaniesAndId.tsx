@@ -3,8 +3,15 @@ import applicationTrackerApi from "../services/api.ts";
 
 /* Modul, dass die Liste an Unternehmensdaten und zugehörigen Ids holt */
 
-/*// Verwendung des Custom Hooks, um die Firmen- und Ladezustandsdaten zu holen:
+/* Verwendung des Custom Hooks, um die Firmen- und Ladezustandsdaten zu holen:
     const { listOfCompanies, loading } = useCompanyData(); */
+
+//-------------------------------------Interfaces----------------------------------------------
+// Tyo der Axios Antwort
+interface ComapnyResponse {
+  id: number;
+  companyname: string;
+}
 
 // Typ für die Unternehmensdaten
 export interface Company {
@@ -12,40 +19,48 @@ export interface Company {
   name: string;
 }
 
-// KI (Abfrage von Seite Bewerbungen übernommen und angepasst)
-export async function getAllCompanies(): Promise<Company[]> {
+//-------------------------------------Daten-API----------------------------------------------
+// Abfrage von der Liste aller Firmen vom backend mithilfe von Axios
+export async function getAllCompanies() {
   try {
-    const response = await applicationTrackerApi.get("http://localhost:8080/companies");
-
-    // Umwandlung der Daten in ein Array von Firmennamen
-    const companyData = response.data.map(
-      (company: { id: number; companyname: string }) => ({
-        id: company.id,
-        name: company.companyname,
-      })
+    // Axios Anfrage
+    const response = await applicationTrackerApi.get(
+      "http://localhost:8080/companies"
     );
-
-    // Liste der Firmennamen zurückgeben
-    return companyData;
+    // Antwort weitergeben auf aufrufende Funktion
+    return response.data;
   } catch (err) {
+    // Fehlerbehandlung
     console.log("Fehler beim Laden der Unternehmensdaten:", err);
-    return [];
+    return []; // Im Fehlerfall ein Leeres Array zurückgeben
   }
 }
 
-// KI: Custom Hook, der die Firmen abruft und den Ladezustand verwaltet
+//-------------------------------------Custom-Hook----------------------------------------------
+// Custom Hook, der die Firmen abruft und den Ladezustand verwaltet
 export function useCompanyData() {
   const [listOfCompanies, setCompanyList] = useState<Company[]>([]);
   const [loadingCompanies, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    // Funktion zum Laden der Liste aller Unternehmen
     const loadCompanies = async () => {
       setLoading(true);
-      const companies = await getAllCompanies();
-      setCompanyList(companies);
+
+      // Externe Axios Anfrage
+      const response = await getAllCompanies();
+
+      // Umwandlung der Daten in ein Array von Firmennamen
+      const companyList = response.map((company: ComapnyResponse) => ({
+        id: company.id,
+        name: company.companyname,
+      }));
+
+      setCompanyList(companyList);
       setLoading(false);
     };
 
+    // Funktion zum Laden der Liste aller Unternehmen aufrufen
     loadCompanies();
   }, []); // Effekt läuft nur einmal beim ersten Laden
 

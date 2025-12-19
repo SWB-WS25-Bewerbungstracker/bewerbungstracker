@@ -5,7 +5,7 @@ import keycloak from "./keycloak";
 import PrivateRoute from "./helper/PrivateRoute";
 
 // Komponenten
-import ResponsiveAppBar from "./components/AppBarWithResponsiveMenu";
+import ResponsiveAppBar from "./components/AppBar";
 
 // Seiten
 import Home from "./pages/Home";

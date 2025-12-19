@@ -1,5 +1,5 @@
 import CardGrid from "../components/Grid";
-import TestButtonGroup from "../components/TestButtonGroup";
+import CustomButtonGroup from "../components/ButtonGroup";
 import { Add } from "@mui/icons-material";
 import { Box, Stack } from "@mui/material";
 import {
@@ -34,7 +34,7 @@ const Bewerbungen: React.FC = () => {
       >
         <h1>Bewerbungen</h1>
         <Box>
-          <TestButtonGroup
+          <CustomButtonGroup
             buttons={[
               {
                 label: "Hinzufügen",

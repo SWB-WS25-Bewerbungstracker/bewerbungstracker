@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import applicationTrackerApi from "../services/api.ts";
@@ -5,10 +6,28 @@ import { parseDateToNextAppointmentString } from "./parseDate";
 
 /* Modul, dass die Liste an Joboffer-Daten holt */
 
-/*// Verwendung des Custom Hooks, um die Joboffer- und Ladezustandsdaten zu holen:
+/* Verwendung des Custom Hooks, um die Joboffer- und Ladezustandsdaten zu holen:
     const { listOfJoboffers, loading, error } = useJobofferData(); */
 
+// Funktion kann mehrere Verwendungszwecke haben und je nachdem gibt es andere Rückgabewerte
+type UseCase = "overview" | "addAppointment";
+/* use = 'addAppointment' 
+    ->  gibt Joboffer Id und JobofferName + CompanyName zurück
+        für Dropdown Menü beim hinzufügen von Terminen
+  use = 'overview' (default)
+    ->  gibt Daten für die Stellenübersicht-Cards zurück
+*/
+
 //-------------------------------------Interface----------------------------------------------
+// Typ für die erhaltenen Response Daten
+interface JobofferResponse {
+  jobofferid: number;
+  joboffername: string;
+  companyid: number;
+  companyname: string;
+  nextapptdate: string;
+}
+
 // Typ für die Joboffer Daten
 export interface JobofferOverview {
   jobofferId: number;
@@ -20,80 +39,32 @@ export interface JobofferOverview {
 }
 
 // Typ für die Joboffer Daten
-export interface JobofferDropDownList {
+export interface JobofferAndCompany {
   jobofferId: number;
   jobofferAndCompanyName: string;
 }
 
 //-------------------------------------Daten-API----------------------------------------------
 // Funktion zum Abrufen aller Jobofferdaten
-export async function getOverviewOfAllJoboffers(use?: string) {
-  // Funktion für mehrere Zwecke verwendbak machen:
-  // use = 'addAppointment' ->  gibt Joboffer Id und JobofferName + CompanyName zurück
-  //                          für Dropdown Menü beim hinzufügen von Terminen
-  // use = '' -> gibt Daten für die Stellenübersicht-Cards zurück
+export async function getOverviewOfAllJoboffers() {
   try {
     // Daten mit Axios holen
-    const response = await applicationTrackerApi.get("http://localhost:8080/joboffer");
+    const response = await applicationTrackerApi.get(
+      "http://localhost:8080/joboffer"
+    );
 
     // Debugging
-    console.log("Antwort vom Server zur API /joboffer: ", response);
-
-    // KI Verbesserung: Prüfen, ob Daten vorhanden sind
-    if (!response.data || !Array.isArray(response.data)) {
-      throw new Error("Unerwartetes Format der Daten vom Server.");
-    }
-
-    // Umwandlung der Daten in ein Array von Joboffer Overviews
-    const jobofferData = response.data.map(
-      // Map: Durchlaufen des JSONs, da es sich um ein Array an JSONs handelt
-      (joboffer: {
-        // Welche Daten (Attributname: Typ) werden von Backend empfangen:
-        jobofferid: number;
-        joboffername: string;
-        companyid: number;
-        companyname: string;
-        nextapptdate: string;
-      }) => {
-        // Debugging
-        console.log(
-          "ID:",
-          joboffer.jobofferid,
-          "Name:",
-          joboffer.joboffername,
-          "Company ID:",
-          joboffer.companyid,
-          "Company:",
-          joboffer.companyname,
-          "Next Apointment:",
-          joboffer.nextapptdate
-        ); // Zuweisen der Daten in den JobofferOverview Datentyp
-        // Wenn der Verwendungszweck das Hinzufügen eines Termins ist
-        if (use === "addAppointment") {
-          return {
-            jobofferId: joboffer.jobofferid,
-            jobofferAndCompanyName: `${joboffer.joboffername} + " - " + ${joboffer.companyname}`,
-          };
-        } else {
-          // Wenn der Verwendungszweck die Übersichtskarten sind
-          return {
-            jobofferId: joboffer.jobofferid,
-            jobofferName: joboffer.joboffername,
-            companyID: joboffer.companyid,
-            companyName: joboffer.companyname,
-            companyImage: "", // Default: Leerer String, da momentan noch kein Bild mitgegeben wird
-            nextAppointment: parseDateToNextAppointmentString(
-              joboffer.nextapptdate
-            ),
-          };
-        }
-      }
+    console.log(
+      "Antwort vom Server zur API /joboffer (= Liste aller Joboffers für Overview): ",
+      response
     );
-    // Liste der Joboffers zurückgeben
-    return jobofferData;
+
+    // Weitergabe der Daten an aufrufende Funktion
+    return response.data;
   } catch (error) {
     // Fehlerbehandlung
-    console.error("Fehler beim Laden der Unternehmensdaten:", error);
+    // Fehler auf Konsole ausgeben
+    console.error("Fehler beim Laden der Unternehmensdaten über Axios:", error);
     // KI: Fehler weitergeben
     throw error;
   }
@@ -101,16 +72,16 @@ export async function getOverviewOfAllJoboffers(use?: string) {
 
 //-------------------------------------Custom-Hook----------------------------------------------
 // Custom Hook, der die Joboffers abruft und den Ladezustand verwaltet sowie die Fehlerbehandlung übernimmt
-export function useOverviewOfAllJoboffers(use?: string) {
+export function useOverviewOfAllJoboffers(use: UseCase = "overview") {
   // const [variableName, setMethodName] = useState<type>(initialState); // Element, dass das enthält, wird neu geladen, wenn sich die variable ändert
-  const [listOfJoboffers, setJobofferList] = useState<JobofferOverview[]>([]); // Joboffers speichern
+  const [listOfJoboffers, setJobofferList] = useState<JobofferOverview[]>([]);
   const [listOfJoboffersAndCompanyNames, setJobofferDropDownList] = useState<
-    JobofferDropDownList[]
-  >([]); // Joboffers speichern
-  const [loading, setLoading] = useState<boolean>(true); // Ladezustand speichern
-  const [error, setError] = useState<string | null>(null); // Fehlerbehandlung
+    JobofferAndCompany[]
+  >([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // // useEffect wird nur einmal beim ersten Rendern des Components ausgeführt
+  // useEffect wird nur einmal beim ersten Rendern des Components ausgeführt
   useEffect(() => {
     // Funktion zum Abrufen der Joboffers
     const loadJoboffers = async () => {
@@ -128,10 +99,35 @@ export function useOverviewOfAllJoboffers(use?: string) {
         } else {
           // Wenn der Verwendungszweck das Hinzufügen eines Termins ist
           if (use == "addAppointment") {
-            setJobofferDropDownList(response as JobofferDropDownList[]);
+            const JoboffersForDropdown = response.map(
+              (joboffer: JobofferResponse) => {
+                return {
+                  jobofferId: joboffer.jobofferid,
+                  jobofferAndCompanyName: `${joboffer.joboffername} + " - " + ${joboffer.companyname}`,
+                };
+              }
+            );
+            setJobofferDropDownList(JoboffersForDropdown);
           }
-          // Wenn der Verwendungszweck die Übersichtskarten sind
-          setJobofferList(response as JobofferOverview[]); // Joboffers speichern
+          // Wenn der Verwendungszweck die Übersicht aller Stellen ist
+          else {
+            const JoboffersForOverview = response.map(
+              (joboffer: JobofferResponse) => {
+                return {
+                  jobofferId: joboffer.jobofferid,
+                  jobofferName: joboffer.joboffername,
+                  companyID: joboffer.companyid,
+                  companyName: joboffer.companyname,
+                  companyImage: "", // Default: Leerer String, da momentan noch kein Bild mitgegeben wird
+                  nextAppointment: parseDateToNextAppointmentString(
+                    joboffer.nextapptdate
+                  ),
+                };
+              }
+            );
+            // Wenn der Verwendungszweck die Übersichtskarten sind
+            setJobofferList(JoboffersForOverview); // Joboffers speichern
+          }
         }
       } catch (err: unknown) {
         // Fehlerbehandlung im Falle eines Fehlers bei der API-Anfrage (basierend auf KI Troubleshooting Tips)

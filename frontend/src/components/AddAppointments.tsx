@@ -5,13 +5,13 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box, Paper, Stack, TextField, Typography } from "@mui/material";
-import TestButtonGroup from "./TestButtonGroup";
+import CustomButtonGroup from "./ButtonGroup";
 import { Save, Edit, Delete } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { parseDateToString, type Appointment } from "../functions/parseDate";
-import { getLang} from "../functions/getLanguage";
-import 'dayjs/locale/de';
-import 'dayjs/locale/en';
+import { getLang } from "../functions/getLanguage";
+import "dayjs/locale/de";
+import "dayjs/locale/en";
 
 // KI: die Komponente als externes Modul nutzbar machen
 export interface AddDateAndTimeProps {
@@ -22,7 +22,7 @@ export interface AddDateAndTimeProps {
   onAppointmentChange: (appointments: Appointment[]) => void;
 }
 //Sprache des Browsers auslesen und in Lang speichern
-const Lang=getLang();
+const Lang = getLang();
 
 // Komponente, die seperate Datum und Zeiteingabe erlaubt und diese kombiniert
 const AddAppointments: React.FC<AddDateAndTimeProps> = ({
@@ -215,7 +215,7 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
             }}
           />
           <Box>
-            <TestButtonGroup
+            <CustomButtonGroup
               buttons={[
                 {
                   label: "",
@@ -255,7 +255,7 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
                     )}`}
                   </Typography>
                   {/* Bearbeiten und Löschen für jeden Termin ermöglichen */}
-                  <TestButtonGroup
+                  <CustomButtonGroup
                     buttons={[
                       /* Bearbeiten Button für jeden Termin anzeigen*/
                       {

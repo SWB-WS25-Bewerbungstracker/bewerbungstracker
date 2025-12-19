@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom"; // Zum Verarbeiten der mitgegeben Parameter
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Box, Paper, Stack, SvgIcon, Typography } from "@mui/material";
-import { useJobofferDetails } from "../functions/getJobofferById";
+import { useCompleteJobofferInformation } from "../functions/getJobofferById";
 import { parseDateToString } from "../functions/parseDate";
-import TestButtonGroup from "../components/TestButtonGroup";
+import CustomButtonGroup from "../components/ButtonGroup";
 import { ArrowBack, Delete, Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 // import BusinessIcon from "@mui/icons-material/Business";
@@ -19,18 +19,23 @@ const Stellenansicht: React.FC = () => {
   const navigate = useNavigate();
 
   // Daten mithilfe externer Funktion laden
-  const { jobofferDetails, loadingJoboffer, errorRetrievingJoboffer } =
-    useJobofferDetails(id);
+  const {
+    jobofferCompleteInformation,
+    loadingStateJoboffer,
+    errorRetrievingJoboffer,
+  } = useCompleteJobofferInformation(id);
 
-  console.log(JSON.stringify(jobofferDetails?.appointments, null, 2));
+  console.log(
+    JSON.stringify(jobofferCompleteInformation?.appointments, null, 2)
+  );
 
   // Prüfen ob überhaupt Daten empfangen wurden
-  if (!jobofferDetails) {
+  if (!jobofferCompleteInformation) {
     // sollte ein Leeres Array sein wenn keine Id mitgegeben wurde
     return <div>Keine Daten geladen...</div>;
   }
   // Falls noch Daten geladen werden, dies auf der Seite ausgeben
-  if (loadingJoboffer) {
+  if (loadingStateJoboffer) {
     return <div>Loading...</div>;
   }
   // Falls ein Fehler auftrat, den auf der Seite ausgeben
@@ -42,7 +47,7 @@ const Stellenansicht: React.FC = () => {
     <>
       {/* Daten bearbeiten können */}
       <Stack padding={2} justifyContent={"space-between"}>
-        <TestButtonGroup
+        <CustomButtonGroup
           buttons={[
             {
               label: "Zurück zur Übersicht",
@@ -56,7 +61,7 @@ const Stellenansicht: React.FC = () => {
             },
           ]}
         />
-        <TestButtonGroup
+        <CustomButtonGroup
           buttons={[
             {
               label: "Bearbeiten",
@@ -92,9 +97,9 @@ const Stellenansicht: React.FC = () => {
             marginBottom: 2,
           }}
         >
-          {jobofferDetails.companyLogo ? (
+          {jobofferCompleteInformation.companyLogo ? (
             <img
-              src={jobofferDetails.companyLogo}
+              src={jobofferCompleteInformation.companyLogo}
               alt="Bild des Unternehmens"
             />
           ) : (
@@ -109,7 +114,9 @@ const Stellenansicht: React.FC = () => {
         {/* ----------------------------Stellenname---------------------------- */}
         <Stack direction="column" spacing={2}>
           <Paper>
-            <Typography variant="h1">{jobofferDetails.jobofferName}</Typography>
+            <Typography variant="h1">
+              {jobofferCompleteInformation.jobofferName}
+            </Typography>
           </Paper>
           {/* ----------------------------Termine---------------------------- */}
           <Paper>
@@ -119,23 +126,27 @@ const Stellenansicht: React.FC = () => {
               </Box>
               {/* Termien als Liste */}
               {/* Wenn Termine vorhanden sind, dann diese anzeigen, sonst drauf hinweisen, dass noch keine vermerkt wurden */}
-              {jobofferDetails.appointments &&
-              jobofferDetails.appointments.length > 0 ? (
+              {jobofferCompleteInformation.appointments &&
+              jobofferCompleteInformation.appointments.length > 0 ? (
                 // KI Bugfixing: map läuft auch bei leerem Array, daher Prüfen ob Array Länge > 0 hat
                 <ul>
-                  {jobofferDetails.appointments.map((appointment) => {
-                    return (
-                      <li key={appointment.appointmentId}>
-                        <Stack>
-                          <Typography>{appointment.appointmentName}</Typography>
-                          <Typography> {" am "}</Typography>
-                          <Typography>
-                            {parseDateToString(appointment.appointmentDate)}
-                          </Typography>
-                        </Stack>
-                      </li>
-                    );
-                  })}
+                  {jobofferCompleteInformation.appointments.map(
+                    (appointment) => {
+                      return (
+                        <li key={appointment.appointmentId}>
+                          <Stack>
+                            <Typography>
+                              {appointment.appointmentName}
+                            </Typography>
+                            <Typography> {" am "}</Typography>
+                            <Typography>
+                              {parseDateToString(appointment.appointmentDate)}
+                            </Typography>
+                          </Stack>
+                        </li>
+                      );
+                    }
+                  )}
                 </ul>
               ) : (
                 <div>
@@ -147,9 +158,9 @@ const Stellenansicht: React.FC = () => {
           {/* ----------------------------Beschreibung---------------------------- */}
           <Paper>
             <Typography variant="h5">Beschreibung</Typography>
-            {jobofferDetails.jobofferDescription ? (
+            {jobofferCompleteInformation.jobofferDescription ? (
               <Typography variant="body1">
-                {jobofferDetails.jobofferDescription}
+                {jobofferCompleteInformation.jobofferDescription}
               </Typography>
             ) : (
               <Typography> Noch keine Beschreibung angegeben </Typography>
@@ -161,9 +172,9 @@ const Stellenansicht: React.FC = () => {
               <Box minWidth={TitleWidth}>
                 <Typography variant="h5"> Rating </Typography>
               </Box>
-              {jobofferDetails.jobofferRating ? (
+              {jobofferCompleteInformation.jobofferRating ? (
                 <Typography variant="body1">
-                  {jobofferDetails.jobofferRating}
+                  {jobofferCompleteInformation.jobofferRating}
                 </Typography>
               ) : (
                 <Typography> Noch kein Rating angegeben</Typography>
@@ -176,19 +187,19 @@ const Stellenansicht: React.FC = () => {
               <Box minWidth={TitleWidth}>
                 <Typography variant="h5"> Gehalt </Typography>
               </Box>
-              {jobofferDetails.jobofferMinimumWage &&
-              jobofferDetails.jobofferMaximumWage ? (
+              {jobofferCompleteInformation.jobofferMinimumWage &&
+              jobofferCompleteInformation.jobofferMaximumWage ? (
                 <Typography variant="body1">
-                  {jobofferDetails.jobofferMinimumWage}
+                  {jobofferCompleteInformation.jobofferMinimumWage}
                   {"€ bis "}
-                  {jobofferDetails.jobofferMaximumWage}
+                  {jobofferCompleteInformation.jobofferMaximumWage}
                   {"€"}
                 </Typography>
-              ) : jobofferDetails.jobofferMinimumWage ||
-                jobofferDetails.jobofferMaximumWage ? (
+              ) : jobofferCompleteInformation.jobofferMinimumWage ||
+                jobofferCompleteInformation.jobofferMaximumWage ? (
                 <Typography variant="body1">
-                  {jobofferDetails.jobofferMinimumWage ||
-                    jobofferDetails.jobofferMaximumWage}
+                  {jobofferCompleteInformation.jobofferMinimumWage ||
+                    jobofferCompleteInformation.jobofferMaximumWage}
                   €
                 </Typography>
               ) : (
@@ -198,15 +209,15 @@ const Stellenansicht: React.FC = () => {
           </Paper>
           {/* ----------------------------Unternehmen und Mitarbeiteranzahl---------------------------- */}
           <Paper>
-            {jobofferDetails.companyName ? (
+            {jobofferCompleteInformation.companyName ? (
               <Stack direction={"row"}>
                 <Box minWidth={TitleWidth}>
                   <Typography variant="h5">
-                    {jobofferDetails.companyName}
+                    {jobofferCompleteInformation.companyName}
                   </Typography>
                 </Box>
 
-                {jobofferDetails.companyEmployees ? (
+                {jobofferCompleteInformation.companyEmployees ? (
                   <Stack alignItems={"baseline"}>
                     <Box minWidth={TitleWidth}>
                       <Typography variant="body1">
@@ -214,7 +225,7 @@ const Stellenansicht: React.FC = () => {
                       </Typography>
                     </Box>
                     <Typography variant="body1">
-                      {jobofferDetails.companyEmployees}
+                      {jobofferCompleteInformation.companyEmployees}
                     </Typography>
                   </Stack>
                 ) : (
@@ -231,25 +242,25 @@ const Stellenansicht: React.FC = () => {
               <Box minWidth={TitleWidth}>
                 <Typography variant="h5"> Adresse </Typography>
               </Box>
-              {jobofferDetails.addressId ? (
+              {jobofferCompleteInformation.addressId ? (
                 <Stack direction={"column"} spacing={0}>
                   <Stack direction={"row"}>
                     <Typography variant="body1">
-                      {jobofferDetails.addressStreet}
+                      {jobofferCompleteInformation.addressStreet}
                     </Typography>
                     <Typography variant="body1">
-                      {jobofferDetails.addressStreetNumber}
+                      {jobofferCompleteInformation.addressStreetNumber}
                     </Typography>
                   </Stack>
                   <Stack direction={"row"}>
                     <Typography variant="body1">
-                      {jobofferDetails.addressZipCode}
+                      {jobofferCompleteInformation.addressZipCode}
                     </Typography>
                     <Typography variant="body1">
-                      {jobofferDetails.addressCity}
+                      {jobofferCompleteInformation.addressCity}
                     </Typography>
                     <Typography variant="body1">
-                      {jobofferDetails.addressCountry}
+                      {jobofferCompleteInformation.addressCountry}
                     </Typography>
                   </Stack>
                 </Stack>
@@ -264,18 +275,18 @@ const Stellenansicht: React.FC = () => {
               <Box minWidth={TitleWidth}>
                 <Typography variant="h5"> Kontaktperson </Typography>
               </Box>
-              {jobofferDetails.contactId ? (
+              {jobofferCompleteInformation.contactId ? (
                 <Stack direction={"column"} spacing={0}>
                   <Typography variant="body1">
-                    {jobofferDetails.contactFirstName +
+                    {jobofferCompleteInformation.contactFirstName +
                       " " +
-                      jobofferDetails.contactLastName}
+                      jobofferCompleteInformation.contactLastName}
                   </Typography>
                   <Typography variant="body1">
-                    {jobofferDetails.contactPhone}
+                    {jobofferCompleteInformation.contactPhone}
                   </Typography>
                   <Typography variant="body1">
-                    {jobofferDetails.contactEmail}
+                    {jobofferCompleteInformation.contactEmail}
                   </Typography>
                 </Stack>
               ) : (
@@ -287,9 +298,9 @@ const Stellenansicht: React.FC = () => {
           <Paper>
             <Stack direction={"column"}>
               <Typography variant="h5">Notizen: </Typography>
-              {jobofferDetails.jobofferNotes ? (
+              {jobofferCompleteInformation.jobofferNotes ? (
                 <Typography variant="body1">
-                  {jobofferDetails.jobofferNotes}
+                  {jobofferCompleteInformation.jobofferNotes}
                 </Typography>
               ) : (
                 <Typography> Noch keine Notizen vermerkt</Typography>

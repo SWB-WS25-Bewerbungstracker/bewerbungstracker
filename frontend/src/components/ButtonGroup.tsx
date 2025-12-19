@@ -1,4 +1,5 @@
 import Button from "@mui/material/Button";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IconButton, Stack, type SvgIconProps } from "@mui/material";
 import type { ReactElement } from "react";
 
@@ -6,7 +7,7 @@ import type { ReactElement } from "react";
     buttons: { label: string; onClick: () => void }[];
 }*/
 
-export interface TestButtonGroupProps {
+export interface ButtonGroupProps {
   buttons: {
     label: string;
     icon: ReactElement;
@@ -15,7 +16,7 @@ export interface TestButtonGroupProps {
   }[];
 }
 
-export default function TestButtonGroup({ buttons }: TestButtonGroupProps) {
+export default function CustomButtonGroup({ buttons }: ButtonGroupProps) {
   return (
     <Stack direction={"row"} spacing={1}>
       {/* Flexible Anzahl an Buttons */}
