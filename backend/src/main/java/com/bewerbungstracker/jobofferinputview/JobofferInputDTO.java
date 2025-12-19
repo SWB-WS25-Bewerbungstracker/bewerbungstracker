@@ -15,7 +15,7 @@ public class JobofferInputDTO {
     //private Integer jobofferRating;
     private Integer salaryMinimum;
     private Integer salaryMaximum;
-    private String jobofferNotes;
+    private String personalNotes;
     //private String perks;
 
     // Company related information
