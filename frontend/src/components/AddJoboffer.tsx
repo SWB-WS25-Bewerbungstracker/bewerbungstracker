@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import CustomButtonGroup from "./ButtonGroup.tsx";
+import CustomButtonGroup from "./ButtonGroup";
 import axios from "axios";
 import applicationTrackerApi from "../services/api.ts";
 import { useCompanyData } from "../functions/getAllCompaniesAndId";

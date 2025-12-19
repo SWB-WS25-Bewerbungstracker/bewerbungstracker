@@ -25,7 +25,7 @@ import {
 import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOverview";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import CustomButtonGroup from "./ButtonGroup.tsx";
+import CustomButtonGroup from "./ButtonGroup";
 
 const Lang = getLang();
 
