@@ -30,8 +30,8 @@ export default function ActionAreaCard({
   image = "",
 }: ActionAreaCardProps) {
   // Debugging
-
-  console.log(
+  /*
+  console.debug(
     "Daten an ActionAreaCard: ",
     "ID: ",
     id,
@@ -44,7 +44,7 @@ export default function ActionAreaCard({
     "Image: ",
     image
   );
-
+*/
   // Card Component
   return (
     <Card

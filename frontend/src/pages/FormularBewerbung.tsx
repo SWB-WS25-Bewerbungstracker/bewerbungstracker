@@ -35,7 +35,7 @@ const FormularBewerbungHinzufuegen: React.FC = () => {
               icon: <Delete />,
               iconPosition: "start",
               onClick: () => {
-                console.log("Löschen Button wurde geklickt");
+                console.debug("Löschen Button wurde geklickt");
                 // Jeweiligen Behfel ans Backend Senden (Schnittstelle fehlt noch -> noch nicht implementiert);
               },
             },

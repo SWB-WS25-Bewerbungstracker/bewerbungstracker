@@ -54,7 +54,7 @@ export async function getOverviewOfAllJoboffers() {
     );
 
     // Debugging
-    console.log(
+    console.debug(
       "Antwort vom Server zur API /joboffer (= Liste aller Joboffers für Overview): ",
       response
     );

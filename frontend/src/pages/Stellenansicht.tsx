@@ -25,7 +25,7 @@ const Stellenansicht: React.FC = () => {
     errorRetrievingJoboffer,
   } = useCompleteJobofferInformation(id);
 
-  console.log(
+  console.debug(
     JSON.stringify(jobofferCompleteInformation?.appointments, null, 2)
   );
 
@@ -54,7 +54,7 @@ const Stellenansicht: React.FC = () => {
               icon: <ArrowBack />,
               iconPosition: "start",
               onClick: () => {
-                console.log("Zurück Button wurde geklickt");
+                console.debug("Zurück Button wurde geklickt");
                 //window.close();
                 navigate("/bewerbungen");
               },
@@ -68,7 +68,7 @@ const Stellenansicht: React.FC = () => {
               icon: <Edit />,
               iconPosition: "start",
               onClick: () => {
-                console.log("Bearbeiten Button wurde geklickt");
+                console.debug("Bearbeiten Button wurde geklickt");
                 window.open(`/formular/${id}`);
               },
             },
@@ -77,7 +77,7 @@ const Stellenansicht: React.FC = () => {
               icon: <Delete />,
               iconPosition: "start",
               onClick: () => {
-                console.log("Löschen Button wurde geklickt");
+                console.debug("Löschen Button wurde geklickt");
                 // Jeweiligen Behfel ans Backend Senden (Schnittstelle fehlt noch -> noch nicht implementiert);
               },
             },
@@ -114,7 +114,7 @@ const Stellenansicht: React.FC = () => {
         {/* ----------------------------Stellenname---------------------------- */}
         <Stack direction="column" spacing={2}>
           <Paper>
-            <Typography variant="h1">
+            <Typography variant="h5">
               {jobofferCompleteInformation.jobofferName}
             </Typography>
           </Paper>
@@ -122,7 +122,7 @@ const Stellenansicht: React.FC = () => {
           <Paper>
             <Stack direction={"row"} spacing={2} alignItems={"center"}>
               <Box minWidth={TitleWidth}>
-                <Typography variant="h5"> Termine </Typography>
+                <Typography variant="h6"> Termine </Typography>
               </Box>
               {/* Termien als Liste */}
               {/* Wenn Termine vorhanden sind, dann diese anzeigen, sonst drauf hinweisen, dass noch keine vermerkt wurden */}
@@ -157,7 +157,7 @@ const Stellenansicht: React.FC = () => {
           </Paper>
           {/* ----------------------------Beschreibung---------------------------- */}
           <Paper>
-            <Typography variant="h5">Beschreibung</Typography>
+            <Typography variant="h6">Beschreibung</Typography>
             {jobofferCompleteInformation.jobofferDescription ? (
               <Typography variant="body1">
                 {jobofferCompleteInformation.jobofferDescription}
@@ -170,7 +170,7 @@ const Stellenansicht: React.FC = () => {
           <Paper>
             <Stack alignItems={"baseline"}>
               <Box minWidth={TitleWidth}>
-                <Typography variant="h5"> Rating </Typography>
+                <Typography variant="h6"> Rating </Typography>
               </Box>
               {jobofferCompleteInformation.jobofferRating ? (
                 <Typography variant="body1">
@@ -185,7 +185,7 @@ const Stellenansicht: React.FC = () => {
           <Paper>
             <Stack alignItems={"baseline"}>
               <Box minWidth={TitleWidth}>
-                <Typography variant="h5"> Gehalt </Typography>
+                <Typography variant="h6"> Gehalt </Typography>
               </Box>
               {jobofferCompleteInformation.jobofferMinimumWage &&
               jobofferCompleteInformation.jobofferMaximumWage ? (
@@ -212,7 +212,7 @@ const Stellenansicht: React.FC = () => {
             {jobofferCompleteInformation.companyName ? (
               <Stack direction={"row"}>
                 <Box minWidth={TitleWidth}>
-                  <Typography variant="h5">
+                  <Typography variant="h6">
                     {jobofferCompleteInformation.companyName}
                   </Typography>
                 </Box>
@@ -240,7 +240,7 @@ const Stellenansicht: React.FC = () => {
           <Paper>
             <Stack direction={"row"} spacing={2} alignItems={"center"}>
               <Box minWidth={TitleWidth}>
-                <Typography variant="h5"> Adresse </Typography>
+                <Typography variant="h6"> Adresse </Typography>
               </Box>
               {jobofferCompleteInformation.addressId ? (
                 <Stack direction={"column"} spacing={0}>
@@ -273,7 +273,7 @@ const Stellenansicht: React.FC = () => {
           <Paper>
             <Stack direction={"row"} spacing={2} alignItems={"center"}>
               <Box minWidth={TitleWidth}>
-                <Typography variant="h5"> Kontaktperson </Typography>
+                <Typography variant="h6"> Kontaktperson </Typography>
               </Box>
               {jobofferCompleteInformation.contactId ? (
                 <Stack direction={"column"} spacing={0}>
@@ -297,7 +297,7 @@ const Stellenansicht: React.FC = () => {
           {/* ----------------------------Adresse---------------------------- */}
           <Paper>
             <Stack direction={"column"}>
-              <Typography variant="h5">Notizen: </Typography>
+              <Typography variant="h6">Notizen: </Typography>
               {jobofferCompleteInformation.jobofferNotes ? (
                 <Typography variant="body1">
                   {jobofferCompleteInformation.jobofferNotes}

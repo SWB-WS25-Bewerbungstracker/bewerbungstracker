@@ -78,9 +78,9 @@ export function parseDateToString(passedDate?: string): string | undefined {
 export function removeIdForNewAppointments(
   tmpAppointments: Appointment[]
 ): Appointment[] {
-  console.log("Funktion zum Entfernen neuer Appointment Ids aufgerufen");
+  console.debug("Funktion zum Entfernen neuer Appointment Ids aufgerufen");
   if (!tmpAppointments) {
-    console.log("Keine Appointments gefunden");
+    console.debug("Keine Appointments gefunden");
     return [];
   } else {
     return tmpAppointments.map((appointment: Appointment) => {

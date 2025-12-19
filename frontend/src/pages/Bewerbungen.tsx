@@ -10,6 +10,7 @@ import {
 
 //-------------------------------------Seite----------------------------------------------
 const Bewerbungen: React.FC = () => {
+  // Liste aller Bewerbungen holen
   const { listOfJoboffers, loading, error } = useOverviewOfAllJoboffers();
 
   // Umwandeln auf Typ den ActionAreaCard erwartet
@@ -17,9 +18,9 @@ const Bewerbungen: React.FC = () => {
     (joboffer) => ({
       id: joboffer.jobofferId,
       title: joboffer.jobofferName,
-      description1: joboffer.companyName || "Kein Unternehmen angegeben", // Standardwert falls null, undefined order leerer String
-      description2: joboffer.nextAppointment || "Es steht kein Termin an.", // Standardwert falls null, undefined order leerer String
-      image: joboffer.companyImage || "", // Standardwert falls null, undefined order leerer String
+      description1: joboffer.companyName || "Kein Unternehmen angegeben",
+      description2: joboffer.nextAppointment || "Es steht kein Termin an.",
+      image: joboffer.companyImage || "",
     })
   );
 
@@ -65,7 +66,7 @@ export default Bewerbungen;
 
 // Funktion, die beim Click auf den Hinzufügen Button ausgeführt wird
 const addButtonClicked = () => {
-  console.log("Hinzufügen-Button wurde geklickt!");
+  console.debug("Hinzufügen-Button wurde geklickt!");
   window.open("/formular"); // Zum öffnen in einer anderen Seite
   //window.location.replace('/home'); // Zum öffnen auf dieser Seite
 };

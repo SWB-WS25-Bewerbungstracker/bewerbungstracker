@@ -31,7 +31,7 @@ export async function getAllCompanies() {
     return response.data;
   } catch (err) {
     // Fehlerbehandlung
-    console.log("Fehler beim Laden der Unternehmensdaten:", err);
+    console.debug("Fehler beim Laden der Unternehmensdaten:", err);
     return []; // Im Fehlerfall ein Leeres Array zurückgeben
   }
 }

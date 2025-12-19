@@ -99,7 +99,7 @@ export async function getAllJobofferInformationById(id: string | number) {
     );
 
     // Debugging
-    console.log(
+    console.debug(
       `Antwort vom Server zur API /joboffer/${id} (= alle Informationen zu einer Joboffer): `,
       response
     );

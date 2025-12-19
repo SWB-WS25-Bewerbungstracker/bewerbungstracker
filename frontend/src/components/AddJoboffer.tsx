@@ -143,7 +143,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
       setAction("Es trat ein Fehler auf: " + errorRetrievingJoboffer);
     } else if (jobofferCompleteInformation) {
       // Debugging
-      console.log(
+      console.debug(
         "Abrufen der Stellendaten für ",
         id,
         "Jobofferdaten: ",
@@ -232,7 +232,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
     }
 
     // Debugging: Appointments nach dem Entfernen der IDs
-    console.log(
+    console.debug(
       "Appointments nach dem Entfernen der IDs: ",
       formData.appointments
     );
@@ -245,12 +245,12 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
     // - eventuell Datenformat auf JobofferResponse (Interface von getJobofferById) mappen
 
     // Debugging
-    console.log("Joboffer gesendet: Daten an Backend: ", formData);
+    console.debug("Joboffer gesendet: Daten an Backend: ", formData);
 
     // Wenn eine Id vorhanden ist: Bearbeiten der Daten
     if (id) {
       // Debugging: Daten der Appointments vor bearbeiten der Ids
-      console.log(
+      console.debug(
         "Appointments vor dem Entfernen der IDs: ",
         formData.appointments
       );
@@ -267,7 +267,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
           }
         );
         // Antwort vom Server auslesen
-        console.log("Server response:", response.data);
+        console.debug("Server response:", response.data);
 
         if (response.status === 201 || response.status === 200) {
           window.close();
@@ -284,7 +284,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
     // Wenn keine Id vorhanden ist: Hinzufügen der Daten
     else {
       // Debugging
-      console.log("Daten an Backend: ", formData);
+      console.debug("Daten an Backend: ", formData);
       // Versuch die Daten zu Senden
       try {
         const response = await applicationTrackerApi.post(
@@ -297,7 +297,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
           }
         );
         // Antwort vom Server auslesen
-        console.log("Server response:", response.data);
+        console.debug("Server response:", response.data);
 
         if (response.status === 201 || response.status === 200) {
           window.close();
@@ -315,7 +315,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
 
   // Funktion, die beim Click auf den Senden Button ausgeführt wird
   const sendButtonClicked = () => {
-    console.log("Senden-Button wurde geklickt!");
+    console.debug("Senden-Button wurde geklickt!");
     handleSubmit(id);
     // window.close();
   };

@@ -68,7 +68,7 @@ async function sendButtonClicked(
     .second(0)
     .toISOString();
 
-  console.log("Ich sende ans Backend:", {
+  console.debug("Ich sende ans Backend:", {
     appointmentdate: carrotForRabbit,
     appointmentname: appointmentName,
     jobofferID: selectedJoboffer,
@@ -85,7 +85,7 @@ async function sendButtonClicked(
         window.location.reload();
 
     }   catch(err) {
-            console.log(err)
+            console.debug(err)
             alert("Der Hase hat die Karotte nicht geliefert :(")
         }
 

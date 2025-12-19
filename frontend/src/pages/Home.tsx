@@ -89,7 +89,7 @@ export default Home;
 
 // Funktion, die beim Click auf den Hinzufügen Button ausgeführt wird
 const addJobofferButtonClicked = () => {
-  console.log("Joboffer-Hinzufügen-Button wurde geklickt!");
+  console.debug("Joboffer-Hinzufügen-Button wurde geklickt!");
   window.open("/formular"); // Zum öffnen in einer anderen Seite
   //window.location.replace('/home'); // Zum öffnen auf dieser Seite
 };
