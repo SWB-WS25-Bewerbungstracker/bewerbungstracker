@@ -13,15 +13,15 @@ public class ContactService {
     public Contact createContact(ContactInputDTO input) {
         Contact contact;
         //Frontend gives blank strings: If everything is blank nothing is saved.
-        if(input.getContactFirstName().isBlank() && input.getContactLastName().isBlank() && input.getContactEmail().isBlank() && input.getContactPhoneNumber().isBlank()){
+        if(input.getContactFirstName() == null && input.getContactLastName() == null && input.getContactEmail() == null && input.getContactPhoneNumber() == null){
             return null;
         }
 
         //Instead of blank strings safe null in Entity
-        input.setContactFirstName((input.getContactFirstName().isBlank() ? null : input.getContactFirstName()));
-        input.setContactLastName((input.getContactLastName().isBlank() ? null : input.getContactLastName()));
-        input.setContactEmail((input.getContactEmail().isBlank() ? null : input.getContactEmail()));
-        input.setContactPhoneNumber((input.getContactPhoneNumber().isBlank() ? null : input.getContactPhoneNumber()));
+        input.setContactFirstName((input.getContactFirstName()));
+        input.setContactLastName((input.getContactLastName()));
+        input.setContactEmail((input.getContactEmail()));
+        input.setContactPhoneNumber((input.getContactPhoneNumber()));
 
 
         contact = contactConverter.toEntity(input);

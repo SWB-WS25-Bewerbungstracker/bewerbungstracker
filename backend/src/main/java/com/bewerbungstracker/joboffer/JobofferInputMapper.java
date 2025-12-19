@@ -6,34 +6,36 @@ import com.bewerbungstracker.joboffer.contact.ContactInputDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import static com.bewerbungstracker.utilities.InputNormalizer.normalize;
+
 @Component
 @RequiredArgsConstructor
 public class JobofferInputMapper {
     JobofferNestedInputDTO map(JobofferInputDTO input) {
         return JobofferNestedInputDTO.builder()
-                .jobofferName(input.getJobofferName())
-                .jobofferDescription(input.getJobofferDescription())
-                .salaryMinimum(input.getSalaryMinimum())
-                .salaryMaximum(input.getSalaryMaximum())
-                .jobofferNotes(input.getJobofferNotes())
+                .jobofferName(normalize(input.getJobofferName()))
+                .jobofferDescription(normalize(input.getJobofferDescription()))
+                .salaryMinimum(normalize(input.getSalaryMinimum()))
+                .salaryMaximum(normalize(input.getSalaryMaximum()))
+                .jobofferNotes(normalize(input.getJobofferNotes()))
                 .company(new CompanyInputDTO(
-                        input.getCompanyId(),
-                        input.getCompanyName(),
-                        input.getCompanyEmployees(),
-                        input.getCompanyLogo(),
+                        normalize(input.getCompanyId()),
+                        normalize(input.getCompanyName()),
+                        normalize(input.getCompanyEmployees()),
+                        normalize(input.getCompanyLogo()),
                         new AddressInputDTO(
-                                input.getAddressStreet(),
-                                input.getAddressStreetNumber(),
-                                input.getAddressZipCode(),
-                                input.getAddressCity(),
-                                input.getAddressCountry()
+                                normalize(input.getAddressStreet()),
+                                normalize(input.getAddressStreetNumber()),
+                                normalize(input.getAddressZipCode()),
+                                normalize(input.getAddressCity()),
+                                normalize(input.getAddressCountry())
                         )
                 ))
                 .contact(new ContactInputDTO(
-                        input.getContactFirstName(),
-                        input.getContactLastName(),
-                        input.getContactEmail(),
-                        input.getContactPhoneNumber()
+                        normalize(input.getContactFirstName()),
+                        normalize(input.getContactLastName()),
+                        normalize(input.getContactEmail()),
+                        normalize(input.getContactPhoneNumber())
                         )
                 )
                 .build();
