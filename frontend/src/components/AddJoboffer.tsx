@@ -27,6 +27,7 @@ import {
   removeIdForNewAppointments,
   type Appointment,
 } from "../functions/parseDate";
+import {normalizeFormData} from "../services/normalizer.ts";
 
 const TitleWidth = "20%";
 
@@ -230,22 +231,23 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
     // Speichern der geänderten Daten (um sicher zu gehen dass Änderung gespeichert ist)
     setFormData(formData);
 
+    const payload = normalizeFormData(formData)
     // Debugging
-    console.log("Joboffer gesendet: Daten an Backend: ", formData);
+    console.log("Joboffer gesendet: Daten an Backend: ", payload);
 
     // Wenn eine Id vorhanden ist: Bearbeiten der Daten
     if (id) {
       // Debugging: Daten der Appointments vor bearbeiten der Ids
       console.log(
         "Appointments vor dem Entfernen der IDs: ",
-        formData.appointments
+        payload.appointments
       );
 
       // Versuch die Daten zu Senden
       try {
         const response = await applicationTrackerApi.put(
           "http://localhost:8080/joboffer/editForm", // Backend Schnittstelle
-          formData, // zu sendende Daten (automatisch als JSON)
+          payload, // zu sendende Daten (automatisch als JSON)
           {
             headers: {
               "Content-Type": "application/json",
@@ -256,7 +258,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
         console.log("Server response:", response.data);
 
         if (response.status === 201 || response.status === 200) {
-          window.close();
+          //window.close();
         }
       } catch (error) {
         // Axios-Fehlerbehandlung
@@ -270,12 +272,12 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
     // Wenn keine Id vorhanden ist: Hinzufügen der Daten
     else {
       // Debugging
-      console.log("Daten an Backend: ", formData);
+      console.log("Daten an Backend: ", payload);
       // Versuch die Daten zu Senden
       try {
         const response = await applicationTrackerApi.post(
           "http://localhost:8080/joboffer/inputForm", // Backend Schnittstelle
-          formData, // zu sendende Daten (automatisch als JSON)
+          payload, // zu sendende Daten (automatisch als JSON)
           {
             headers: {
               "Content-Type": "application/json",
@@ -286,7 +288,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
         console.log("Server response:", response.data);
 
         if (response.status === 201 || response.status === 200) {
-          window.close();
+          //window.close();
         }
       } catch (error) {
         // Axios-Fehlerbehandlung
@@ -345,6 +347,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
                 variant="outlined"
                 // Zuweisung der Daten für Übergabe
                 name="jobofferName"
+                required
                 value={formData.jobofferName}
                 onChange={handleChange}
                 // Input

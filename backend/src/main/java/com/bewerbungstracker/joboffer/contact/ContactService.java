@@ -13,7 +13,7 @@ public class ContactService {
     public Contact createContact(ContactInputDTO input) {
         Contact contact;
         //Frontend gives blank strings: If everything is blank nothing is saved.
-        if(input.getContactFirstName() == null && input.getContactLastName() == null && input.getContactEmail() == null && input.getContactPhoneNumber() == null){
+        if(input == null){
             return null;
         }
 

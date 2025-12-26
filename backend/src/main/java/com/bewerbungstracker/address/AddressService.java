@@ -11,7 +11,7 @@ public class AddressService {
 
     public Address createAddress(AddressInputDTO dto) {
         Address address = null;
-        if (!dto.isEmpty()) {
+        if (dto != null) {
              address = converter.toEntity(dto);
             return addressRepository.save(address);
         }

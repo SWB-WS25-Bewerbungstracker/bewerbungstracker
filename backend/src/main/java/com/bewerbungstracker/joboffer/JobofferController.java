@@ -30,7 +30,7 @@ public class JobofferController {
     }
 
     @PostMapping(path = "/inputForm", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> postJobofferInfo(@RequestBody JobofferInputDTO jobofferInfo,
+    public ResponseEntity<String> postJobofferInfo(@RequestBody JobofferNestedInputDTO jobofferInfo,
                                                    @AuthenticationPrincipal Jwt jwt) {
         String email = jwt.getClaimAsString("email");
         log.info("jobofferInfo: {} user: {}", jobofferInfo, email);
