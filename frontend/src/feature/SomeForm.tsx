@@ -1,14 +1,12 @@
-import {Paper,Stack, Typography, Button, Box} from "@mui/material"
+import {Stack, Typography, Button, Box} from "@mui/material"
 import {useForm} from "react-hook-form";
 import {FormInputTest} from "./FormInputTest.tsx";
+import FormSection from "./FormSection.tsx";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AddressSchema , type AddressFormValues, AddressForm } from "./AdressForm.tsx";
 import applicationTrackerApi from "../services/api.ts";
 import axios from "axios";
-
-const TitleWidth = "15%";
-
 
 //Setting up  some basic validation with zod
 const validationSchema = z.object({
@@ -112,104 +110,45 @@ const SomeForm = () => {
                 }}
             >
                 <Typography variant="h4">Some Form</Typography>
-                <Paper sx={{p: 3}}>
+
+                <FormSection title={"Stelle"}>
+                    <FormInputTest name={"jobofferName"} control={control} trigger={trigger} label={"Stellenbezeichnung"}/>
+                    <FormInputTest name={"jobofferDescription"} control={control} trigger={trigger} label={"Kurzbeschreibung der Stelle"} minRows={5}/>
+                </FormSection>
+
+                <FormSection title={"Firma"} direction={"row"}>
+                    <FormInputTest name={"company.companyName"} control={control} trigger={trigger} label={"Firmenname"} sx={{flex: "0 0 70%"}}/>
+                    <FormInputTest name ={"company.companyEmployees"} control={control} trigger={trigger} label={"Anzahl Mitarbeiter"} type={"number"} />
+                </FormSection>
+
+                <AddressForm control={control} trigger={trigger} baseName={"company.address"}/>
+
+                <FormSection title={"Distanz"}>
+                    <FormInputTest name={"distanceLength"} control={control} trigger={trigger} label={"Strecke"}/>
+                    <FormInputTest name ={"distanceTime"} control={control} trigger={trigger} label={"Fahrtzeit"}/>
+                </FormSection>
+
+                <FormSection title={"Kontakt"}>
                     <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        sx={{ flexWrap: "wrap" }}
+                        direction="row"
+                        spacing={1}
+                        paddingLeft={1}
+                        paddingBottom={1}
                     >
-                        <Box minWidth={TitleWidth}>
-                            <Typography paddingBottom={1}>Stelle</Typography>
-                        </Box>
-                        <Box flex={1}>
-                            <Stack
-                                direction="column"
-                                spacing={1}
-                                paddingLeft={1}
-                                paddingBottom={1}
-                            >
-                                <FormInputTest name={"jobofferName"} control={control} trigger={trigger} label={"Stellenbezeichnung"}/>
-                                <FormInputTest name={"jobofferDescription"} control={control} trigger={trigger} label={"Kurzbeschreibung der Stelle"} minRows={5}/>
-                            </Stack>
-                        </Box>
+                        <FormInputTest name={"contact.contactFirstName"} control={control} trigger={trigger} label={"Vorname"}/>
+                        <FormInputTest name ={"contact.contactLastName"} control={control} trigger={trigger} label={"Nachname"}/>
                     </Stack>
-                </Paper>
-                <Paper sx={{p: 3}}>
                     <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        sx={{ flexWrap: "wrap" }}
+                        direction="row"
+                        spacing={1}
+                        paddingLeft={1}
+                        paddingBottom={1}
                     >
-                        <Box minWidth={TitleWidth}>
-                            <Typography paddingBottom={1}>Firma</Typography>
-                        </Box>
-                        <Box flex={1}>
-                            <Stack
-                                direction="row"
-                                spacing={1}
-                                paddingLeft={1}
-                                paddingBottom={1}
-                            >
-                                <FormInputTest name={"company.companyName"} control={control} trigger={trigger} label={"Firmenname"}/>
-                                <FormInputTest name ={"company.companyEmployees"} control={control} trigger={trigger} label={"Anzahl Mitarbeiter"} type={"number"}/>
-                            </Stack>
-                        </Box>
+                        <FormInputTest name={"contact.contactPhoneNumber"} control={control} trigger={trigger} label={"Telefonnummer"}/>
+                        <FormInputTest name ={"contact.contactEmail"} control={control} trigger={trigger} label={"Email"}/>
                     </Stack>
-                    <AddressForm control={control} trigger={trigger} baseName={"company.address"}/>
-                </Paper>
-                <Paper sx={{p: 3}}>
-                    <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        sx={{ flexWrap: "wrap" }}
-                    >
-                        <Box minWidth={TitleWidth}>
-                            <Typography paddingBottom={1}>Distanz</Typography>
-                        </Box>
-                        <Box flex={1}>
-                            <Stack
-                                direction="row"
-                                spacing={1}
-                                paddingLeft={1}
-                                paddingBottom={1}
-                            >
-                                <FormInputTest name={"distanceLength"} control={control} trigger={trigger} label={"Strecke"}/>
-                                <FormInputTest name ={"distanceTime"} control={control} trigger={trigger} label={"Fahrtzeit"}/>
-                            </Stack>
-                        </Box>
-                    </Stack>
-                </Paper>
-                <Paper sx={{p: 3}}>
-                    <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        sx={{ flexWrap: "wrap" }}
-                    >
-                        <Box minWidth={TitleWidth}>
-                            <Typography paddingBottom={1}>Kontakt</Typography>
-                        </Box>
-                        <Box flex={1}>
-                            <Stack
-                                direction="row"
-                                spacing={1}
-                                paddingLeft={1}
-                                paddingBottom={1}
-                            >
-                                <FormInputTest name={"contact.contactFirstName"} control={control} trigger={trigger} label={"Vorname"}/>
-                                <FormInputTest name ={"contact.contactLastName"} control={control} trigger={trigger} label={"Nachname"}/>
-                            </Stack>
-                            <Stack
-                                direction="row"
-                                spacing={1}
-                                paddingLeft={1}
-                                paddingBottom={1}
-                            >
-                                <FormInputTest name={"contact.contactPhoneNumber"} control={control} trigger={trigger} label={"Telefonnummer"}/>
-                                <FormInputTest name ={"contact.contactEmail"} control={control} trigger={trigger} label={"Email"}/>
-                            </Stack>
-                        </Box>
-                    </Stack>
-                </Paper>
+                </FormSection>
+                
                 <Button type="submit" variant={"contained"} sx={{ mt: 2, display: "block" }}>
                     Submit
                 </Button>

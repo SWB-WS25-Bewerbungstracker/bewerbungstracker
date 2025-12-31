@@ -39,7 +39,7 @@ export const FormInputTest = ({ name, control, trigger, label, minRows = 1, type
             control={control}
             render={(renderProps) => (
                 <TextField
-                    size="small"
+                    //size="small"
                     type={type === undefined || type === "number" ? "text" : type}
                     value={renderProps.field.value ?? ""}
                     onChange={(e) => handleInputChange(e, renderProps.field, type)}
