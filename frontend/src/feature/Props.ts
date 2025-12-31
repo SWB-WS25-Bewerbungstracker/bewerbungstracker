@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from "@mui/material";
+import type { ReactNode } from "react";
 
 export interface FormInputProps {
     name: string;       //name of the field (has to match inputDTO- and FormValues fields)
@@ -10,4 +11,10 @@ export interface FormInputProps {
     type?:string;       //type of field (number, text ...) default = "text"
 
     sx?: SxProps<Theme>;
+}
+
+export interface FormSectionProps {
+    title: string;
+    children: ReactNode;
+    direction?: "row" | "column"
 }
