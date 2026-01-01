@@ -12,18 +12,6 @@ public class ContactService {
     private final ContactConverter contactConverter;
     public Contact createContact(ContactInputDTO input) {
         Contact contact;
-        //Frontend gives blank strings: If everything is blank nothing is saved.
-        if(input == null){
-            return null;
-        }
-
-        //Instead of blank strings safe null in Entity
-        input.setContactFirstName((input.getContactFirstName()));
-        input.setContactLastName((input.getContactLastName()));
-        input.setContactEmail((input.getContactEmail()));
-        input.setContactPhoneNumber((input.getContactPhoneNumber()));
-
-
         contact = contactConverter.toEntity(input);
         return contactRepository.save(contact);
     }

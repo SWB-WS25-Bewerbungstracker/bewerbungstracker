@@ -6,10 +6,11 @@ import com.bewerbungstracker.joboffer.contact.ContactInputDTO;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Builder
+//@Builder
 public class JobofferNestedInputDTO {
     private String jobofferName;
     private String jobofferDescription;
@@ -21,5 +22,6 @@ public class JobofferNestedInputDTO {
     private CompanyInputDTO company;
     private ContactInputDTO contact;
 
-    private List<AppointmentCleanView> appointments;
+    //@Builder.Default
+    private List<AppointmentCleanView> appointments = new ArrayList<>();
 }

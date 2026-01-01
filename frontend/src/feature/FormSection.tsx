@@ -1,15 +1,7 @@
-import React from "react";
 import {Box, Paper, Stack, Typography} from "@mui/material";
+import type { FormSectionProps }  from "./Props.ts";
 
 const TitleWidth = "15%";
-
-interface FormSectionProps {
-    title: string;
-    children: React.ReactNode;
-    direction?: "row" | "column"
-
-
-}
 
 const FormSection = ({title, children, direction}: FormSectionProps) =>
     (

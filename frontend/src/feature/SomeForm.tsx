@@ -1,22 +1,26 @@
 import {Stack, Typography, Button, Box} from "@mui/material"
 import {useForm} from "react-hook-form";
-import {FormInputTest} from "./FormInputTest.tsx";
+import {FormInputText} from "./FormInputText.tsx";
 import FormSection from "./FormSection.tsx";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AddressSchema , type AddressFormValues, AddressForm } from "./AdressForm.tsx";
+import { AddressSchema , type AddressFormValues, AddressForm } from "./AddressForm.tsx";
 import applicationTrackerApi from "../services/api.ts";
 import axios from "axios";
 
+import { useState } from "react";
+import AddAppointments from "../components/AddAppointments.tsx";
+import {type Appointment, removeIdForNewAppointments} from "../functions/parseDate";
+
 //Setting up  some basic validation with zod
 const validationSchema = z.object({
-    jobofferName: z.string("Pflichtfeld"),
+    jobofferName: z.string("Pflichtfeld").min(1, "Pflichtfeld"),
     jobofferDescription: z.string().optional(),
     company: z.object({
-        companyName: z.string("Pflichtfeld"),
+        companyName: z.string("Pflichtfeld").min(1, "Pflichtfeld"),
         companyEmployees: z.number().int().min(0).optional(),
-        companyLogos: z.string().optional(),
-        address: AddressSchema
+        companyLogo: z.string().optional(),
+        companyAddress: AddressSchema.optional()
 
         }),
     contact: z.object({
@@ -37,7 +41,7 @@ interface FormValues {
         companyName: string;
         companyEmployees?: number;
         companyLogo?: string;
-        address?: AddressFormValues;
+        companyAddress?: AddressFormValues;
     };
     contact?: {
         contactFirstName?: string;
@@ -63,21 +67,28 @@ const SomeForm = () => {
         },
     });
 
+    const [appointments, setAppointments] =useState<Appointment[]>([]);
+
     const onSubmit = async (data: FormValues) => {
         //remove empty contact object
         if (data.contact && Object.values(data.contact).every(v => v === undefined)) {
             delete data.contact;
         }
         //remove empty address object
-        if (data.company.address && Object.values(data.company.address).every(v => v === undefined)) {
-            delete data.company.address;
+        if (data.company.companyAddress && Object.values(data.company.companyAddress).every(v => v === undefined)) {
+            delete data.company.companyAddress;
         }
 
-        const payload = JSON.parse(JSON.stringify(data)); //remove undefined fields
+        data = JSON.parse(JSON.stringify(data)); //remove undefined fields
+
+        const payload = {
+            ...data,
+            appointments: appointments.length > 0 ? removeIdForNewAppointments(appointments) : [],
+        }
         console.debug("onSubmit", payload); //log payload data
         //try Post
         try {
-            const response = await applicationTrackerApi.post("/joboffer/inputForm", data,
+            const response = await applicationTrackerApi.post("/joboffer/inputForm", payload,
                 {
                 headers: {
                     "Content-Type": "application/json",
@@ -112,20 +123,20 @@ const SomeForm = () => {
                 <Typography variant="h4">Some Form</Typography>
 
                 <FormSection title={"Stelle"}>
-                    <FormInputTest name={"jobofferName"} control={control} trigger={trigger} label={"Stellenbezeichnung"}/>
-                    <FormInputTest name={"jobofferDescription"} control={control} trigger={trigger} label={"Kurzbeschreibung der Stelle"} minRows={5}/>
+                    <FormInputText name={"jobofferName"} control={control} trigger={trigger} label={"Stellenbezeichnung"}/>
+                    <FormInputText name={"jobofferDescription"} control={control} trigger={trigger} label={"Kurzbeschreibung der Stelle"} minRows={5}/>
                 </FormSection>
 
                 <FormSection title={"Firma"} direction={"row"}>
-                    <FormInputTest name={"company.companyName"} control={control} trigger={trigger} label={"Firmenname"} sx={{flex: "0 0 70%"}}/>
-                    <FormInputTest name ={"company.companyEmployees"} control={control} trigger={trigger} label={"Anzahl Mitarbeiter"} type={"number"} />
+                    <FormInputText name={"company.companyName"} control={control} trigger={trigger} label={"Firmenname"} sx={{flex: "0 0 70%"}}/>
+                    <FormInputText name ={"company.companyEmployees"} control={control} trigger={trigger} label={"Anzahl Mitarbeiter"} type={"number"} />
                 </FormSection>
 
-                <AddressForm control={control} trigger={trigger} baseName={"company.address"}/>
+                <AddressForm control={control} trigger={trigger} baseName={"company.companyAddress"}/>
 
                 <FormSection title={"Distanz"}>
-                    <FormInputTest name={"distanceLength"} control={control} trigger={trigger} label={"Strecke"}/>
-                    <FormInputTest name ={"distanceTime"} control={control} trigger={trigger} label={"Fahrtzeit"}/>
+                    <FormInputText name={"distanceLength"} control={control} trigger={trigger} label={"Strecke"}/>
+                    <FormInputText name ={"distanceTime"} control={control} trigger={trigger} label={"Fahrtzeit"}/>
                 </FormSection>
 
                 <FormSection title={"Kontakt"}>
@@ -135,8 +146,8 @@ const SomeForm = () => {
                         paddingLeft={1}
                         paddingBottom={1}
                     >
-                        <FormInputTest name={"contact.contactFirstName"} control={control} trigger={trigger} label={"Vorname"}/>
-                        <FormInputTest name ={"contact.contactLastName"} control={control} trigger={trigger} label={"Nachname"}/>
+                        <FormInputText name={"contact.contactFirstName"} control={control} trigger={trigger} label={"Vorname"}/>
+                        <FormInputText name ={"contact.contactLastName"} control={control} trigger={trigger} label={"Nachname"}/>
                     </Stack>
                     <Stack
                         direction="row"
@@ -144,11 +155,14 @@ const SomeForm = () => {
                         paddingLeft={1}
                         paddingBottom={1}
                     >
-                        <FormInputTest name={"contact.contactPhoneNumber"} control={control} trigger={trigger} label={"Telefonnummer"}/>
-                        <FormInputTest name ={"contact.contactEmail"} control={control} trigger={trigger} label={"Email"}/>
+                        <FormInputText name={"contact.contactPhoneNumber"} control={control} trigger={trigger} label={"Telefonnummer"}/>
+                        <FormInputText name ={"contact.contactEmail"} control={control} trigger={trigger} label={"Email"}/>
                     </Stack>
                 </FormSection>
-                
+
+                <AddAppointments
+                    appointments={appointments}
+                    onAppointmentChange={setAppointments}/>
                 <Button type="submit" variant={"contained"} sx={{ mt: 2, display: "block" }}>
                     Submit
                 </Button>

@@ -1,5 +1,5 @@
 import { Controller } from "react-hook-form";
-import type { FormInputProps } from "./FormInputProps.ts";
+import type { FormInputProps } from "./Props.ts";
 import { TextField } from "@mui/material";
 
 const handleInputChange = (event: React.ChangeEvent<HTMLInputElement |  HTMLTextAreaElement>, field: any, type?: string): void  => {
@@ -32,7 +32,7 @@ const handleBlur = async (field: any, trigger: any, name: string, type?: string,
 }
 
 
-export const FormInputTest = ({ name, control, trigger, label, minRows = 1, type, sx}: FormInputProps) => {
+export const FormInputText = ({ name, control, trigger, label, minRows = 1, type, sx}: FormInputProps) => {
     return (
         <Controller
             name={name}

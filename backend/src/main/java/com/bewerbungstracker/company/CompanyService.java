@@ -36,7 +36,7 @@ public class CompanyService {
         if(input.getCompanyName() == null || input.getCompanyName().isEmpty()) {
             throw new IllegalArgumentException("Company name cannot be null or empty");
         }
-        Address address = addressService.createAddress(input.getCompanyAdress());
+        Address address = addressService.createAddress(input.getCompanyAddress());
         Company company = companyConverter.toEntity(input, address);
         return companyRepository.save(company);
     }

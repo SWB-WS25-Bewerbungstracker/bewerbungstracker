@@ -127,7 +127,7 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
       // dann daraus ein neues Appointment erstellen
       const newAppointment: Appointment = {
         appointmentId: appointmentData?.appointmentId || `new_${Date.now()}`, // KI Fehlerbehebung: Falls keine ID, neuen Termin anlegen
-        appointmentDate: combinedDateAndTime.toISOString(),
+        appointmentDate: combinedDateAndTime.format("YYYY-MM-DDTHH:mm:ss.SSS"),
         appointmentName,
       };
 

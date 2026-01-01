@@ -11,5 +11,5 @@ public class CompanyInputDTO {
     private String companyName;
     private Integer companyEmployees;
     private String companyLogo;
-    private AddressInputDTO companyAdress;
+    private AddressInputDTO companyAddress;
 }
