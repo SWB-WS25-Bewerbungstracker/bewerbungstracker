@@ -1,6 +1,5 @@
 import {Stack, Typography, Button, Box} from "@mui/material"
 import {useForm} from "react-hook-form";
-import { useParams } from "react-router-dom";
 import {FormInputText} from "./FormInputText.tsx";
 import FormSection from "./FormSection.tsx";
 import * as z from "zod";
@@ -13,8 +12,8 @@ import {useEffect, useState} from "react";
 import AddAppointments from "../components/AddAppointments.tsx";
 import {type Appointment, removeIdForNewAppointments} from "../functions/parseDate";
 import {FormInputAutocomplete} from "./FormInputAutocomplete.tsx";
-import {useCompanyData} from "../functions/getAllCompaniesAndId.tsx";
-import {useJobofferDetails} from "../functions/getJobofferById.tsx";
+import {useCompanyData} from "../functions/getAllCompaniesAndId.ts";
+import { useCompleteJobofferInformation } from "../functions/getJobofferById.ts";
 import {type AddJobofferFormProps} from "./Props.ts";
 
 
@@ -88,36 +87,36 @@ const SomeForm:React.FC<AddJobofferFormProps> = ({id}) => {
 
     /* ----------------------------------Bisherige Daten holen---------------------------------- */
     // Daten mithilfe externer Funktion laden
-    const { jobofferDetails, loadingJoboffer, errorRetrievingJoboffer } =
-        useJobofferDetails(id);
+    const { jobofferCompleteInformation, loadingStateJoboffer, errorRetrievingJoboffer } =
+        useCompleteJobofferInformation(id);
 
     useEffect(() => {
-        if (!jobofferDetails) return;
+        if (!jobofferCompleteInformation) return;
 
         reset({
-            jobofferName: jobofferDetails.jobofferName,
-            jobofferDescription: jobofferDetails.jobofferDescription,
-            jobofferNotes: jobofferDetails.jobofferNotes,
+            jobofferName: jobofferCompleteInformation.jobofferName,
+            jobofferDescription: jobofferCompleteInformation.jobofferDescription,
+            jobofferNotes: jobofferCompleteInformation.jobofferNotes,
 
             company: {
-                companyId: jobofferDetails.companyId,
-                companyName: jobofferDetails.companyName,
-                companyEmployees: jobofferDetails.companyEmployees,
+                companyId: jobofferCompleteInformation.companyId,
+                companyName: jobofferCompleteInformation.companyName,
+                companyEmployees: jobofferCompleteInformation.companyEmployees,
                 companyAddress: {
-                    addressStreet: jobofferDetails.addressStreet,
-                    addressZipCode: jobofferDetails.addressZipCode,
-                    addressCity: jobofferDetails.addressCity,
-                    addressCountry: jobofferDetails.addressCountry,
+                    addressStreet: jobofferCompleteInformation.addressStreet,
+                    addressZipCode: jobofferCompleteInformation.addressZipCode,
+                    addressCity: jobofferCompleteInformation.addressCity,
+                    addressCountry: jobofferCompleteInformation.addressCountry,
                 },
             },
 
-            salaryMinimum: jobofferDetails.jobofferMinimumWage,
-            salaryMaximum: jobofferDetails.jobofferMaximumWage,
+            salaryMinimum: jobofferCompleteInformation.jobofferMinimumWage,
+            salaryMaximum: jobofferCompleteInformation.jobofferMaximumWage,
             perks: undefined,
         });
 
-        setAppointments(jobofferDetails.appointments ?? [])
-    }, [id, jobofferDetails, reset]);
+        setAppointments(jobofferCompleteInformation.appointments ?? [])
+    }, [id, jobofferCompleteInformation, reset]);
 
 
     // Verwendung des Custom Hooks, um die Firmen- und Ladezustandsdaten zu holen
