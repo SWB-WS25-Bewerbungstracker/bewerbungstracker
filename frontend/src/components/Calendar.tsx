@@ -29,7 +29,7 @@ interface CalendarDate{
 }
 
 function AppointmentDate(props: any) {
-    const { day, events = [], ...other} = props; //...other übergibt alle übrigen Props ohne manuell zu übergeben
+    const { day, events = [], outsideCurrentMonth, ...other} = props; //...other übergibt alle übrigen Props ohne manuell zu übergeben
 
     const dateStr = day.format("YYYY-MM-DD"); //das Datum 'day' ins richtige Format bringen
     const hasEvent = events.some((e: CalendarDate) => e.datum === dateStr); //event.some() prüft ob minfdestens ein Event in events am aktuellen Datum ist
@@ -48,9 +48,10 @@ function AppointmentDate(props: any) {
         <PickersDay     // stellt einen einzelnen Tag im Kalender dar
             {...other}  //auch hier, alle Props an PickersDay übergeben ohne sie nochmal in day oder events zu entpacken
             day={day}
+            outsideCurrentMonth = {outsideCurrentMonth}
             sx={{
+                color: outsideCurrentMonth ? 'text.disabled' : hasEvent ? 'white' : undefined,
                 backgroundColor: hasEvent ? "orange" : undefined,
-                color: hasEvent ? "white" : undefined,
                 borderRadius: "8px",
                 '&:hover': {
                     backgroundColor: 'lightblue'  // Beispiel-Hover-Farbe
