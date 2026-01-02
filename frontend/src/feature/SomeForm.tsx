@@ -11,12 +11,15 @@ import axios from "axios";
 import { useState } from "react";
 import AddAppointments from "../components/AddAppointments.tsx";
 import {type Appointment, removeIdForNewAppointments} from "../functions/parseDate";
+import {FormInputAutocomplete} from "./FormInputAutocomplete.tsx";
+import {useCompanyData} from "../functions/getAllCompaniesAndId.tsx";
 
 //Setting up  some basic validation with zod
 const validationSchema = z.object({
     jobofferName: z.string("Pflichtfeld").min(1, "Pflichtfeld"),
     jobofferDescription: z.string().optional(),
     company: z.object({
+        companyId: z.number().int().optional(),
         companyName: z.string("Pflichtfeld").min(1, "Pflichtfeld"),
         companyEmployees: z.number().int().min(0).optional(),
         companyLogo: z.string().optional(),
@@ -38,6 +41,7 @@ interface FormValues {
     jobofferName: string;
     jobofferDescription?: string;
     company: {
+        companyId?: number;
         companyName: string;
         companyEmployees?: number;
         companyLogo?: string;
@@ -55,7 +59,7 @@ interface FormValues {
 
 //Test form
 const SomeForm = () => {
-    const { handleSubmit, control, trigger } = useForm<FormValues>({
+    const { handleSubmit, control, trigger, setValue, watch } = useForm<FormValues>({
         resolver: zodResolver(validationSchema),
         mode: "onBlur",
         reValidateMode: "onBlur",
@@ -67,7 +71,17 @@ const SomeForm = () => {
         },
     });
 
+    // Verwendung des Custom Hooks, um die Firmen- und Ladezustandsdaten zu holen
+    const { listOfCompanies, loadingCompanies } = useCompanyData();
+
     const [appointments, setAppointments] =useState<Appointment[]>([]);
+
+    //watch input of company to disable other company fields if company matches existing company.
+    const companyName = watch("company.companyName").trim();
+    const companyId   = watch("company.companyId");
+    const companyMatched =
+        !!companyId ||
+        listOfCompanies.some(c => c.name === companyName);
 
     const onSubmit = async (data: FormValues) => {
         //remove empty contact object
@@ -106,6 +120,7 @@ const SomeForm = () => {
         }
     };
 
+
     return (
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -123,13 +138,32 @@ const SomeForm = () => {
                 <Typography variant="h4">Some Form</Typography>
 
                 <FormSection title={"Stelle"}>
-                    <FormInputText name={"jobofferName"} control={control} trigger={trigger} label={"Stellenbezeichnung"}/>
+                    <FormInputText name={"jobofferName"} control={control} trigger={trigger} label={"Titel der Stelle"}/>
                     <FormInputText name={"jobofferDescription"} control={control} trigger={trigger} label={"Kurzbeschreibung der Stelle"} minRows={5}/>
                 </FormSection>
 
                 <FormSection title={"Firma"} direction={"row"}>
-                    <FormInputText name={"company.companyName"} control={control} trigger={trigger} label={"Firmenname"} sx={{flex: "0 0 70%"}}/>
-                    <FormInputText name ={"company.companyEmployees"} control={control} trigger={trigger} label={"Anzahl Mitarbeiter"} type={"number"} />
+                    <FormInputAutocomplete name={"company.companyName"}
+                                           idName={"company.companyId"}
+                                           control={control}
+                                           trigger={trigger}
+                                           label={"Name der Firma"}
+                                           options={listOfCompanies.map(
+                                               (company) => (
+                                                   {label: company.name, id: company.id}
+                                               )
+                                           )}
+                                           setValue={setValue}
+                                           loading={loadingCompanies}
+                                           sx={{flex: "0 0 70%"}}
+                    />
+                    <FormInputText name ={"company.companyEmployees"}
+                                   control={control}
+                                   trigger={trigger}
+                                   label={"Anzahl Mitarbeiter"}
+                                   type={"number"}
+                                   disabled={companyMatched}
+                    />
                 </FormSection>
 
                 <AddressForm control={control} trigger={trigger} baseName={"company.companyAddress"}/>

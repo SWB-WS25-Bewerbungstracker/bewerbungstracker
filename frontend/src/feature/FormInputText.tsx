@@ -32,7 +32,7 @@ const handleBlur = async (field: any, trigger: any, name: string, type?: string,
 }
 
 
-export const FormInputText = ({ name, control, trigger, label, minRows = 1, type, sx}: FormInputProps) => {
+export const FormInputText = ({ name, control, trigger, label, minRows = 1, type, disabled = false, sx}: FormInputProps) => {
     return (
         <Controller
             name={name}
@@ -51,6 +51,7 @@ export const FormInputText = ({ name, control, trigger, label, minRows = 1, type
                     multiline={minRows > 1}
                     minRows={minRows}
                     variant="outlined"
+                    disabled={disabled}
                     sx={sx}
                 />
             )}
