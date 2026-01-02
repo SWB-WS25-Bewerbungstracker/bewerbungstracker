@@ -29,7 +29,6 @@ import CustomButtonGroup from "./ButtonGroup";
 
 const Lang = getLang();
 
-
 //*************** Toolbar function ****************
 
 function CustomToolbar({ onAddClick }: { onAddClick: () => void }) {
@@ -52,16 +51,20 @@ function CustomToolbar({ onAddClick }: { onAddClick: () => void }) {
 //***************** Send Button function ***********************************
 
 async function sendButtonClicked(
-  date,
-  time,
-  appointmentName,
-  selectedJoboffer,
-  closeDialog
+    date,
+    time,
+    appointmentName,
+    selectedJoboffer,
+    closeDialog,
+    setErrorMessage: (msg: string) => void
+
 ) {
   if (!date || !time || !appointmentName || selectedJoboffer === "") {
-    alert("BIDDÄÄÄ FÜLL ALLE FELDER AUS!!");
+      setErrorMessage("Alles ausfüllen bitte!"); // Fehler setzen
     return;
   }
+
+    setErrorMessage("");
 
   const carrotForRabbit = date
     .hour(time.hour())
@@ -119,13 +122,14 @@ export interface BackendTermin {
 
 const TerminList: React.FC = () => {
 
+    const [errorMessage, setErrorMessage] = useState("");
+
     // Datum Input speichern (kopie aus AddAppointment)
     const [date, setDate] = useState<Dayjs | null>(dayjs());
     const [time, setTime] = useState<Dayjs | null>(dayjs());
     //************* AppointmentName ****************
     const[appointmentName, setAppointmentName] = useState("");
-  //************* AppointmentName ****************
-  const [appointmentName, setAppointmentName] = useState("");
+
 
   //********** onChange Handler für popup "Hinzufügen" ************
   const onDateChange = (newDate: Dayjs | null) => setDate(newDate);
@@ -350,6 +354,13 @@ const TerminList: React.FC = () => {
               />
             </Box>
           </LocalizationProvider>
+
+            {errorMessage && (
+                <Box sx={{ color: "red", fontWeight: "bold", marginTop: 1 }}>
+                    {errorMessage}
+                </Box>
+            )}
+
           <Box sx={{ display: "flex", justifyContent: "center", marginTop: 1 }}>
             <CustomButtonGroup
               buttons={[
@@ -363,7 +374,8 @@ const TerminList: React.FC = () => {
                       time,
                       appointmentName,
                       selectedJoboffer,
-                      handleClose
+                      handleClose,
+                      setErrorMessage
                     );
                   },
                 },
