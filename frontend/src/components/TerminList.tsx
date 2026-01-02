@@ -51,16 +51,20 @@ function CustomToolbar({ onAddClick }: { onAddClick: () => void }) {
 //***************** Send Button function ***********************************
 
 async function sendButtonClicked(
-  date,
-  time,
-  appointmentName,
-  selectedJoboffer,
-  closeDialog
+    date,
+    time,
+    appointmentName,
+    selectedJoboffer,
+    closeDialog,
+    setErrorMessage: (msg: string) => void
+
 ) {
   if (!date || !time || !appointmentName || selectedJoboffer === "") {
-    alert("BIDDÄÄÄ FÜLL ALLE FELDER AUS!!");
+      setErrorMessage("Alles ausfüllen bitte!"); // Fehler setzen
     return;
   }
+
+    setErrorMessage("");
 
   const carrotForRabbit = date
     .hour(time.hour())
@@ -92,10 +96,11 @@ async function sendButtonClicked(
   */
 }
 
+
 //**************** INTERFACE *************************
 export interface terminListProps {
   id: number;
-  datumSort: string; //datum als ISO string um soriteren zu können.
+  //datumSort: string; //datum als ISO string um soriteren zu können.
   datum: string;
   uhrzeit: string;
   firmaName?: string;
@@ -116,13 +121,15 @@ export interface BackendTermin {
 //************ MUI Komponente mit einigen anpassungen beginnt ****************
 
 const TerminList: React.FC = () => {
-  // Datum Input speichern (kopie aus AddAppointment)
-  const [date, setDate] = useState<Dayjs | null>(dayjs()); //ausgewähltes Datum
-  // Zeit Input speichern
-  const [time, setTime] = useState<Dayjs | null>(dayjs()); //ausgewählte Zeit
 
-  //************* AppointmentName ****************
-  const [appointmentName, setAppointmentName] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+
+    // Datum Input speichern (kopie aus AddAppointment)
+    const [date, setDate] = useState<Dayjs | null>(dayjs());
+    const [time, setTime] = useState<Dayjs | null>(dayjs());
+    //************* AppointmentName ****************
+    const[appointmentName, setAppointmentName] = useState("");
+
 
   //********** onChange Handler für popup "Hinzufügen" ************
   const onDateChange = (newDate: Dayjs | null) => setDate(newDate);
@@ -139,93 +146,107 @@ const TerminList: React.FC = () => {
   //hier wird das array erstellt für Popup um alle daten anzuzeigen
   const { listOfJoboffers, loading, error } = useOverviewOfAllJoboffers();
 
-  const [rows, setRows] = useState<terminListProps[]>([]);
-  const columns: GridColDef<(typeof rows)[number]>[] = [
-    { field: "id", headerName: "ID", width: 90 },
-    {
-      field: "firmaName",
-      headerName: "Unternehmen",
-      maxWidth: 150,
-      editable: false,
-      align: "left",
-      renderCell: (params) => (
-        <span style={{ cursor: "default" }}>{params.value}</span>
-      ),
-    },
-    {
-      field: "terminName",
-      headerName: "Terminart",
-      width: 100,
-      editable: true,
-      align: "left",
-    },
-    {
-      //Problem: datum kann nicht sortiert werden, wenn es parsed ist. also speichern wir datumSort als original ISO und lassen es dann danach Sortieren,
-      //aber rendern die Zelle trotzdem mit datum, was das parsed Datum ist.
-      field: "datumSort",
-      headerName: "Datum",
-      renderCell: (params) => params.row.datum,
-      type: "string",
-      width: 110,
-      editable: true,
-      align: "center",
-      headerAlign: "left",
-    },
-    {
-      field: "uhrzeit",
-      headerName: "Uhrzeit",
-      type: "number",
-      width: 100,
-      align: "center",
-      headerAlign: "center",
-      editable: true,
-      sortable: false,
-    },
-    {
-      field: "toDo",
-      headerName: "To-Do",
-      flex: 1, // soll die restliche Zeile auffüllen
-      align: "left",
-      headerAlign: "left",
-      editable: true,
-    },
-  ];
+
+
+
+    const [rows, setRows] = useState<terminListProps[]>([])
+    const columns: GridColDef<(typeof rows)[number]>[] = [
+        {   field: 'id',
+            headerName: 'ID',
+            width: 90
+        },
+        {
+            field: 'firmaName',
+            headerName: 'Unternehmen',
+            width: 120,
+            editable: false,
+            align: 'left',
+            renderCell: params => (
+                <span style={{cursor:'default'}}>{params.value}</span>
+            ),
+        },
+        {
+            field: 'terminName',
+            headerName: 'Terminart',
+            width: 100,
+            editable: true,
+            align: 'left',
+        },
+        {
+            field: 'datum',
+            headerName: 'Datum',
+            width: 110,
+            editable: false,
+            sortable: true,
+
+            renderCell: (params) => {
+                const parsed = parseDatePassed(params.value as string);
+                return <span>{parsed?.[1]}</span>;
+            }
+
+        },
+        {
+            field: 'uhrzeit',
+            headerName: 'Uhrzeit',
+            type: 'number',
+            width: 100,
+            align: 'center',
+            headerAlign: 'center',
+            editable: false,
+            sortable: false,
+
+            renderCell: (params) => {
+                const parsed = parseDatePassed(params.value as string);
+                return <span>{parsed?.[2]}</span>;}
+        },
+        {
+            field: 'toDo',
+            headerName: 'To-Do',
+            flex: 1, // soll die restliche Zeile auffüllen
+            align: 'left',
+            headerAlign: 'left',
+            editable: true,
+        },
+    ];
 
   // use Effect wird immer aufgerufen beim ersten rendern.
   useEffect(() => {
     applicationTrackerApi.get("/appointments").then((response) => {
       const today = new Date(); //erstellt ein neues Objekt mit dem heuigen Datum.
 
-      const appointmentList = response.data
-        .map((t: BackendTermin): terminListProps => {
-          const parsed = parseDatePassed(t.appointmentdate);
-          return {
-            id: t.appointmentID,
-            datumSort: t.appointmentdate,
-            datum: parsed?.[1] ?? "", //hier mache ich selben fix wie bei list unten. falls parsed[1/2] null/undefiined ist schreiben wir ein leeres array
-            uhrzeit: parsed?.[2] ?? "",
-            firmaName: t.companyname,
-            terminName: t.appointmentname,
-            //oDo: t.oDo,
-            //contact: t.contact
-          };
-        })
-        //Filter erstellen, damit nur Termine Heute oder in Zukunft angezeigt werden
-        .filter((t: terminListProps) => {
-          const [day, month, year] = (t.datum as string).split(".").map(Number); //trennt string bei jedem Punkt, wandelt dann string in Zahlen um
-          const date = new Date(year, month - 1, day);
-          return date >= today;
-        });
+                const appointmentList = response.data
+                    .map((t: BackendTermin): terminListProps => {
+                        //const parsed = parseDatePassed(t.appointmentdate);
 
-      setRows(appointmentList);
-    });
-  }, []);
+                        return{
+                            id: t.appointmentID,
+                            datum: t.appointmentdate,
+                            uhrzeit: t.appointmentdate,
+                            firmaName: t.companyname,
+                            terminName: t.appointmentname,
+                            //oDo: t.oDo,
+                            //contact: t.contact
+                        };
+                    })
 
-  return (
-    <Box sx={{ height: 370, width: "100%" }}>
-      <DataGrid
-        sx={{
-          background: "transparent",
+                    //Filter erstellen, damit nur Termine Heute oder in Zukunft angezeigt werden
+                    .filter((t: terminListProps) => {
+                        return new Date(t.datum) >= today;
+                    })
+
+
+                setRows(appointmentList)
+            });
+    },[]);
+
+
+
+    return (
+        <Box sx={{ height: 375, width: '100%' }}>
+            <DataGrid
+
+                sx={{
+                    background: 'transparent',
 
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: "transparent",
@@ -244,26 +265,28 @@ const TerminList: React.FC = () => {
             },
           },
 
-          "& .MuiDataGrid-row:last-child": {
-            marginBottom: 0,
-          },
-        }}
-        rows={rows}
-        columns={columns}
-        getRowId={(row) => row.id}
-        columnVisibilityModel={{ id: false }}
-        initialState={{
-          pagination: { paginationModel: { pageSize: 5 } },
-          sorting: {
-            //wir initialisieren die Tabelle am anfang Sortiert nach Terminen
-            sortModel: [{ field: "datumSort", sort: "asc" }],
-          },
-        }}
-        pageSizeOptions={[5]}
-        disableRowSelectionOnClick
-        slots={{ toolbar: () => <CustomToolbar onAddClick={handleOpen} /> }}
-        showToolbar
-      />
+                    '& .MuiDataGrid-row:last-child': {
+                        marginBottom: 0,
+                    },
+
+                }}
+
+                rows={rows}
+                columns={columns}
+                columnVisibilityModel={{ id: false }}
+                initialState={{
+                    pagination: { paginationModel: { pageSize: 4 } },
+                    sorting: {                  //wir initialisieren die Tabelle am anfang Sortiert nach Terminen
+                        sortModel: [
+                            {field: 'datum', sort: 'asc'}
+                        ]
+                    }
+                }}
+                pageSizeOptions={[4]}
+                disableRowSelectionOnClick
+                slots={{ toolbar:()=> <CustomToolbar onAddClick={handleOpen}/> }}
+                showToolbar
+            />
 
       <Dialog
         open={open}
@@ -331,6 +354,13 @@ const TerminList: React.FC = () => {
               />
             </Box>
           </LocalizationProvider>
+
+            {errorMessage && (
+                <Box sx={{ color: "red", fontWeight: "bold", marginTop: 1 }}>
+                    {errorMessage}
+                </Box>
+            )}
+
           <Box sx={{ display: "flex", justifyContent: "center", marginTop: 1 }}>
             <CustomButtonGroup
               buttons={[
@@ -344,7 +374,8 @@ const TerminList: React.FC = () => {
                       time,
                       appointmentName,
                       selectedJoboffer,
-                      handleClose
+                      handleClose,
+                      setErrorMessage
                     );
                   },
                 },
