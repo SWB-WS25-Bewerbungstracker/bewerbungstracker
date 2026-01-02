@@ -100,7 +100,7 @@ async function sendButtonClicked(
 //**************** INTERFACE *************************
 export interface terminListProps {
   id: number;
-  datumSort: string; //datum als ISO string um soriteren zu können.
+  //datumSort: string; //datum als ISO string um soriteren zu können.
   datum: string;
   uhrzeit: string;
   firmaName?: string;
