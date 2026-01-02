@@ -16,4 +16,13 @@ public class AppointmentConverter {
         appointment.setJoboffer(joboffer);
         return appointment;
     }
+
+    Appointment toEntity(AppointmentInputDTO dto, Joboffer joboffer ) {
+        Appointment appointment = new Appointment();
+        appointment.setAppointmentdate(dto.getAppointmentdate());
+        appointment.setAppointmentname(dto.getAppointmentname());
+        appointment.setJoboffer(joboffer);
+        return appointment;
+    }
 }
+
