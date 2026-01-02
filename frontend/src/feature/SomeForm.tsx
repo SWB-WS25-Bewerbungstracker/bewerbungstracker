@@ -34,6 +34,10 @@ const validationSchema = z.object({
     }).optional(),
     distanceLength: z.string().optional(),
     distanceTime: z.string().optional(),
+    salaryMinimum: z.number().optional(),
+    salaryMaximum: z.number().optional(),
+    perks: z.string().optional(),
+    jobofferNotes: z.string().optional(),
 })
 
 //interface type for the useform and data (this structure will be sent to the backend but some values maybe undefined)
@@ -55,6 +59,10 @@ interface FormValues {
     };
     distanceLength?: string;
     distanceTime?: string;
+    salaryMinimum?: number;
+    salaryMaximum?:number;
+    perks?: string;
+    jobofferNotes?: string;
 }
 
 //Test form
@@ -136,12 +144,10 @@ const SomeForm = () => {
                 }}
             >
                 <Typography variant="h4">Some Form</Typography>
-
                 <FormSection title={"Stelle"}>
-                    <FormInputText name={"jobofferName"} control={control} trigger={trigger} label={"Titel der Stelle"}/>
+                    <FormInputText name={"jobofferName"} control={control} trigger={trigger} label={"Titel der Stelle"} required/>
                     <FormInputText name={"jobofferDescription"} control={control} trigger={trigger} label={"Kurzbeschreibung der Stelle"} minRows={5}/>
                 </FormSection>
-
                 <FormSection title={"Firma"} direction={"row"}>
                     <FormInputAutocomplete name={"company.companyName"}
                                            idName={"company.companyId"}
@@ -154,6 +160,7 @@ const SomeForm = () => {
                                                )
                                            )}
                                            setValue={setValue}
+                                           required
                                            loading={loadingCompanies}
                                            sx={{flex: "0 0 70%"}}
                     />
@@ -165,14 +172,11 @@ const SomeForm = () => {
                                    disabled={companyMatched}
                     />
                 </FormSection>
-
                 <AddressForm control={control} trigger={trigger} baseName={"company.companyAddress"}/>
-
-                <FormSection title={"Distanz"}>
+                <FormSection title={"Distanz"} direction={"row"}>
                     <FormInputText name={"distanceLength"} control={control} trigger={trigger} label={"Strecke"}/>
                     <FormInputText name ={"distanceTime"} control={control} trigger={trigger} label={"Fahrtzeit"}/>
                 </FormSection>
-
                 <FormSection title={"Kontakt"}>
                     <Stack
                         direction="row"
@@ -193,10 +197,30 @@ const SomeForm = () => {
                         <FormInputText name ={"contact.contactEmail"} control={control} trigger={trigger} label={"Email"}/>
                     </Stack>
                 </FormSection>
-
                 <AddAppointments
                     appointments={appointments}
-                    onAppointmentChange={setAppointments}/>
+                    onAppointmentChange={setAppointments}
+                />
+                <FormSection title={"Gehaltsspielraum"} direction={"row"}>
+                    <FormInputText name ={"salaryMinimum"}
+                                   control={control}
+                                   trigger={trigger}
+                                   label={"Minimum"}
+                                   type={"number"}
+                    />
+                    <FormInputText name ={"salaryMaxiumum"}
+                                   control={control}
+                                   trigger={trigger}
+                                   label={"Maximum"}
+                                   type={"number"}
+                    />
+                </FormSection>
+                <FormSection title={"Perks und Benefits"}>
+                    <FormInputText name={"perks"} control={control} trigger={trigger} label={"Perks"} minRows={5}/>
+                </FormSection>
+                <FormSection title={"Persönliche Notizen"}>
+                    <FormInputText name={"jobofferNotes"} control={control} trigger={trigger} label={"Notizen"} minRows={5}/>
+                </FormSection>
                 <Button type="submit" variant={"contained"} sx={{ mt: 2, display: "block" }}>
                     Submit
                 </Button>

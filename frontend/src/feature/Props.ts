@@ -8,8 +8,9 @@ export interface FormInputProps {
     label: string;
     setValue?: any;     //not in use (copied from tutorial)
     minRows?: number;   //multiline field with min rows =number
+    required?: boolean;
     disabled?: boolean;
-    type?:string;       //type of field (number, text ...) default = "text"
+    type?: "number" | "text";       //type of field (number, text ...) default = "text"
     sx?: SxProps<Theme>;
 }
 
@@ -27,6 +28,7 @@ export interface FormAutocompleteProps {
     label: string;
     options: Array< {label: string , id: string }>;
     setValue: any;
+    required?: boolean;
     disabled?: boolean;
     loading?: boolean;
     sx?: SxProps<Theme>;

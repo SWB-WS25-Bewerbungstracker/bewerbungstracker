@@ -2,7 +2,7 @@ import { Controller} from "react-hook-form";
 import { Autocomplete, CircularProgress, TextField } from "@mui/material"
 import type { FormAutocompleteProps } from "./Props.ts";
 
-export const FormInputAutocomplete = ({ name, idName, control, trigger, label, options, setValue, loading=false, sx}: FormAutocompleteProps) => {
+export const FormInputAutocomplete = ({ name, idName, control, trigger, label, options, setValue, required, loading=false, sx}: FormAutocompleteProps) => {
     return(
         <Controller
             name={name}
@@ -25,33 +25,42 @@ export const FormInputAutocomplete = ({ name, idName, control, trigger, label, o
                     value={renderProps.field.value ?? ""}
 
                     onChange={(_, value) => {
-                        if(!value) return;
-                        renderProps.field.onChange(value.label);
+                        if (typeof value === "object" && value) {
+                            setValue(idName, value.id, { shouldDirty: true });
+                            renderProps.field.onChange(value.label);
+                        }
                     }}
 
                     onInputChange={(_, value) => {
-                        if(!value) setValue(idName, undefined, { shouldDirty: true} );
                         renderProps.field.onChange(value);
-
+                        if(!value) {
+                            setValue(idName, undefined, {shouldDirty: true});
+                        }
                     }}
                     onBlur={() => {
-                        if(!renderProps.field.value) return;
-                        const trimmed = renderProps.field.value.trim()
-                        const found = options.find(o => o.label === trimmed)
-                        if(found) {
-                            setValue(idName, found.id, { shouldDirty: true});
-                        } else {
+                        const trimmed = renderProps.field.value?.trim()
+                        if (!trimmed) {
                             setValue(idName, undefined, { shouldDirty: true });
+                            renderProps.field.onChange("");
+                            renderProps.field.onBlur();
+                        } else {
+                            const found = options.find(o => o.label === trimmed)
+                            if(found) {
+                                setValue(idName, found.id, { shouldDirty: true});
+                            } else {
+                                setValue(idName, undefined, { shouldDirty: true });
+                            }
+                            renderProps.field.onChange(trimmed === "" ? undefined : trimmed);
+                            renderProps.field.onBlur();
+                            trigger?.(name);
                         }
-                        renderProps.field.onChange(trimmed === "" ? undefined : trimmed);
-                        renderProps.field.onBlur();
-                        if (trigger) trigger(name);
                     }}
                     fullWidth
                     renderInput={(params)=> (
                         <TextField
                             {...params}
                             label={label}
+                            required={required}
                             error={!!renderProps.fieldState.error}
                             helperText={renderProps.fieldState.error?.message ?? " "}
                             slotProps={{

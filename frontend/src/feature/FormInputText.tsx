@@ -32,7 +32,18 @@ const handleBlur = async (field: any, trigger: any, name: string, type?: string,
 }
 
 
-export const FormInputText = ({ name, control, trigger, label, minRows = 1, type, disabled = false, sx}: FormInputProps) => {
+export const FormInputText = ({
+                                  name,
+                                  control,
+                                  trigger,
+                                  label,
+                                  minRows = 1,
+                                  required,
+                                  type,
+                                  disabled = false,
+                                  sx
+}: FormInputProps) => {
+
     return (
         <Controller
             name={name}
@@ -40,7 +51,6 @@ export const FormInputText = ({ name, control, trigger, label, minRows = 1, type
             render={(renderProps) => (
                 <TextField
                     //size="small"
-                    type={type === undefined || type === "number" ? "text" : type}
                     value={renderProps.field.value ?? ""}
                     onChange={(e) => handleInputChange(e, renderProps.field, type)}
                     onBlur={() => handleBlur(renderProps.field, trigger, name, type)}
@@ -50,6 +60,7 @@ export const FormInputText = ({ name, control, trigger, label, minRows = 1, type
                     label={label}
                     multiline={minRows > 1}
                     minRows={minRows}
+                    required={required}
                     variant="outlined"
                     disabled={disabled}
                     sx={sx}
