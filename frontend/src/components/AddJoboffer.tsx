@@ -16,24 +16,23 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import ButtonGroup from "./ButtonGroup.tsx";
+import CustomButtonGroup from "./ButtonGroup";
 import axios from "axios";
 import applicationTrackerApi from "../services/api.ts";
 import { useCompanyData } from "../functions/getAllCompaniesAndId";
-import { useJobofferDetails } from "../functions/getJobofferById";
+import { useCompleteJobofferInformation } from "../functions/getJobofferById";
 import AddAppointments from "./AddAppointments";
 import { Send } from "@mui/icons-material";
 import {
   removeIdForNewAppointments,
   type Appointment,
 } from "../functions/parseDate";
-import {normalizeFormData} from "../services/normalizer.ts";
 
 const TitleWidth = "20%";
 
 //-------------------------------------Interface----------------------------------------------
 interface JobofferFormData {
-  jobofferId: number | string; //!
+  jobofferId: number | string;
   jobofferName: string;
   jobofferRating?: number | string;
   jobofferDescription?: string;
@@ -42,11 +41,11 @@ interface JobofferFormData {
   companyId?: number | string;
   companyName?: string;
   companyEmployees?: number | string;
-  companyLogo?: string; //!
+  companyLogo?: string;
 
   appointments?: Appointment[]; // mehrere Termine können so als Array gespeichert und übergeben werden
 
-  addressId?: number | string; //!
+  addressId?: number | string;
   addressStreet?: string;
   addressStreetNumber?: string;
   addressZipCode?: number | string;
@@ -56,7 +55,7 @@ interface JobofferFormData {
   distanceLength?: string;
   distanceTime?: string;
 
-  contactId?: number | string; //!
+  contactId?: number | string;
   contactFirstName?: string;
   contactLastName?: string;
   contactEmail?: string;
@@ -120,9 +119,13 @@ interface AddJobofferFormProps {
 const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
   /* ----------------------------------Bisherige Daten holen---------------------------------- */
   // Daten mithilfe externer Funktion laden
-  const { jobofferDetails, loadingJoboffer, errorRetrievingJoboffer } =
-    useJobofferDetails(id);
-  // Um welchen Vorgang handelt es sich? (Bearbeiten oder Hinzufügen (default)?)
+  const {
+    jobofferCompleteInformation,
+    loadingStateJoboffer,
+    errorRetrievingJoboffer,
+  } = useCompleteJobofferInformation(id);
+
+  // Um welchen Vorgang handelt es sich? (Bearbeiten oder Hinzufügen (default))
   const [action, setAction] = useState<string>("Stellenangaben hinzufügen");
 
   // KI Tipp: Zuweisung der Daten im useEffect um die Daten nach dem erfolgreichen Laden zu setzen
@@ -133,58 +136,64 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
       setAction("Stellenangaben hinzufügen");
     }
     // Prüfen ob Daten noch geladen werden
-    else if (loadingJoboffer) {
+    else if (loadingStateJoboffer) {
       setAction("Daten werden geladen");
     } // Prüfen ob ein Fehler auftrat
     else if (errorRetrievingJoboffer) {
       setAction("Es trat ein Fehler auf: " + errorRetrievingJoboffer);
-    } else if (jobofferDetails) {
+    } else if (jobofferCompleteInformation) {
       // Debugging
-      console.log(
+      console.debug(
         "Abrufen der Stellendaten für ",
         id,
         "Jobofferdaten: ",
-        jobofferDetails
+        jobofferCompleteInformation
       );
       setAction("Stellenangaben bearbeiten");
       // Falls Daten geladen wurden, dies als Standardwerte setzen
       setFormData({
-        jobofferId: jobofferDetails.jobofferId,
-        jobofferName: jobofferDetails.jobofferName,
-        jobofferDescription: jobofferDetails.jobofferDescription,
-        jobofferRating: jobofferDetails.jobofferRating,
-        personalNotes: jobofferDetails.jobofferNotes,
+        jobofferId: jobofferCompleteInformation.jobofferId,
+        jobofferName: jobofferCompleteInformation.jobofferName,
+        jobofferDescription: jobofferCompleteInformation.jobofferDescription,
+        jobofferRating: jobofferCompleteInformation.jobofferRating,
+        personalNotes: jobofferCompleteInformation.jobofferNotes,
 
-        companyId: jobofferDetails.companyId,
-        companyName: jobofferDetails.companyName,
-        companyEmployees: jobofferDetails.companyEmployees?.toString(),
+        companyId: jobofferCompleteInformation.companyId,
+        companyName: jobofferCompleteInformation.companyName,
+        companyEmployees:
+          jobofferCompleteInformation.companyEmployees?.toString(),
         companyLogo: "", // Existiert noch nicht in der Datenbank
 
-        appointments: jobofferDetails.appointments,
+        appointments: jobofferCompleteInformation.appointments,
 
-        addressId: jobofferDetails.addressId,
-        addressStreet: jobofferDetails.addressStreet,
-        addressStreetNumber: jobofferDetails.addressStreetNumber,
-        addressZipCode: jobofferDetails.addressZipCode?.toString(),
-        addressCity: jobofferDetails.addressCity,
-        addressCountry: jobofferDetails.addressCountry,
+        addressId: jobofferCompleteInformation.addressId,
+        addressStreet: jobofferCompleteInformation.addressStreet,
+        addressStreetNumber: jobofferCompleteInformation.addressStreetNumber,
+        addressZipCode: jobofferCompleteInformation.addressZipCode?.toString(),
+        addressCity: jobofferCompleteInformation.addressCity,
+        addressCountry: jobofferCompleteInformation.addressCountry,
 
         distanceLength: "", // Existiert soweit ich weiß noch nicht in der Datenbank
         distanceTime: "", // Existiert soweit ich weiß noch nicht in der Datenbank
 
-        contactId: jobofferDetails.contactId,
-        contactFirstName: jobofferDetails.contactFirstName,
-        contactLastName: jobofferDetails.contactLastName,
-        contactEmail: jobofferDetails.contactEmail,
-        contactPhoneNumber: jobofferDetails.contactPhone,
+        contactId: jobofferCompleteInformation.contactId,
+        contactFirstName: jobofferCompleteInformation.contactFirstName,
+        contactLastName: jobofferCompleteInformation.contactLastName,
+        contactEmail: jobofferCompleteInformation.contactEmail,
+        contactPhoneNumber: jobofferCompleteInformation.contactPhone,
 
-        salaryMinimum: jobofferDetails.jobofferMinimumWage,
-        salaryMaximum: jobofferDetails.jobofferMaximumWage,
+        salaryMinimum: jobofferCompleteInformation.jobofferMinimumWage,
+        salaryMaximum: jobofferCompleteInformation.jobofferMaximumWage,
 
         perks: "", // Wird aktuell bei getJobofferById noch nicht bereitgestellt
       });
     }
-  }, [id, loadingJoboffer, errorRetrievingJoboffer, jobofferDetails]);
+  }, [
+    id,
+    loadingStateJoboffer,
+    errorRetrievingJoboffer,
+    jobofferCompleteInformation,
+  ]);
 
   /* ----------------------------------Unternehmensliste abrufen---------------------------------- */
 
@@ -223,7 +232,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
     }
 
     // Debugging: Appointments nach dem Entfernen der IDs
-    console.log(
+    console.debug(
       "Appointments nach dem Entfernen der IDs: ",
       formData.appointments
     );
@@ -231,23 +240,26 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
     // Speichern der geänderten Daten (um sicher zu gehen dass Änderung gespeichert ist)
     setFormData(formData);
 
-    const payload = normalizeFormData(formData)
+    // IDEE FÜR SPÄTER:
+    // - Leere Strings durch null ersetzen vor dem Absenden
+    // - eventuell Datenformat auf JobofferResponse (Interface von getJobofferById) mappen
+
     // Debugging
-    console.log("Joboffer gesendet: Daten an Backend: ", payload);
+    console.debug("Joboffer gesendet: Daten an Backend: ", formData);
 
     // Wenn eine Id vorhanden ist: Bearbeiten der Daten
     if (id) {
       // Debugging: Daten der Appointments vor bearbeiten der Ids
-      console.log(
+      console.debug(
         "Appointments vor dem Entfernen der IDs: ",
-        payload.appointments
+        formData.appointments
       );
 
       // Versuch die Daten zu Senden
       try {
         const response = await applicationTrackerApi.put(
           "http://localhost:8080/joboffer/editForm", // Backend Schnittstelle
-          payload, // zu sendende Daten (automatisch als JSON)
+          formData, // zu sendende Daten (automatisch als JSON)
           {
             headers: {
               "Content-Type": "application/json",
@@ -255,10 +267,10 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
           }
         );
         // Antwort vom Server auslesen
-        console.log("Server response:", response.data);
+        console.debug("Server response:", response.data);
 
         if (response.status === 201 || response.status === 200) {
-          //window.close();
+          window.close();
         }
       } catch (error) {
         // Axios-Fehlerbehandlung
@@ -272,12 +284,12 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
     // Wenn keine Id vorhanden ist: Hinzufügen der Daten
     else {
       // Debugging
-      console.log("Daten an Backend: ", payload);
+      console.debug("Daten an Backend: ", formData);
       // Versuch die Daten zu Senden
       try {
         const response = await applicationTrackerApi.post(
           "http://localhost:8080/joboffer/inputForm", // Backend Schnittstelle
-          payload, // zu sendende Daten (automatisch als JSON)
+          formData, // zu sendende Daten (automatisch als JSON)
           {
             headers: {
               "Content-Type": "application/json",
@@ -285,10 +297,10 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
           }
         );
         // Antwort vom Server auslesen
-        console.log("Server response:", response.data);
+        console.debug("Server response:", response.data);
 
         if (response.status === 201 || response.status === 200) {
-          //window.close();
+          window.close();
         }
       } catch (error) {
         // Axios-Fehlerbehandlung
@@ -303,7 +315,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
 
   // Funktion, die beim Click auf den Senden Button ausgeführt wird
   const sendButtonClicked = () => {
-    console.log("Senden-Button wurde geklickt!");
+    console.debug("Senden-Button wurde geklickt!");
     handleSubmit(id);
     // window.close();
   };
@@ -347,7 +359,6 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
                 variant="outlined"
                 // Zuweisung der Daten für Übergabe
                 name="jobofferName"
-                required
                 value={formData.jobofferName}
                 onChange={handleChange}
                 // Input
@@ -903,7 +914,7 @@ const AddJobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
             },
           }}
         >
-          <ButtonGroup
+          <CustomButtonGroup
             buttons={[
               {
                 label: "Senden",

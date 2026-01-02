@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import type { Appointment } from "./parseDate";
@@ -5,7 +6,7 @@ import applicationTrackerApi from "../services/api.ts";
 
 //-------------------------------------Interface----------------------------------------------
 // Die Interface für das Konstrukt, in das die Daten der Joboffer Detailansicht gespeichert werden
-export interface JobofferDetails {
+export interface JobofferCompleteInformation {
   jobofferId: number;
   jobofferName: string;
   jobofferDescription?: string;
@@ -86,7 +87,7 @@ type Appointments = {
 
 //-------------------------------------Daten-API----------------------------------------------
 // Funktion zum Abrufen aller Jobofferdaten
-export async function getAllJobofferDetailsById(id?: string) {
+export async function getAllJobofferInformationById(id: string | number) {
   // KI Fehlerkorrektur: zusätzlich zu null und undefined prüfen, ob id ein leeres Objekt ist
   if (!id || (typeof id === "object" && Object.keys(id).length === 0)) {
     return undefined;
@@ -97,55 +98,18 @@ export async function getAllJobofferDetailsById(id?: string) {
       `http://localhost:8080/joboffer/${id}`
     );
 
-    // KI Verbesserung: Prüfen, ob Daten vorhanden sind
-    if (!response.data) {
-      throw new Error("Unerwartetes Format der Daten vom Server.");
-    }
-
     // Debugging
-    console.log("Joboffer empfangen:", response); // Zuweisen der Daten in den JobofferDetailsDatentyp
+    console.debug(
+      `Antwort vom Server zur API /joboffer/${id} (= alle Informationen zu einer Joboffer): `,
+      response
+    );
 
-    // Umwandlung der Daten in ein Array von Joboffer Details
-    const jobofferData: JobofferDetails = {
-      jobofferId: response.data.joboffer?.id,
-      jobofferName: response.data.joboffer?.jobtitle,
-      jobofferDescription: response.data.joboffer?.description,
-      jobofferRating: response.data.joboffer?.rating,
-      jobofferMinimumWage: response.data.joboffer?.wagemin,
-      jobofferMaximumWage: response.data.joboffer?.wagemax,
-      jobofferNotes: response.data.joboffer?.notes,
-      contactId: response.data.joboffer?.contact?.id,
-      contactFirstName: response.data.joboffer?.contact?.firstname,
-      contactLastName: response.data.joboffer?.contact?.lastname,
-      contactEmail: response.data.joboffer?.contact?.email,
-      contactPhone: response.data.joboffer?.contact?.phoneno,
-      companyId: response.data.joboffer?.company?.id,
-      companyName: response.data.joboffer?.company?.companyname,
-      companyEmployees: response.data.joboffer?.company?.empcount,
-      companyLogo: response.data.joboffer?.company?.logo,
-      addressId: response.data.joboffer?.company?.address?.id,
-      addressStreet: response.data.joboffer?.company?.address?.street,
-      addressStreetNumber: response.data.joboffer?.company?.address?.streetno,
-      addressCity: response.data.joboffer?.company?.address?.city,
-      addressZipCode: response.data.joboffer?.company?.address?.zip,
-      addressCountry: response.data.joboffer?.company?.address?.country,
-      appointments: (response.data.appointments || []).map(
-        // KI Bug Fix: nicht auf appointments = undefinded gecheckt, und daher hat map nicht funktioniert
-        (appointment: {
-          id: number;
-          appointmentDate: string;
-          appointmentName: string;
-        }) => {
-          return {
-            appointmentId: appointment.id,
-            appointmentDate: appointment.appointmentDate,
-            appointmentName: appointment.appointmentName,
-          };
-        }
-      ),
-    };
-    // Joboffer Details zurückgeben
-    return jobofferData;
+    // KI Verbesserung: Prüfen, ob Daten vorhanden sind
+    if (response.data) {
+      return response.data;
+    } else {
+      throw new Error("Keine Daten vom Server erhalten.");
+    }
   } catch (error) {
     // Fehlerbehandlung
     console.error("Fehler beim Laden der Unternehmensdaten:", error);
@@ -156,16 +120,17 @@ export async function getAllJobofferDetailsById(id?: string) {
 
 //-------------------------------------Custom-Hook----------------------------------------------
 // Custom Hook, der die Joboffers abruft und den Ladezustand verwaltet sowie die Fehlerbehandlung übernimmt
-export function useJobofferDetails(id?: string) {
+export function useCompleteJobofferInformation(id?: string) {
   // const [variableName, setMethodName] = useState<type>(initialState); // Element, dass das enthält, wird neu geladen, wenn sich die variable ändert
-  const [jobofferDetails, setJoboffer] = useState<JobofferDetails>(); // Joboffers speichern
-  const [loadingJoboffer, setLoading] = useState<boolean>(true); // Ladezustand speichern
+  const [jobofferCompleteInformation, setJoboffer] =
+    useState<JobofferCompleteInformation>(); // Joboffers speichern
+  const [loadingStateJoboffer, setLoading] = useState<boolean>(true); // Ladezustand speichern
   const [errorRetrievingJoboffer, setError] = useState<string | null>(null); // Fehlerbehandlung
 
   // // useEffect wird nur einmal beim ersten Rendern des Components ausgeführt
   useEffect(() => {
     // Funktion zum Abrufen der Joboffer
-    const loadJobofferDetails = async () => {
+    const loadAllJobofferInformation = async () => {
       try {
         // KI: Fehlerstatus zurücksetzen, wenn eine neue Anfrage gestartet wird
         setError(null);
@@ -174,14 +139,60 @@ export function useJobofferDetails(id?: string) {
 
         // Falls keine Id vorhanden:
         if (!id) {
-          return { jobofferDetails: [], loading: false, error: null };
+          return {
+            jobofferCompleteInformation: [],
+            loading: false,
+            error: null,
+          };
         }
 
         // Falls Id vorhanden: Daten mit seperater axios-get-Funktion holen
-        const response = await getAllJobofferDetailsById(id);
+        const response = await getAllJobofferInformationById(id);
 
-        // Speichern der zugewiesenen Daten
-        setJoboffer(response);
+        // Wenn eine Antwort erhalten wurde, diese verarbeiten
+        if (response) {
+          // Zuweisen der Daten in den JobofferCompleteInformation Datentyp
+          const jobofferData: JobofferCompleteInformation = {
+            jobofferId: response.joboffer?.id,
+            jobofferName: response.joboffer?.jobtitle,
+            jobofferDescription: response.joboffer?.description,
+            jobofferRating: response.joboffer?.rating,
+            jobofferMinimumWage: response.joboffer?.wagemin,
+            jobofferMaximumWage: response.joboffer?.wagemax,
+            jobofferNotes: response.joboffer?.notes,
+            contactId: response.joboffer?.contact?.id,
+            contactFirstName: response.joboffer?.contact?.firstname,
+            contactLastName: response.joboffer?.contact?.lastname,
+            contactEmail: response.joboffer?.contact?.email,
+            contactPhone: response.joboffer?.contact?.phoneno,
+            companyId: response.joboffer?.company?.id,
+            companyName: response.joboffer?.company?.companyname,
+            companyEmployees: response.joboffer?.company?.empcount,
+            companyLogo: response.joboffer?.company?.logo,
+            addressId: response.joboffer?.company?.address?.id,
+            addressStreet: response.joboffer?.company?.address?.street,
+            addressStreetNumber: response.joboffer?.company?.address?.streetno,
+            addressCity: response.joboffer?.company?.address?.city,
+            addressZipCode: response.joboffer?.company?.address?.zip,
+            addressCountry: response.joboffer?.company?.address?.country,
+            appointments: (response.appointments || []).map(
+              // KI Bug Fix: nicht auf appointments = undefinded gecheckt, und daher hat map nicht funktioniert
+              (appointment: {
+                id: number;
+                appointmentDate: string;
+                appointmentName: string;
+              }) => {
+                return {
+                  appointmentId: appointment.id,
+                  appointmentDate: appointment.appointmentDate,
+                  appointmentName: appointment.appointmentName,
+                };
+              }
+            ),
+          };
+          // Speichern der zugewiesenen Joboffer Details Daten
+          setJoboffer(jobofferData);
+        }
       } catch (err: unknown) {
         // Fehlerbehandlung im Falle eines Fehlers bei der API-Anfrage (basierend auf KI Troubleshooting Tips)
         console.error("Fehler beim Laden der Stellenausschreibungen:", err);
@@ -210,9 +221,13 @@ export function useJobofferDetails(id?: string) {
     };
 
     // Den Hook zum Abrufen der Joboffers ausführen
-    loadJobofferDetails();
+    loadAllJobofferInformation();
   }, [id]); // Effekt läuft nur einmal beim ersten Laden, oder wenn sich die Id ändert
 
   // Alle Werte übergeben
-  return { jobofferDetails, loadingJoboffer, errorRetrievingJoboffer };
+  return {
+    jobofferCompleteInformation,
+    loadingStateJoboffer,
+    errorRetrievingJoboffer,
+  };
 }

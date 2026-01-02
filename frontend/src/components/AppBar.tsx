@@ -61,7 +61,7 @@ function ResponsiveAppBar() {
     // - Weiterleitung zur Login-Seite
     keycloak.logout();
     navigate("/login");
-    console.log("User logged out");
+    console.debug("User logged out");
   };
 
   return (

@@ -1,6 +1,6 @@
 import AddJobofferForm from "../components/AddJoboffer";
 import { useParams } from "react-router-dom";
-import ButtonGroup from "../components/ButtonGroup.tsx";
+import CustomButtonGroup from "../components/ButtonGroup";
 import { Stack } from "@mui/material";
 import { ArrowBack, Delete } from "@mui/icons-material";
 import SomeForm from "../feature/SomeForm.tsx";
@@ -15,7 +15,7 @@ const FormularBewerbungHinzufuegen: React.FC = () => {
   return (
     <div>
       <Stack padding={2} justifyContent={"space-between"}>
-        <ButtonGroup
+        <CustomButtonGroup
           buttons={[
             {
               label: "Abbrechen und zurück zur Übersicht",
@@ -29,14 +29,14 @@ const FormularBewerbungHinzufuegen: React.FC = () => {
             },
           ]}
         />
-        <ButtonGroup
+        <CustomButtonGroup
           buttons={[
             {
               label: "Löschen",
               icon: <Delete />,
               iconPosition: "start",
               onClick: () => {
-                console.log("Löschen Button wurde geklickt");
+                console.debug("Löschen Button wurde geklickt");
                 // Jeweiligen Behfel ans Backend Senden (Schnittstelle fehlt noch -> noch nicht implementiert);
               },
             },
