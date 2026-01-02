@@ -1,6 +1,6 @@
 import AddJobofferForm from "../components/AddJoboffer";
 import { useParams } from "react-router-dom";
-import TestButtonGroup from "../components/TestButtonGroup";
+import CustomButtonGroup from "../components/ButtonGroup";
 import { Stack } from "@mui/material";
 import { ArrowBack, Delete } from "@mui/icons-material";
 
@@ -14,7 +14,7 @@ const FormularBewerbungHinzufuegen: React.FC = () => {
   return (
     <div>
       <Stack padding={2} justifyContent={"space-between"}>
-        <TestButtonGroup
+        <CustomButtonGroup
           buttons={[
             {
               label: "Abbrechen und zurück zur Übersicht",
@@ -28,14 +28,14 @@ const FormularBewerbungHinzufuegen: React.FC = () => {
             },
           ]}
         />
-        <TestButtonGroup
+        <CustomButtonGroup
           buttons={[
             {
               label: "Löschen",
               icon: <Delete />,
               iconPosition: "start",
               onClick: () => {
-                console.log("Löschen Button wurde geklickt");
+                console.debug("Löschen Button wurde geklickt");
                 // Jeweiligen Behfel ans Backend Senden (Schnittstelle fehlt noch -> noch nicht implementiert);
               },
             },

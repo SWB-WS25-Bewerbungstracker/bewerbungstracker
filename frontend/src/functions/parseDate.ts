@@ -1,8 +1,10 @@
-export type Appointment = {
+export interface Appointment {
   appointmentId: number | string;
   appointmentDate: string;
   appointmentName: string;
-};
+}
+
+/* ----------------------------------Funktionen zum Arbeiten mit Iso-Timestamps---------------------------------- */
 
 // Funktion, um ein Iso-Timestamp in die Komponenten Wochentag, Datum und Uhrzeit zu zerlegen (basierend auf KI Vorschlag(?))
 export function parseDateFromIso(isoDate: string): string[] | null {
@@ -71,14 +73,14 @@ export function parseDateToString(passedDate?: string): string | undefined {
   }
 }
 
-/* ----------------------------------Funktionen zum Entfernen der Ids neu erstellter Termine ---------------------------------- */
+/* ----------------------------------Funktion zum Entfernen der Ids neu erstellter Termine ---------------------------------- */
 
 export function removeIdForNewAppointments(
   tmpAppointments: Appointment[]
 ): Appointment[] {
-  console.log("Funktion zum Entfernen neuer Appointment Ids aufgerufen");
+  console.debug("Funktion zum Entfernen neuer Appointment Ids aufgerufen");
   if (!tmpAppointments) {
-    console.log("Keine Appointments gefunden");
+    console.debug("Keine Appointments gefunden");
     return [];
   } else {
     return tmpAppointments.map((appointment: Appointment) => {

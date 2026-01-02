@@ -1,10 +1,14 @@
-import React from 'react';
+import React from "react";
 
 function Login() {
   return (
     <div>
       <h2>Login Page</h2>
-      {/* Hier deine Login-Form */}
+      <body>
+        {" "}
+        Aktuell über Keycloak implementiert, und daher noch keine eigene Login
+        Seite erstellt
+      </body>
     </div>
   );
 }
