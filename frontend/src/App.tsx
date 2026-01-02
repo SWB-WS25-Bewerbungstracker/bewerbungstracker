@@ -6,7 +6,6 @@ import PrivateRoute from "./helper/PrivateRoute";
 
 // Komponenten
 import ResponsiveAppBar from "./components/AppBarWithResponsiveMenu";
-import SomeForm from "./feature/SomeForm.tsx"
 
 // Seiten
 import Home from "./pages/Home";
@@ -100,10 +99,6 @@ function App() {
                 </PrivateRoute>
               }
             />
-              <Route
-                  path={"/test"}
-                  element={<SomeForm/>}
-              />
             {/*       <Route path="*" element={<Navigate to="/home" replace />} />
           <Route path="/" element={<Navigate to="/home" replace />} /> */}
           </Routes>

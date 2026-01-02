@@ -33,3 +33,7 @@ export interface FormAutocompleteProps {
     loading?: boolean;
     sx?: SxProps<Theme>;
 }
+
+export interface AddJobofferFormProps {
+    id?: string; // Id soll optional sein
+}

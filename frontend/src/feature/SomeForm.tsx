@@ -1,5 +1,6 @@
 import {Stack, Typography, Button, Box} from "@mui/material"
 import {useForm} from "react-hook-form";
+import { useParams } from "react-router-dom";
 import {FormInputText} from "./FormInputText.tsx";
 import FormSection from "./FormSection.tsx";
 import * as z from "zod";
@@ -8,11 +9,14 @@ import { AddressSchema , type AddressFormValues, AddressForm } from "./AddressFo
 import applicationTrackerApi from "../services/api.ts";
 import axios from "axios";
 
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import AddAppointments from "../components/AddAppointments.tsx";
 import {type Appointment, removeIdForNewAppointments} from "../functions/parseDate";
 import {FormInputAutocomplete} from "./FormInputAutocomplete.tsx";
 import {useCompanyData} from "../functions/getAllCompaniesAndId.tsx";
+import {useJobofferDetails} from "../functions/getJobofferById.tsx";
+import {type AddJobofferFormProps} from "./Props.ts";
+
 
 //Setting up  some basic validation with zod
 const validationSchema = z.object({
@@ -66,8 +70,8 @@ interface FormValues {
 }
 
 //Test form
-const SomeForm = () => {
-    const { handleSubmit, control, trigger, setValue, watch } = useForm<FormValues>({
+const SomeForm:React.FC<AddJobofferFormProps> = ({id}) => {
+    const { handleSubmit, control, trigger, setValue, watch, reset } = useForm<FormValues>({
         resolver: zodResolver(validationSchema),
         mode: "onBlur",
         reValidateMode: "onBlur",
@@ -78,6 +82,43 @@ const SomeForm = () => {
             },
         },
     });
+
+    // Um welchen Vorgang handelt es sich? (Bearbeiten oder Hinzufügen (default)?)
+    const isEdit = Boolean(id);
+
+    /* ----------------------------------Bisherige Daten holen---------------------------------- */
+    // Daten mithilfe externer Funktion laden
+    const { jobofferDetails, loadingJoboffer, errorRetrievingJoboffer } =
+        useJobofferDetails(id);
+
+    useEffect(() => {
+        if (!jobofferDetails) return;
+
+        reset({
+            jobofferName: jobofferDetails.jobofferName,
+            jobofferDescription: jobofferDetails.jobofferDescription,
+            jobofferNotes: jobofferDetails.jobofferNotes,
+
+            company: {
+                companyId: jobofferDetails.companyId,
+                companyName: jobofferDetails.companyName,
+                companyEmployees: jobofferDetails.companyEmployees,
+                companyAddress: {
+                    addressStreet: jobofferDetails.addressStreet,
+                    addressZipCode: jobofferDetails.addressZipCode,
+                    addressCity: jobofferDetails.addressCity,
+                    addressCountry: jobofferDetails.addressCountry,
+                },
+            },
+
+            salaryMinimum: jobofferDetails.jobofferMinimumWage,
+            salaryMaximum: jobofferDetails.jobofferMaximumWage,
+            perks: undefined,
+        });
+
+        setAppointments(jobofferDetails.appointments ?? [])
+    }, [id, jobofferDetails, reset]);
+
 
     // Verwendung des Custom Hooks, um die Firmen- und Ladezustandsdaten zu holen
     const { listOfCompanies, loadingCompanies } = useCompanyData();
@@ -105,19 +146,39 @@ const SomeForm = () => {
 
         const payload = {
             ...data,
+            jobofferId: id,
             appointments: appointments.length > 0 ? removeIdForNewAppointments(appointments) : [],
         }
         console.debug("onSubmit", payload); //log payload data
         //try Post
         try {
-            const response = await applicationTrackerApi.post("/joboffer/inputForm", payload,
-                {
-                headers: {
-                    "Content-Type": "application/json",
-                    },
+            if(isEdit){
+                const response = await applicationTrackerApi.put(
+                    "http://localhost:8080/joboffer/editForm", // Backend Schnittstelle
+                    payload, // zu sendende Daten (automatisch als JSON)
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+                console.debug(response.status)
+                if (response.status === 201 || response.status === 200) {
+                    //window.close();
                 }
-            );
-            console.debug(response.status)
+            } else {
+                const response = await applicationTrackerApi.post("/joboffer/inputForm", payload,
+                    {
+                    headers: {
+                        "Content-Type": "application/json",
+                        },
+                    }
+                );
+                console.debug(response.status)
+                if (response.status === 201 || response.status === 200) {
+                    //window.close();
+                }
+            }
         } catch(error) {
             // Axios-Fehlerbehandlung
             if (axios.isAxiosError(error)) {
@@ -208,7 +269,7 @@ const SomeForm = () => {
                                    label={"Minimum"}
                                    type={"number"}
                     />
-                    <FormInputText name ={"salaryMaxiumum"}
+                    <FormInputText name ={"salaryMaximum"}
                                    control={control}
                                    trigger={trigger}
                                    label={"Maximum"}

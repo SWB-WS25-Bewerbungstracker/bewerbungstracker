@@ -10,8 +10,8 @@ export interface JobofferDetails {
   jobofferName: string;
   jobofferDescription?: string;
   jobofferRating?: number;
-  jobofferMinimumWage?: number | string;
-  jobofferMaximumWage?: number | string;
+  jobofferMinimumWage?: number;
+  jobofferMaximumWage?: number;
   jobofferNotes?: string;
 
   companyId?: number;
@@ -24,7 +24,7 @@ export interface JobofferDetails {
   addressId?: number;
   addressStreet?: string;
   addressStreetNumber?: string;
-  addressZipCode?: number;
+  addressZipCode?: string;
   addressCity?: string;
   addressCountry?: string;
 
@@ -46,8 +46,8 @@ type Joboffer = {
   jobtitle: string;
   description: string;
   rating: number;
-  wagemin: number | string;
-  wagemax: number | string;
+  wagemin: number;
+  wagemax: number;
   notes: string;
   contact: Contact;
   company: Company;
@@ -74,7 +74,7 @@ type Address = {
   street: string;
   streetno: string;
   city: string;
-  zip: number;
+  zip: string;
   country: string;
 };
 
