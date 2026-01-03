@@ -1,7 +1,7 @@
-//import * as React from "react";
-import { Drawer, Box, Typography, Divider, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Drawer, Box, Typography, Divider, Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
 import keycloak from "../keycloak";
+import Profil from "../pages/Profil";
 import Einstellungen from "../pages/Einstellungen";
 
 interface SettingsDrawerProps {
@@ -10,19 +10,31 @@ interface SettingsDrawerProps {
 }
 
 const settings = [
-    { name: "Profil", path: "/profil" },
-    { name: "Einstellungen", path: "/einstellungen" },
+    { name: "Mein Profil", dialog: "profil" },
+    { name: "Einstellungen", dialog: "einstellungen" },
 ];
-
 
 //patpat little Drawer
 export default function MyLittleDrawer({ open, onClose }: SettingsDrawerProps) {
+
+    //logout weitestgehend übernommen aus alter Datei.. sollte aber auf unser Login gehen nicht auf KC
     const handleLogout = () => {
         keycloak.logout();
-        window.location.href = "/login";
     };
 
+    const [openDialog, setOpenDialog] = useState(false);
+    const [visibleDialog, setVisibleDialog] = useState(null);
+
+    const chooseDialogContent= () => {
+        switch(visibleDialog){
+            case "profil":
+                return <Profil />
+            case "einstellungen":
+                return <Einstellungen/>
+        }};
+
     return (
+    <>
         <Drawer
             anchor="right"
             open={open}
@@ -45,18 +57,15 @@ export default function MyLittleDrawer({ open, onClose }: SettingsDrawerProps) {
                 <Divider sx={{ my: 1 }} />
 
                 {settings.map((setting) =>
-                    setting.name === "Einstellungen" ? (
-                        <Button key={setting.name} fullWidth sx={{ mb: 1 }}>
-                            {setting.name}
-                        </Button>
-                    ) : (
+                    (
                         <Button
                             key={setting.name}
-                            component={Link}
-                            to={setting.path}
                             fullWidth
                             sx={{ mb: 1 }}
-                            onClick={onClose} //Drawer schließen nur bei Profil
+                            onClick={() => {
+                                setVisibleDialog(setting.dialog);
+                                setOpenDialog(true);
+                                onClose(); }} //vielleicht noch ne Abfrage einbauen oder so
                         >
                             {setting.name}
                         </Button>
@@ -75,5 +84,24 @@ export default function MyLittleDrawer({ open, onClose }: SettingsDrawerProps) {
                 </Button>
             </Box>
         </Drawer>
+
+    <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        fullWidth
+        maxWidth="lg"
+        PaperProps={{
+            sx: {
+                minHeight: "70vh",
+                maxHeight: "90vh",
+            },
+        }}
+    >
+
+        <DialogContent>
+            {chooseDialogContent()}
+        </DialogContent>
+    </Dialog>
+    </>
     );
 }
