@@ -26,6 +26,7 @@ import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOvervi
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CustomButtonGroup from "./ButtonGroup";
+import { Add } from "@mui/icons-material";
 
 const Lang = getLang();
 
@@ -35,15 +36,24 @@ function CustomToolbar({ onAddClick }: { onAddClick: () => void }) {
   return (
     <Box
       sx={{
-        justifyContent: "flex",
+        justifyContent: "flex-end",
         display: "flex",
         alignItems: "center",
-        padding: 1,
+        padding: 2,
       }}
     >
-      <Button variant="contained" onClick={onAddClick}>
-        + Hinzufügen
-      </Button>
+        <CustomButtonGroup
+            buttons={[
+                {
+                    label: "Hinzufügen",
+                    icon: <Add />,
+                    iconPosition: "start",
+                    onClick: () => {
+                        onAddClick();
+                    },
+                },
+            ]}
+        />
     </Box>
   );
 }
