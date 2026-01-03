@@ -39,7 +39,8 @@ function CustomToolbar({ onAddClick }: { onAddClick: () => void }) {
         justifyContent: "flex-end",
         display: "flex",
         alignItems: "center",
-        padding: 2,
+        paddingRight: 2,
+        paddingTop: 2.5,
       }}
     >
         <CustomButtonGroup
