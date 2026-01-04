@@ -47,13 +47,18 @@ services:
       KC_IMPORT_FORCE: "true"
       KC_IMPORT: /opt/keycloak/data/import
 
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://db:5432/testdb
+      KC_DB_USERNAME: testU
+      KC_DB_PASSWORD: pass
+
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7080/health/ready"]
+      test: [ "CMD", "curl", "-f", "http://localhost:7080/health/ready" ]
       interval: 15s
       timeout: 2s
       retries: 15
-      
-    command: ["start-dev", "--http-port", "7080", "--https-port", "7443", "--import-realm"]
+
+    command: [ "start-dev", "--http-port", "7080", "--https-port", "7443", "--import-realm" ]
     ports:
       - "7080:7080"
       - "7443:7443"
@@ -61,6 +66,7 @@ services:
       - local_network
     volumes:
       - ./.keycloak/realms:/opt/keycloak/data/import:ro
+      - ./.keycloak/theme:/opt/keycloak/themes/custom-theme
 networks:
   local_network:
     driver: bridge
