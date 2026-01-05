@@ -1,21 +1,24 @@
 import {Stack, Typography, Button, Box} from "@mui/material"
 import {useForm} from "react-hook-form";
-import {FormInputText} from "./FormInputText.tsx";
-import FormSection from "./FormSection.tsx";
+import {TextInput} from "../components/TextInput.tsx";
+import FormSection from "../components/FormSection.tsx";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AddressSchema , type AddressFormValues, AddressForm } from "./AddressForm.tsx";
+import { AddressSchema , type AddressFormValues, AddressForm } from "../components/AddressForm.tsx";
 import applicationTrackerApi from "../services/api.ts";
 import axios from "axios";
 
 import {useEffect, useState} from "react";
 import AddAppointments from "../components/AddAppointments.tsx";
 import {type Appointment, removeIdForNewAppointments} from "../functions/parseDate";
-import {FormInputAutocomplete} from "./FormInputAutocomplete.tsx";
+import {AutocompleteInput} from "../components/AutocompleteInput.tsx";
 import {useCompanyData} from "../functions/getAllCompaniesAndId.ts";
 import { useCompleteJobofferInformation } from "../functions/getJobofferById.ts";
-import {type AddJobofferFormProps} from "./Props.ts";
 
+
+export interface AddJobofferFormProps {
+    id?: string; // Id soll optional sein
+}
 
 //Setting up  some basic validation with zod
 const validationSchema = z.object({
@@ -69,7 +72,7 @@ interface FormValues {
 }
 
 //Test form
-const SomeForm:React.FC<AddJobofferFormProps> = ({id}) => {
+const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
     const { handleSubmit, control, trigger, setValue, watch, reset } = useForm<FormValues>({
         resolver: zodResolver(validationSchema),
         mode: "onBlur",
@@ -84,6 +87,8 @@ const SomeForm:React.FC<AddJobofferFormProps> = ({id}) => {
 
     // Um welchen Vorgang handelt es sich? (Bearbeiten oder Hinzufügen (default)?)
     const isEdit = Boolean(id);
+
+    const title = isEdit? "Stelle bearbeiten": "Stelle hinzufügen";
 
     /* ----------------------------------Bisherige Daten holen---------------------------------- */
     // Daten mithilfe externer Funktion laden
@@ -203,39 +208,39 @@ const SomeForm:React.FC<AddJobofferFormProps> = ({id}) => {
                     padding: 2,
                 }}
             >
-                <Typography variant="h4">Some Form</Typography>
+                <Typography variant="h4">{ title }</Typography>
                 <FormSection title={"Stelle"}>
-                    <FormInputText name={"jobofferName"} control={control} trigger={trigger} label={"Titel der Stelle"} required/>
-                    <FormInputText name={"jobofferDescription"} control={control} trigger={trigger} label={"Kurzbeschreibung der Stelle"} minRows={5}/>
+                    <TextInput name={"jobofferName"} control={control} trigger={trigger} label={"Titel der Stelle"} required/>
+                    <TextInput name={"jobofferDescription"} control={control} trigger={trigger} label={"Kurzbeschreibung der Stelle"} minRows={5}/>
                 </FormSection>
                 <FormSection title={"Firma"} direction={"row"}>
-                    <FormInputAutocomplete name={"company.companyName"}
-                                           idName={"company.companyId"}
-                                           control={control}
-                                           trigger={trigger}
-                                           label={"Name der Firma"}
-                                           options={listOfCompanies.map(
+                    <AutocompleteInput name={"company.companyName"}
+                                       idName={"company.companyId"}
+                                       control={control}
+                                       trigger={trigger}
+                                       label={"Name der Firma"}
+                                       options={listOfCompanies.map(
                                                (company) => (
                                                    {label: company.name, id: company.id}
                                                )
                                            )}
-                                           setValue={setValue}
-                                           required
-                                           loading={loadingCompanies}
-                                           sx={{flex: "0 0 70%"}}
+                                       setValue={setValue}
+                                       required
+                                       loading={loadingCompanies}
+                                       sx={{flex: "0 0 70%"}}
                     />
-                    <FormInputText name ={"company.companyEmployees"}
-                                   control={control}
-                                   trigger={trigger}
-                                   label={"Anzahl Mitarbeiter"}
-                                   type={"number"}
-                                   disabled={companyMatched}
+                    <TextInput name ={"company.companyEmployees"}
+                               control={control}
+                               trigger={trigger}
+                               label={"Anzahl Mitarbeiter"}
+                               type={"number"}
+                               disabled={companyMatched}
                     />
                 </FormSection>
                 <AddressForm control={control} trigger={trigger} baseName={"company.companyAddress"}/>
                 <FormSection title={"Distanz"} direction={"row"}>
-                    <FormInputText name={"distanceLength"} control={control} trigger={trigger} label={"Strecke"}/>
-                    <FormInputText name ={"distanceTime"} control={control} trigger={trigger} label={"Fahrtzeit"}/>
+                    <TextInput name={"distanceLength"} control={control} trigger={trigger} label={"Strecke"}/>
+                    <TextInput name ={"distanceTime"} control={control} trigger={trigger} label={"Fahrtzeit"}/>
                 </FormSection>
                 <FormSection title={"Kontakt"}>
                     <Stack
@@ -244,8 +249,8 @@ const SomeForm:React.FC<AddJobofferFormProps> = ({id}) => {
                         paddingLeft={1}
                         paddingBottom={1}
                     >
-                        <FormInputText name={"contact.contactFirstName"} control={control} trigger={trigger} label={"Vorname"}/>
-                        <FormInputText name ={"contact.contactLastName"} control={control} trigger={trigger} label={"Nachname"}/>
+                        <TextInput name={"contact.contactFirstName"} control={control} trigger={trigger} label={"Vorname"}/>
+                        <TextInput name ={"contact.contactLastName"} control={control} trigger={trigger} label={"Nachname"}/>
                     </Stack>
                     <Stack
                         direction="row"
@@ -253,8 +258,8 @@ const SomeForm:React.FC<AddJobofferFormProps> = ({id}) => {
                         paddingLeft={1}
                         paddingBottom={1}
                     >
-                        <FormInputText name={"contact.contactPhoneNumber"} control={control} trigger={trigger} label={"Telefonnummer"}/>
-                        <FormInputText name ={"contact.contactEmail"} control={control} trigger={trigger} label={"Email"}/>
+                        <TextInput name={"contact.contactPhoneNumber"} control={control} trigger={trigger} label={"Telefonnummer"}/>
+                        <TextInput name ={"contact.contactEmail"} control={control} trigger={trigger} label={"Email"}/>
                     </Stack>
                 </FormSection>
                 <AddAppointments
@@ -262,24 +267,24 @@ const SomeForm:React.FC<AddJobofferFormProps> = ({id}) => {
                     onAppointmentChange={setAppointments}
                 />
                 <FormSection title={"Gehaltsspielraum"} direction={"row"}>
-                    <FormInputText name ={"salaryMinimum"}
-                                   control={control}
-                                   trigger={trigger}
-                                   label={"Minimum"}
-                                   type={"number"}
+                    <TextInput name ={"salaryMinimum"}
+                               control={control}
+                               trigger={trigger}
+                               label={"Minimum"}
+                               type={"number"}
                     />
-                    <FormInputText name ={"salaryMaximum"}
-                                   control={control}
-                                   trigger={trigger}
-                                   label={"Maximum"}
-                                   type={"number"}
+                    <TextInput name ={"salaryMaximum"}
+                               control={control}
+                               trigger={trigger}
+                               label={"Maximum"}
+                               type={"number"}
                     />
                 </FormSection>
                 <FormSection title={"Perks und Benefits"}>
-                    <FormInputText name={"perks"} control={control} trigger={trigger} label={"Perks"} minRows={5}/>
+                    <TextInput name={"perks"} control={control} trigger={trigger} label={"Perks"} minRows={5}/>
                 </FormSection>
                 <FormSection title={"Persönliche Notizen"}>
-                    <FormInputText name={"jobofferNotes"} control={control} trigger={trigger} label={"Notizen"} minRows={5}/>
+                    <TextInput name={"jobofferNotes"} control={control} trigger={trigger} label={"Notizen"} minRows={5}/>
                 </FormSection>
                 <Button type="submit" variant={"contained"} sx={{ mt: 2, display: "block" }}>
                     Submit
@@ -288,4 +293,4 @@ const SomeForm:React.FC<AddJobofferFormProps> = ({id}) => {
         </form>
     );
 };
-export default SomeForm;
+export default JobofferForm;

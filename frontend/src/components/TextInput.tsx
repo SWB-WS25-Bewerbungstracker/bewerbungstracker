@@ -1,6 +1,18 @@
 import { Controller } from "react-hook-form";
-import type { FormInputProps } from "./Props.ts";
-import { TextField } from "@mui/material";
+import {type SxProps, TextField, type Theme} from "@mui/material";
+
+interface TextInputProps {
+    name: string;       //name of the field (has to match inputDTO- and FormValues fields)
+    control: any;       //controller from react-hook-form
+    trigger: any;       //trigger for onBlur validation
+    label: string;
+    setValue?: any;     //not in use (copied from tutorial)
+    minRows?: number;   //multiline field with min rows =number
+    required?: boolean;
+    disabled?: boolean;
+    type?: "number" | "text";       //type of field (number, text ...) default = "text"
+    sx?: SxProps<Theme>;
+}
 
 const handleInputChange = (event: React.ChangeEvent<HTMLInputElement |  HTMLTextAreaElement>, field: any, type?: string): void  => {
     const val = event.target.value
@@ -32,7 +44,7 @@ const handleBlur = async (field: any, trigger: any, name: string, type?: string,
 }
 
 
-export const FormInputText = ({
+export const TextInput = ({
                                   name,
                                   control,
                                   trigger,
@@ -42,7 +54,7 @@ export const FormInputText = ({
                                   type,
                                   disabled = false,
                                   sx
-}: FormInputProps) => {
+}: TextInputProps) => {
 
     return (
         <Controller
