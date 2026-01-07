@@ -8,8 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class JobofferConverter {
-    public Joboffer toEntity(JobofferNestedInputDTO dto, Company company, Contact contact) {
-        Joboffer joboffer = new Joboffer();
+    public Joboffer toEntity(Joboffer joboffer, JobofferNestedInputDTO dto, Company company, Contact contact) {
         joboffer.setJobtitle(dto.getJobofferName());
         joboffer.setDescription(dto.getJobofferDescription());
         joboffer.setNotes(dto.getJobofferNotes());

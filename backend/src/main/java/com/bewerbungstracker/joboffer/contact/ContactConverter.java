@@ -6,8 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ContactConverter {
-    Contact toEntity(ContactInputDTO input) {
-        Contact contact = new Contact();
+    Contact toEntity(Contact contact, ContactInputDTO input) {
         contact.setFirstname(input.getContactFirstName());
         contact.setLastname(input.getContactLastName());
         contact.setEmail(input.getContactEmail());

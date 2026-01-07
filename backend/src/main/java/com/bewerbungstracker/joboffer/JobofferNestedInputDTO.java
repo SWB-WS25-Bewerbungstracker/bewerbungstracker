@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 //@Builder
 public class JobofferNestedInputDTO {
+    private Integer jobofferId = null;
     private String jobofferName;
     private String jobofferDescription;
     //private Integer jobofferRating;

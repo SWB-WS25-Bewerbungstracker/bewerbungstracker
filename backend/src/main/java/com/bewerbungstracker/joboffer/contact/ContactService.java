@@ -10,9 +10,31 @@ import org.springframework.transaction.annotation.Transactional;
 public class ContactService {
     private final ContactRepository contactRepository;
     private final ContactConverter contactConverter;
+
     public Contact createContact(ContactInputDTO input) {
-        Contact contact;
-        contact = contactConverter.toEntity(input);
+        Contact contact = new Contact();
+        contact = contactConverter.toEntity(contact, input);
         return contactRepository.save(contact);
+    }
+
+    public Contact editContact(ContactInputDTO input, Integer id) {
+        Contact contact = null;
+        //if contact already exists set contact
+        if (id != null) {
+            contact = contactRepository.findById(id).orElseThrow(
+                    ()-> new IllegalArgumentException("Contact not Found: " + id)
+            );
+        }
+
+        if (input == null && contact != null) { //contact data was deleted
+            contactRepository.delete(contact);
+            contact = null;
+        } else if (input != null && contact == null) {  //contact created
+            contact = createContact(input);
+        } else if (input != null && contact != null) {  //contact updated
+            contactConverter.toEntity(contact, input);
+        }
+
+        return contact;
     }
 }

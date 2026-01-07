@@ -38,4 +38,14 @@ public class JobofferController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Bewerbung erfolgreich erstellt!");
     }
+
+    @PutMapping(path = "/editForm", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> putJobofferInfo(@RequestBody JobofferNestedInputDTO jobofferInfo,
+                                                   @AuthenticationPrincipal Jwt jwt) {
+        String email = jwt.getClaimAsString("email");
+        log.info("jobofferInfo: {} user: {}", jobofferInfo, email);
+        jobofferService.editJoboffer(jobofferInfo, email);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Bewerbung erfolgreich erstellt!");
+    }
 }
