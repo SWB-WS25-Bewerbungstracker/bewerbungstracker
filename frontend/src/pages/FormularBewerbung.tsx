@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import CustomButtonGroup from "../components/ButtonGroup";
 import { Stack } from "@mui/material";
 import { ArrowBack, Delete } from "@mui/icons-material";
+import SomeForm from "../feature/JobofferForm.tsx";
 
 const FormularBewerbungHinzufuegen: React.FC = () => {
   // KI: Extrahiere die ID aus der URL
@@ -42,7 +43,8 @@ const FormularBewerbungHinzufuegen: React.FC = () => {
           ]}
         />
       </Stack>
-      <AddJobofferForm id={id} />
+      {/*Altes Formular: <AddJobofferForm id={id} /> */}
+      <SomeForm id={id}/>
     </div>
   );
 };

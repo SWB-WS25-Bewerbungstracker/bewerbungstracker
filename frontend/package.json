@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@hookform/resolvers": "^5.2.2",
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
     "@mui/x-data-grid": "^8.18.0",
@@ -26,8 +27,10 @@
     "nodejs": "^0.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.69.0",
     "react-router-dom": "^7.9.6",
-    "stable": "^0.1.8"
+    "stable": "^0.1.8",
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
