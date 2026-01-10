@@ -1,7 +1,7 @@
 package com.bewerbungstracker.security;
 
-import com.bewerbungstracker.entity.Appuser;
-import com.bewerbungstracker.repository.AppuserRepository;
+import com.bewerbungstracker.appuser.Appuser;
+import com.bewerbungstracker.appuser.AppuserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
