@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS appuser
     UserID SERIAL PRIMARY KEY,
     UserFName TEXT NOT NULL,
     UserLName TEXT NOT NULL,
-    UserEmail TEXT NOT NULL,
+    UserEmail TEXT NOT NULL UNIQUE,
 -- Foreign key to link to address
     UserAddress INTEGER REFERENCES address
 );
