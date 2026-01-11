@@ -80,7 +80,7 @@ type Address = {
 };
 
 type Appointments = {
-  id: number;
+  appointmentId: number;
   appointmentDate: string;
   appointmentName: string;
 };
@@ -178,12 +178,12 @@ export function useCompleteJobofferInformation(id?: string) {
             appointments: (response.appointments || []).map(
               // KI Bug Fix: nicht auf appointments = undefinded gecheckt, und daher hat map nicht funktioniert
               (appointment: {
-                id: number;
+                appointmentId: number;
                 appointmentDate: string;
                 appointmentName: string;
               }) => {
                 return {
-                  appointmentId: appointment.id,
+                  appointmentId: appointment.appointmentId,
                   appointmentDate: appointment.appointmentDate,
                   appointmentName: appointment.appointmentName,
                 };

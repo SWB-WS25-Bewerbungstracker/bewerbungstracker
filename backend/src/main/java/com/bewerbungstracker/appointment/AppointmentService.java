@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -17,8 +16,12 @@ public class AppointmentService {
     private final JobofferRepository jobofferRepository;
     private final AppointmentConverter appointmentConverter;
 
-    public List<AppointmentDetailDTO> getAllAppointments() {
-        return appointmentRepository.getAppointments();
+    public List<AppointmentDetailDTO> getAllAppointmentsWithDetails() {
+        return appointmentRepository.getAppointmentDetails();
+    }
+
+    public List<Appointment> getAllAppointmentsByJoboffer(String email, Integer jobofferId) {
+        return appointmentRepository.getAppointmentsByJoboffer(email, jobofferId);
     }
 
     public Appointment createAppointment (AppointmentCleanView dto, Joboffer joboffer) {
@@ -37,5 +40,14 @@ public class AppointmentService {
         Appointment appointment = appointmentConverter.toEntity(dto, joboffer);
         return appointmentRepository.save(appointment);
     }
+
+    public Appointment updateAppointment (AppointmentCleanView appointment) {
+        Appointment _appointment = appointmentRepository.findById(appointment.getAppointmentId()).orElseThrow(
+                () -> new IllegalArgumentException("Appointment not found: " + appointment.getAppointmentId()));
+        _appointment.setAppointmentdate(appointment.getAppointmentDate());
+        _appointment.setAppointmentname(appointment.getAppointmentName());
+        return _appointment;
+    }
+
 
 }

@@ -32,4 +32,5 @@ public interface JobofferRepository extends JpaRepository<Joboffer, Integer> {
 
     @Query("SELECT appt FROM Appointment appt WHERE appt.joboffer.id=:id ORDER BY appt.appointmentdate ASC")
     List<Appointment> getAppointmentsByJobofferId(@Param("id") Integer id);
+
 }

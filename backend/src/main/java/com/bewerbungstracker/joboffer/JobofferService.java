@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -97,8 +100,30 @@ public class JobofferService {
         Company company = joboffer.getCompany();
         joboffer = jobofferConverter.toEntity(joboffer, input, company, contact);
 
-        //TODO: Appoinments and company
 
+        Set<Integer> incomingIds = input.getAppointments().stream()
+                .map(AppointmentCleanView::getAppointmentId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        List<Appointment> existingAppointments = appointmentService.getAllAppointmentsByJoboffer(email,  joboffer.getId());
+
+        //Check if existing Appointment was deleted and delete it
+        for (Appointment a : existingAppointments) {
+            if (!incomingIds.contains(a.getId())) {
+                log.debug("Deleted Appointment: " + a.getId() + ", " + a.getAppointmentname());
+                //TODO: delete Appoinmtent
+            }
+        }
+
+        for(AppointmentCleanView appointment : input.getAppointments()) {
+            if(appointment.getAppointmentId() == null) {
+                appointmentService.createAppointment(appointment, joboffer);
+            } else  {
+                appointmentService.updateAppointment(appointment);
+            }
+        }
+        //TODO: company
         jobofferRepository.save(joboffer);
     }
 }
