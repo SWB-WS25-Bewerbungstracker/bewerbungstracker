@@ -1,20 +1,22 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
+import {
+    AppBar,
+    Box,
+    Toolbar,
+    IconButton,
+    Typography,
+    Container,
+    Avatar,
+    Button,
+    Tooltip,
+    MenuItem,
+    Menu,
+    SvgIcon,
+} from "@mui/material";
+import { Menu as MenuIcon, Business as BusinessIcon} from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import keycloak from "../keycloak";
-import SvgIcon from "@mui/icons-material/Menu";
-import BusinessIcon from "@mui/icons-material/Business";
+import MyLittleDrawer from "./Drawer";
 
 // Tabs und Links dazu
 const pages = [
@@ -22,16 +24,15 @@ const pages = [
   { name: "Bewerbungen", path: "/bewerbungen" },
   { name: "Dokumente", path: "/dokumente" },
 ];
-// Optionen bei Clicken auf Profilbild und Links dazu
-const settings = [
-  { name: "Profil", path: "/profil" },
-  { name: "Einstellungen", path: "/einstellungen" },
-];
+
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
+
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
@@ -40,17 +41,19 @@ function ResponsiveAppBar() {
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
+//  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+//    setAnchorElUser(event.currentTarget);
+//  };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+ // const handleCloseUserMenu = () => {
+  //  setAnchorElUser(null);
+ // };
+    const handleDrawerOpen = () => setDrawerOpen(true);
+    const handleDrawerClose = () => setDrawerOpen(false);
 
   // Logout-Funktion (später hier einfügen)
   const handleLogout = () => {
@@ -198,44 +201,13 @@ function ResponsiveAppBar() {
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
+
             <Tooltip title="Einstellungen öffnen">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton onClick={handleDrawerOpen} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                  <Link
-                    to={setting.path}
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <Typography sx={{ textAlign: "center" }}>
-                      {setting.name}
-                    </Typography>
-                  </Link>
-                </MenuItem>
-              ))}
-              {/* Logout Menü-Item */}
-              <MenuItem onClick={handleLogout}>
-                <Typography sx={{ textAlign: "center" }}>Logout</Typography>
-              </MenuItem>
-            </Menu>
+            <MyLittleDrawer open={drawerOpen} onClose={handleDrawerClose}/>
           </Box>
         </Toolbar>
       </Container>
