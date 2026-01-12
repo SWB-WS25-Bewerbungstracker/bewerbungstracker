@@ -1,8 +1,22 @@
 import { Controller} from "react-hook-form";
-import { Autocomplete, CircularProgress, TextField } from "@mui/material"
-import type { FormAutocompleteProps } from "./Props.ts";
+import {Autocomplete, CircularProgress, type SxProps, TextField, type Theme} from "@mui/material"
 
-export const FormInputAutocomplete = ({ name, idName, control, trigger, label, options, setValue, required, loading=false, sx}: FormAutocompleteProps) => {
+interface AutocompleteInputProps {
+    name: string;       //name of the field (has to match inputDTO- and FormValues fields)
+    idName: string;
+    control: any;       //controller from react-hook-form
+    trigger: any;       //trigger for onBlur validation
+    label: string;
+    options: Array< {label: string , id: string }>;
+    setValue: any;
+    required?: boolean;
+    disabled?: boolean;
+    loading?: boolean;
+    sx?: SxProps<Theme>;
+}
+
+
+export const AutocompleteInput = ({ name, idName, control, trigger, label, options, setValue, required, loading=false, sx}: AutocompleteInputProps) => {
     return(
         <Controller
             name={name}

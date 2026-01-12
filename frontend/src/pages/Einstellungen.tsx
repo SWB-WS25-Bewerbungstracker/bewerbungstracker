@@ -1,10 +1,5 @@
-const Einstellungen: React.FC = () => {
-  return (
-    <div>
-      <h2>Einstellungen</h2>
-      <p>Hier werden alle Einstellungen angezeigt.</p>
-    </div>
-  );
-};
+import SettingsPage from "../components/LightDarkSettings";
 
-export default Einstellungen;
+export default function Einstellungen() {
+    return <SettingsPage/>;
+}

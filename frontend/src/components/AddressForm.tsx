@@ -1,6 +1,6 @@
 import {Stack,} from "@mui/material"
 import * as z from "zod";
-import { FormInputText } from "./FormInputText.tsx";
+import { TextInput } from "./TextInput.tsx";
 import FormSection from "./FormSection.tsx";
 
 
@@ -33,8 +33,8 @@ export const AddressForm = ({ control, trigger, baseName }: { control: any; trig
                 paddingLeft={1}
                 paddingBottom={1}
             >
-                <FormInputText name={`${baseName}.addressStreet`} control={control} trigger={trigger} label={"Straße"}/>
-                <FormInputText name={`${baseName}.addressStreetNumber`} control={control} trigger={trigger} label={"Hausnummer"}/>
+                <TextInput name={`${baseName}.addressStreet`} control={control} trigger={trigger} label={"Straße"}/>
+                <TextInput name={`${baseName}.addressStreetNumber`} control={control} trigger={trigger} label={"Hausnummer"}/>
             </Stack>
             <Stack
                 direction="row"
@@ -42,9 +42,9 @@ export const AddressForm = ({ control, trigger, baseName }: { control: any; trig
                 paddingLeft={1}
                 paddingBottom={1}
             >
-                <FormInputText name={`${baseName}.addressZipCode`} control={control} trigger={trigger} label={"PLZ"} sx={{flex: "0 0 20%"}}/>
-                <FormInputText name={`${baseName}.addressCity`} control={control} trigger={trigger} label={"Ort"}/>
-                <FormInputText name={`${baseName}.addressCountry`} control={control} trigger={trigger} label={"Land"}/>
+                <TextInput name={`${baseName}.addressZipCode`} control={control} trigger={trigger} label={"PLZ"} sx={{flex: "0 0 20%"}}/>
+                <TextInput name={`${baseName}.addressCity`} control={control} trigger={trigger} label={"Ort"}/>
+                <TextInput name={`${baseName}.addressCountry`} control={control} trigger={trigger} label={"Land"}/>
             </Stack>
         </FormSection>
 
