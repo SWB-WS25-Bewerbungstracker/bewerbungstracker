@@ -21,12 +21,12 @@ public class CompanyService {
     }
 
     //Gibt Liste aller Firmen in der Datenbak als DTO zurück
-    public List<CompanySelectDTO> getCompany() {
+    /*public List<CompanySelectDTO> getCompany() {
         return companyRepository.findAll().stream().map(c -> new CompanySelectDTO(
                 c.getId(),
                 c.getCompanyname())
         ).collect(Collectors.toList());
-    }
+    }*/
 
     public Company getCompanyById(Integer id) {
         return companyRepository.getCompanyById(id);

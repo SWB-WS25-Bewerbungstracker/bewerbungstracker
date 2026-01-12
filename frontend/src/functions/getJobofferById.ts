@@ -15,7 +15,6 @@ export interface JobofferCompleteInformation {
   jobofferMaximumWage?: number;
   jobofferNotes?: string;
 
-  companyId?: number;
   companyName?: string;
   companyEmployees?: number;
   companyLogo?: string;
@@ -51,7 +50,10 @@ type Joboffer = {
   wagemax: number;
   notes: string;
   contact: Contact;
-  company: Company;
+  companyname: string;
+  empcount: number;
+  address: Address;
+  logo: string;
 };
 
 type Contact = {
@@ -165,16 +167,15 @@ export function useCompleteJobofferInformation(id?: string) {
             contactLastName: response.joboffer?.contact?.lastname,
             contactEmail: response.joboffer?.contact?.email,
             contactPhone: response.joboffer?.contact?.phoneno,
-            companyId: response.joboffer?.company?.id,
-            companyName: response.joboffer?.company?.companyname,
-            companyEmployees: response.joboffer?.company?.empcount,
-            companyLogo: response.joboffer?.company?.logo,
-            addressId: response.joboffer?.company?.address?.id,
-            addressStreet: response.joboffer?.company?.address?.street,
-            addressStreetNumber: response.joboffer?.company?.address?.streetno,
-            addressCity: response.joboffer?.company?.address?.city,
-            addressZipCode: response.joboffer?.company?.address?.zip,
-            addressCountry: response.joboffer?.company?.address?.country,
+            companyName: response.joboffer?.companyname,
+            companyEmployees: response.joboffer?.empcount,
+            companyLogo: response.joboffer?.logo,
+            addressId: response.joboffer?.address?.id,
+            addressStreet: response.joboffer?.address?.street,
+            addressStreetNumber: response.joboffer?.address?.streetno,
+            addressCity: response.joboffer?.address?.city,
+            addressZipCode: response.joboffer?.address?.zip,
+            addressCountry: response.joboffer?.address?.country,
             appointments: (response.appointments || []).map(
               // KI Bug Fix: nicht auf appointments = undefinded gecheckt, und daher hat map nicht funktioniert
               (appointment: {

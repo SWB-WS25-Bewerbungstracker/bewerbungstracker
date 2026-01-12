@@ -29,6 +29,11 @@ public class JobofferController {
         return jobofferService.getJobofferById(id);
     }
 
+    @GetMapping("/companies")
+    public List<CompanySelectDTO> getCompanies(@AuthenticationPrincipal Jwt jwt) {
+        return jobofferService.getCompanies(jwt.getClaimAsString("email"));
+    }
+
     @PostMapping(path = "/inputForm", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> postJobofferInfo(@RequestBody JobofferNestedInputDTO jobofferInfo,
                                                    @AuthenticationPrincipal Jwt jwt) {

@@ -1,14 +1,13 @@
 package com.bewerbungstracker.joboffer;
 
 
+import com.bewerbungstracker.address.Address;
+import com.bewerbungstracker.address.AddressService;
 import com.bewerbungstracker.appointment.Appointment;
 import com.bewerbungstracker.appointment.AppointmentCleanView;
 import com.bewerbungstracker.appointment.AppointmentService;
 import com.bewerbungstracker.appuser.Appuser;
 import com.bewerbungstracker.appuser.AppuserRepository;
-import com.bewerbungstracker.company.Company;
-import com.bewerbungstracker.company.CompanyRepository;
-import com.bewerbungstracker.company.CompanyService;
 import com.bewerbungstracker.joboffer.contact.Contact;
 import com.bewerbungstracker.joboffer.contact.ContactService;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +27,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JobofferService {
     private final JobofferRepository jobofferRepository;
-    private final CompanyRepository companyRepository;
     private final AppuserRepository appuserRepository;
-    private final CompanyService companyService;
     private final AppointmentService appointmentService;
+    private final AddressService addressService;
     private final ContactService contactService;
     private final JobofferConverter jobofferConverter;
 
@@ -58,28 +56,27 @@ public class JobofferService {
 
         return new JobofferDTO(joboffer, appointmentCleanViews);
     }
+    //Gibt Liste aller Firmen in der Datenbank als DTO zurück
+    public List<CompanySelectDTO> getCompanies(String email) {
+        return jobofferRepository.getCompanySelection(email);
+    }
 
     public void saveJobofferInput(JobofferNestedInputDTO jobofferInput, String userEmail) {
-        Company company;
+        Address address = addressService.createAddress(jobofferInput.getCompanyAddress());
         Contact contact = null;
         Joboffer joboffer = new Joboffer();
 
         Appuser appuser = appuserRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Authenticated user not found: " + userEmail));
 
-        if(jobofferInput.getCompany().getCompanyId() != null) {
-            company = companyRepository
-                    .findById(jobofferInput.getCompany().getCompanyId())
-                    .orElseThrow(()-> new IllegalArgumentException("Company not found: " + jobofferInput.getCompany().getCompanyId()));
-        }
-        else {
-            company = companyService.createCompany(jobofferInput.getCompany());
+        if(jobofferInput.getCompanyName() == null) {
+            throw new IllegalArgumentException("Company name cannot be null or empty");
         }
         if (jobofferInput.getContact() != null) {
             contact = contactService.createContact(jobofferInput.getContact());
         }
 
-        joboffer = jobofferConverter.toEntity(joboffer, jobofferInput, company, contact);
+        joboffer = jobofferConverter.toEntity(joboffer, jobofferInput, address, contact);
         joboffer.setAppuser(appuser);
         jobofferRepository.save(joboffer);
 
@@ -97,8 +94,8 @@ public class JobofferService {
             contactId = joboffer.getContact().getId();
         }
         Contact contact = contactService.editContact(input.getContact(), contactId);
-        Company company = joboffer.getCompany();
-        joboffer = jobofferConverter.toEntity(joboffer, input, company, contact);
+        Address address = null;
+        joboffer = jobofferConverter.toEntity(joboffer, input, address, contact);
 
 
         Set<Integer> incomingIds = input.getAppointments().stream()

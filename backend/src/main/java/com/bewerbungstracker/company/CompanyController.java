@@ -20,10 +20,10 @@ public class CompanyController {
     }
 
     //Stellt Firmendaten bereit
-    @GetMapping()
+    /*@GetMapping()
     public List<CompanySelectDTO> companies() {
         return companyService.getCompany();
-    }
+    }*/
 
     @GetMapping("/{id}")
     public Company companyById(@PathVariable Integer id) {

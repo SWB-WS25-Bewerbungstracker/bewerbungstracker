@@ -1,9 +1,8 @@
 package com.bewerbungstracker.joboffer;
 
+import com.bewerbungstracker.address.AddressInputDTO;
 import com.bewerbungstracker.appointment.AppointmentCleanView;
-import com.bewerbungstracker.company.CompanyInputDTO;
 import com.bewerbungstracker.joboffer.contact.ContactInputDTO;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -20,9 +19,11 @@ public class JobofferNestedInputDTO {
     private Integer salaryMaximum;
     private String jobofferNotes;
     //private String perks;
-    private CompanyInputDTO company;
+    private String companyName;
+    private Integer companyEmployees;
+    private String companyLogo;
+    private AddressInputDTO companyAddress;
     private ContactInputDTO contact;
 
-    //@Builder.Default
     private List<AppointmentCleanView> appointments = new ArrayList<>();
 }
