@@ -89,12 +89,17 @@ public class JobofferService {
     public void editJoboffer (JobofferNestedInputDTO input, String email) {
         Joboffer joboffer = jobofferRepository.getJobofferById(input.getJobofferId());
         Integer contactId = null;
+        Integer addressId = null;
 
         if (joboffer.getContact() != null) {
             contactId = joboffer.getContact().getId();
         }
         Contact contact = contactService.editContact(input.getContact(), contactId);
-        Address address = null;
+        if(joboffer.getAddress() != null) {
+            addressId = joboffer.getAddress().getId();
+        }
+        Address address = addressService.editAddress(input.getCompanyAddress(), addressId);
+
         joboffer = jobofferConverter.toEntity(joboffer, input, address, contact);
 
 
@@ -104,7 +109,6 @@ public class JobofferService {
                 .collect(Collectors.toSet());
 
         List<Appointment> existingAppointments = appointmentService.getAllAppointmentsByJoboffer(email,  joboffer.getId());
-
         //Check if existing Appointment was deleted and delete it
         for (Appointment a : existingAppointments) {
             if (!incomingIds.contains(a.getId())) {
@@ -120,7 +124,6 @@ public class JobofferService {
                 appointmentService.updateAppointment(appointment);
             }
         }
-        //TODO: company
         jobofferRepository.save(joboffer);
     }
 }
