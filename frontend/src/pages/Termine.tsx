@@ -101,11 +101,39 @@ import CalendarAllDates from '../components/Calendar'; // Importiere die Kalende
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Rabbit from '../components/TerminList'; //die TerminListe
+import { Stack } from "@mui/material";
+import CustomButtonGroup from "../components/ButtonGroup";
+import { Add } from "@mui/icons-material";
 
+const addTerminClicked = () => {
+    console.debug("Hinzufügen-Button (Termin) geklickt!");
+};
 
 
 const Termine: React.FC = () => {
     return (
+        <div style={{ width: '100%' }}>
+
+            {/* ----- Leiste oben mit Button ----- */}
+            <Stack
+                padding={2}
+                direction="row"
+                alignItems="center"
+                width="100%"
+                justifyContent="flex-end" // Button immer rechts
+                spacing={2}               // optional: Abstand, falls mehrere Buttons
+            >
+                <CustomButtonGroup
+                    buttons={[
+                        {
+                            label: "Hinzufügen",
+                            icon: <Add />,
+                            iconPosition: "start",
+                            onClick: addTerminClicked,
+                        },
+                    ]}
+                />
+            </Stack>
         <div style={{
             display: 'flex',
             flexWrap: 'wrap',
@@ -126,6 +154,7 @@ const Termine: React.FC = () => {
                 <Rabbit/>
             </div>
         </div>
+      </div>
     );
 };
 
