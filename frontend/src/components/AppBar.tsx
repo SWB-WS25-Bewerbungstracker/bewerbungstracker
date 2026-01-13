@@ -14,15 +14,16 @@ import {
     SvgIcon,
 } from "@mui/material";
 import { Menu as MenuIcon, Business as BusinessIcon} from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import keycloak from "../keycloak";
 import MyLittleDrawer from "./Drawer";
 
 // Tabs und Links dazu
 const pages = [
+  { name: "Home", path: "" },
   { name: "Termine", path: "/termine" },
   { name: "Bewerbungen", path: "/bewerbungen" },
-  { name: "Dokumente", path: "/dokumente" },
+
 ];
 
 
@@ -37,6 +38,7 @@ function ResponsiveAppBar() {
     null
   );
   const navigate = useNavigate();
+  const actualLocation = useLocation();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -183,22 +185,26 @@ function ResponsiveAppBar() {
             BEWERBUNGSTRACKER
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page.name}
-                component={Link}
-                to={page.path}
-                onClick={handleCloseNavMenu}
-                sx={{
-                  my: 2,
-                  color: "white",
-                  display: "block",
-                  boxShadow: "none",
-                }}
-              >
-                {page.name}
-              </Button>
-            ))}
+            {pages.map((page) => {
+                const isActive = actualLocation.pathname === page.path;
+                return(
+                <Button
+                    key={page.name}
+                    component={Link}
+                    to={page.path}
+                    onClick={handleCloseNavMenu}
+                    sx={{
+                        my: 2,
+                        color: "white",
+                        display: "block",
+                        boxShadow: "none",
+                        backgroundColor: isActive ? "rgba(255,255,255,0.2)" : "transparent",
+                    }}
+                >
+                    {page.name}
+                </Button>
+                )
+            })}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
 
