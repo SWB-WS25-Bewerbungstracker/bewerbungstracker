@@ -62,7 +62,7 @@ services:
     entrypoint: [ "sh", "-c" ]
     command: 
       - |
-        /opt/keycloak/bin/kc.sh import --dir /opt/keycloak/data/import --override true --optimized
+        /opt/keycloak/bin/kc.sh import --dir /opt/keycloak/data/import --optimized
         /opt/keycloak/bin/kc.sh start-dev --http-port 7080 --https-port 7443
     ports:
       - "7080:7080"
