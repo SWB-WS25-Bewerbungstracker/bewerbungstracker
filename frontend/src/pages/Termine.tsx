@@ -98,19 +98,18 @@ export default Termine;
 */
 
 import CalendarAllDates from '../components/Calendar'; // Importiere die Kalender-Komponente
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import Rabbit from '../components/TerminList'; //die TerminListe
 import { Stack } from "@mui/material";
 import CustomButtonGroup from "../components/ButtonGroup";
 import { Add } from "@mui/icons-material";
 
-const addTerminClicked = () => {
-    console.debug("Hinzufügen-Button (Termin) geklickt!");
-};
-
-
 const Termine: React.FC = () => {
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     return (
         <div style={{ width: '100%' }}>
 
@@ -129,7 +128,7 @@ const Termine: React.FC = () => {
                             label: "Hinzufügen",
                             icon: <Add />,
                             iconPosition: "start",
-                            onClick: addTerminClicked,
+                            onClick: handleOpen,
                         },
                     ]}
                 />
@@ -151,7 +150,7 @@ const Termine: React.FC = () => {
                 width: '60%',
                 flex: '60%',
             }}>
-                <Rabbit/>
+                <Rabbit open={open} handleClose={handleClose}/>
             </div>
         </div>
       </div>

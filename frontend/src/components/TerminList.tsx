@@ -12,7 +12,6 @@ import "dayjs/locale/en";
 import dayjs, { Dayjs } from "dayjs";
 import {
   Box,
-  Button,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -25,48 +24,25 @@ import {
 import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOverview";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import CustomButtonGroup from "./ButtonGroup";
-import { Add } from "@mui/icons-material";
+import CustomButtonGroup from "../components/ButtonGroup";
 
 const Lang = getLang();
 
-//*************** Toolbar function ****************
-
-function CustomToolbar({ onAddClick }: { onAddClick: () => void }) {
-  return (
-    <Box
-      sx={{
-        justifyContent: "flex-end",
-        display: "flex",
-        alignItems: "center",
-        paddingRight: 2,
-        paddingTop: 2.5,
-      }}
-    >
-        <CustomButtonGroup
-            buttons={[
-                {
-                    label: "Hinzufügen",
-                    icon: <Add />,
-                    iconPosition: "start",
-                    onClick: () => {
-                        onAddClick();
-                    },
-                },
-            ]}
-        />
-    </Box>
-  );
+//*************** Zeug für Dialog ****************
+interface TerminListProps {
+    open: boolean;
+    handleClose: () => void;
 }
+
 
 //***************** Send Button function ***********************************
 
 async function sendButtonClicked(
-    date,
-    time,
-    appointmentName,
-    selectedJoboffer,
-    closeDialog,
+    date: Dayjs,
+    time: Dayjs,
+    appointmentName:string,
+    selectedJoboffer:number,
+    closeDialog:()=> void,
     setErrorMessage: (msg: string) => void
 
 ) {
@@ -130,7 +106,7 @@ export interface BackendTermin {
 
 //************ MUI Komponente mit einigen anpassungen beginnt ****************
 
-const TerminList: React.FC = () => {
+const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
 
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -145,10 +121,6 @@ const TerminList: React.FC = () => {
   const onDateChange = (newDate: Dayjs | null) => setDate(newDate);
   const onTimeChange = (newTime: Dayjs | null) => setTime(newTime);
 
-  //************ const für Popup "Hinzufügen" *******************
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   //***************** const für dropdown in Hinzufügen *************
   const [selectedJoboffer, setSelectedJoboffer] = useState<number | "">(""); //Ausgewähltes Jobangebot
@@ -294,8 +266,7 @@ const TerminList: React.FC = () => {
                 }}
                 pageSizeOptions={[4]}
                 disableRowSelectionOnClick
-                slots={{ toolbar:()=> <CustomToolbar onAddClick={handleOpen}/> }}
-                showToolbar
+
             />
 
       <Dialog
