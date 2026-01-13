@@ -2,7 +2,6 @@ package com.bewerbungstracker.joboffer;
 
 import com.bewerbungstracker.address.Address;
 import com.bewerbungstracker.appuser.Appuser;
-import com.bewerbungstracker.company.Company;
 import com.bewerbungstracker.joboffer.contact.Contact;
 import jakarta.persistence.*;
 import lombok.Data;

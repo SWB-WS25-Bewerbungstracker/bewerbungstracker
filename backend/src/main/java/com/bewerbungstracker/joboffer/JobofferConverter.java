@@ -1,7 +1,6 @@
 package com.bewerbungstracker.joboffer;
 
 import com.bewerbungstracker.address.Address;
-import com.bewerbungstracker.company.Company;
 import com.bewerbungstracker.joboffer.contact.Contact;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

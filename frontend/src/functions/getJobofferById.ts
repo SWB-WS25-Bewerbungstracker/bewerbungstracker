@@ -64,14 +64,6 @@ type Contact = {
   phoneno: string;
 };
 
-type Company = {
-  id: number;
-  companyname: string;
-  empcount: number;
-  logo: string;
-  address: Address;
-};
-
 type Address = {
   id: number;
   street: string;
