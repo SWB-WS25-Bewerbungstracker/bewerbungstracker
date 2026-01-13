@@ -111,7 +111,7 @@ const Termine: React.FC = () => {
     const handleClose = () => setOpen(false);
 
     return (
-        <div style={{ width: '100%' }}>
+        <div style={{ width: '100%', height:"100vh", display:"flex", flexDirection:"column"}}>
 
             {/* ----- Leiste oben mit Button ----- */}
             <Stack
@@ -135,20 +135,21 @@ const Termine: React.FC = () => {
             </Stack>
         <div style={{
             display: 'flex',
-            flexWrap: 'wrap',
+            flex:"1",
             backgroundColor: '',
             borderRadius: '8px',
         }}>
             <div style={{
                 width: '40%',
                 flex: '40%',        // flex-grow, flex-shrink
-                minWidth: '300px',
+                height: '100%',
             }}>
                 <CalendarAllDates/>
             </div>
             <div style={{
                 width: '60%',
                 flex: '60%',
+                height: '100%',
             }}>
                 <Rabbit open={open} handleClose={handleClose}/>
             </div>

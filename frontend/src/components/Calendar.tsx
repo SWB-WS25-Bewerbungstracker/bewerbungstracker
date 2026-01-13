@@ -100,9 +100,36 @@ export default function CalendarAllDates() {
           }}
           sx={{
             width: "100%",
-            height: "100%",
+            flex:1,
+              display:"flex",
+              flexDirection:"column",
             backgroundColor: "",
             borderRadius: "8px", //ecken abrunden
+
+              "& .MuiDayCalendar-weekContainer": {
+                  display: "flex",
+                  flex:1,
+
+              },
+
+              "& .MuiPickersDay-root": {
+              flex:1,
+              aspectRatio:"1/1",
+              maxWidth: "unset",
+              },
+
+              "& .MuiDayCalendar-header": {
+                  display: "flex",
+                  border: "1px solid",
+                  borderColor: "primary.main",
+                  width:"100%",
+              },
+
+              "& .MuiDayCalendar-weekDayLabel": {
+                  flex: 1,
+                  textAlign: "center",
+              },
+
           }}
         />
       </Box>

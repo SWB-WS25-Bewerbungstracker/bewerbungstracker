@@ -257,7 +257,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
                 columns={columns}
                 columnVisibilityModel={{ id: false }}
                 initialState={{
-                    pagination: { paginationModel: { pageSize: 4 } },
+                    pagination: { paginationModel: { pageSize: 5 } },
                     sorting: {                  //wir initialisieren die Tabelle am anfang Sortiert nach Terminen
                         sortModel: [
                             {field: 'datum', sort: 'asc'}
