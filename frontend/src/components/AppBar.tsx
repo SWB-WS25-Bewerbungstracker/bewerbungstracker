@@ -210,7 +210,7 @@ function ResponsiveAppBar() {
 
             <Tooltip title="Einstellungen öffnen">
               <IconButton onClick={handleDrawerOpen} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar sx={{color:"black"}} alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <MyLittleDrawer open={drawerOpen} onClose={handleDrawerClose}/>
