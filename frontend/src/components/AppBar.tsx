@@ -20,7 +20,7 @@ import MyLittleDrawer from "./Drawer";
 
 // Tabs und Links dazu
 const pages = [
-  { name: "Home", path: "" },
+  { name: "Home", path: "/" },
   { name: "Termine", path: "/termine" },
   { name: "Bewerbungen", path: "/bewerbungen" },
 
