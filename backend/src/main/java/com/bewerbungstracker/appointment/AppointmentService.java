@@ -16,8 +16,8 @@ public class AppointmentService {
     private final JobofferRepository jobofferRepository;
     private final AppointmentConverter appointmentConverter;
 
-    public List<AppointmentDetailDTO> getAllAppointmentsWithDetails() {
-        return appointmentRepository.getAppointmentDetails();
+    public List<AppointmentDetailDTO> getAllAppointmentsWithDetails(String email) {
+        return appointmentRepository.getAppointmentDetails(email);
     }
 
     public List<Appointment> getAllAppointmentsByJoboffer(String email, Integer jobofferId) {

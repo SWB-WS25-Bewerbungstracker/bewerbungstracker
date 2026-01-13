@@ -15,8 +15,9 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
 
     @GetMapping
-    public List<AppointmentDetailDTO> getAllAppointments() {
-        return appointmentService.getAllAppointmentsWithDetails();
+    public List<AppointmentDetailDTO> getAllAppointments(@AuthenticationPrincipal Jwt jwt) {
+        String email = jwt.getClaimAsString("email");
+        return appointmentService.getAllAppointmentsWithDetails(email);
     }
 
     @PostMapping

@@ -16,8 +16,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             appt.joboffer.jobtitle, 
             appt.joboffer.companyname)
         FROM Appointment appt
+        WHERE appt.joboffer.appuser.email = ?1
         """)
-    List<AppointmentDetailDTO> getAppointmentDetails();
+    List<AppointmentDetailDTO> getAppointmentDetails(String email);
 
 
     @Query("""
