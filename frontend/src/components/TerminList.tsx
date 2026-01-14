@@ -92,8 +92,8 @@ export interface terminListProps {
   uhrzeit: string;
   firmaName?: string;
   terminName?: string;
-  toDo?: string;
-  contact?: string;
+  contact?:string;
+  todo?:string;
 }
 
 export interface BackendTermin {
@@ -103,6 +103,7 @@ export interface BackendTermin {
   jobofferID: number;
   joboffername: string;
   companyname: string;
+  contact: string;
 }
 
 //************ MUI Komponente mit einigen anpassungen beginnt ****************
@@ -141,7 +142,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
         {
             field: 'firmaName',
             headerName: 'Unternehmen',
-            width: 120,
+            width: 200,
             editable: false,
             align: 'left',
             renderCell: params => (
@@ -151,7 +152,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
         {
             field: 'terminName',
             headerName: 'Terminart',
-            width: 100,
+            width: 185,
             editable: true,
             align: 'left',
         },
@@ -183,21 +184,23 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
                 return <span>{parsed?.[2]}</span>;}
         },
         {
-            field: 'toDo',
-            headerName: 'To-Do',
-            flex: 1, // soll die restliche Zeile auffüllen
-            align: 'left',
-            headerAlign: 'left',
+            field: 'contact',
+            headerName: 'E-Main',
             editable: true,
+            align: 'left',
+            flex:1,
+            sortable:false,
         },
     ];
 
   // use Effect wird immer aufgerufen beim ersten rendern.
   useEffect(() => {
     applicationTrackerApi.get("/appointments").then((response) => {
+        console.log("Response from backend:", response.data);
       const today = new Date(); //erstellt ein neues Objekt mit dem heuigen Datum.
 
                 const appointmentList = response.data
+
                     .map((t: BackendTermin): terminListProps => {
                         //const parsed = parseDatePassed(t.appointmentdate);
 
@@ -208,16 +211,15 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
                             firmaName: t.companyname,
                             terminName: t.appointmentname,
                             //oDo: t.oDo,
-                            //contact: t.contact
+                            contact: t.contact
                         };
                     })
-
                     //Filter erstellen, damit nur Termine Heute oder in Zukunft angezeigt werden
                     .filter((t: terminListProps) => {
                         return new Date(t.datum) >= today;
                     })
 
-
+        console.log("Mapped Appointments:", appointmentList);
                 setRows(appointmentList)
             });
     },[]);
