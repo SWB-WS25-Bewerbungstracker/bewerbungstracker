@@ -185,7 +185,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
         },
         {
             field: 'contact',
-            headerName: 'E-Main',
+            headerName: 'E-Mail',
             editable: true,
             align: 'left',
             flex:1,
@@ -239,19 +239,19 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
                     padding :0,
 
           "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "transparent",
+            backgroundColor: "",
           },
 
           "& .MuiDataGrid-columnHeader": {
             //die einzelnen überschriften
             backgroundColor: "transparent",
-            color: "black",
           },
 
           "& .MuiDataGrid-row": {
             marginBottom: "0px",
             "&:hover": {
-              backgroundColor: "lightblue", // Beispiel-Hover-Farbe
+                backgroundColor: undefined,
+
             },
           },
 
@@ -298,7 +298,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
                 <MenuItem disabled>Lade Daten...</MenuItem>
               ) : error ? (
                 <MenuItem disabled>
-                  Der code ist perfekt. DU hast mist gebaut...
+                  Bitte erst eine Bewerbung erstellen
                 </MenuItem>
               ) : (
                 (listOfJoboffers ?? []) // fix: wir schauen ob listOfJoboffers NULL/undefined ist. wenn nicht nutzen wir es. wenn doch, geben wir leeres array.

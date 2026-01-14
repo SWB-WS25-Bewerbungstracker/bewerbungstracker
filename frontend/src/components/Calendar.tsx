@@ -3,13 +3,14 @@
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { Box } from "@mui/material";
+
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import { Tooltip, Paper } from "@mui/material";
 
 import { getLang } from "../functions/getLanguage";
 import "dayjs/locale/de";
 import "dayjs/locale/en";
+import myTheme from "../theme/theme.ts";
 
 import applicationTrackerApi from "../services/api.ts";
 import { useEffect, useState } from "react";
@@ -54,10 +55,7 @@ function AppointmentDate(props: any) {
                 color: outsideCurrentMonth ? 'text.disabled' : hasEvent ? 'white' : undefined,
                 backgroundColor: hasEvent ? "primary.main" : "transparent",
                 borderRadius: "8px",
-                '&:hover': {
-                    backgroundColor: 'lightblue'  // Beispiel-Hover-Farbe
-
-                }
+                "&:hover": {backgroundColor:"action.hover"},
             }}
             />
         </Tooltip>
@@ -68,7 +66,6 @@ function AppointmentDate(props: any) {
 export default function CalendarAllDates() {
   const Lang = getLang(); //Liest Sprache vom browser für Kalender layout
   const [events, setEvents] = useState<CalendarDate[]>([]);
-
   //Wenn möglich extern lagern um daten nur einmal aufrufen zu müssen
   useEffect(() => {
     applicationTrackerApi

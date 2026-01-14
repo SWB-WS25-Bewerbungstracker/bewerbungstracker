@@ -122,6 +122,7 @@ const Termine: React.FC = () => {
                 justifyContent="flex-end" // Button immer rechts
                 spacing={2}               // optional: Abstand, falls mehrere Buttons
                 sx={{flexShrink:0,}}
+                marginBottom={3}
             >
                 <CustomButtonGroup
                     buttons={[
