@@ -16,6 +16,7 @@
  */
 
 /* Reset and Base Styles */
+
 * {
     margin: 0;
     padding: 0;
@@ -35,17 +36,12 @@ body {
     align-items: center;
     min-width: 100%;
     min-height: 100vh;
-    /* Light Mode */
     background-color: white !important;
     background-image: none !important;
     border-radius: 24px !important;
     color: black;
-    /* Dark Mode (commented)
-    background-color: rgb(32, 32, 32);
-    color: white;
-    */
 
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: Inter, sans-serif;
     line-height: 1.5;
     font-weight: 400;
     font-synthesis: none;
@@ -54,15 +50,24 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: rgb(32, 32, 32) !important;
+        /* color: white; */
+    }
+}
+
 /* Login Container */
 .login-pf body {
-    /* Light Mode */
     background-color: #d4d4ffff !important;
     background-image: none !important;
-    /* Dark Mode (commented)
-    background-color: rgb(32, 32, 32);
-    */
     border-radius: 24px !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    .login-pf body {
+        background-color: rgb(32, 32, 32) !important;
+    }
 }
 
 /* Override Keycloak default background */
@@ -89,8 +94,14 @@ body {
     padding: 3rem;
     border-radius: 24px !important;
     background-color: white;
-    /* Optional: Add subtle shadow for depth */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+    #kc-container-wrapper {
+        background-color: rgb(32, 32, 32);
+        box-shadow: none;
+    }
 }
 
 /* Header */
@@ -102,11 +113,13 @@ body {
 #kc-header-wrapper {
     font-size: 2.4rem;
     font-weight: 600;
-    /* Light Mode */
     color: black;
-    /* Dark Mode (commented)
-    color: white;
-    */
+}
+
+@media (prefers-color-scheme: dark) {
+    #kc-header-wrapper {
+        color: white;
+    }
 }
 
 /* Labels */
@@ -115,12 +128,9 @@ label {
     margin-bottom: 0.5rem;
     font-size: 1.4rem;
     font-weight: 500;
-    /* Light Mode */
     color: black;
-    /* Dark Mode (commented)
-    color: white;
-    */
 }
+
 
 /* Smaller labels for username and password fields */
 label[for="username"],
@@ -138,14 +148,19 @@ input[type="email"] {
     font-size: 1.4rem;
     border: 1px solid #ccc;
     border-radius: 16px;
-    /* Light Mode */
     background-color: white;
     color: black;
-    /* Dark Mode (commented)
-    background-color: rgb(45, 45, 45);
-    color: white;
-    border-color: #555;
-    */
+}
+
+@media (prefers-color-scheme: dark) {
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+        background-color: rgb(45, 45, 45);
+        /* color: white; */
+        border-color: #555;
+    }
 }
 
 input[type="text"]:focus,
@@ -171,23 +186,34 @@ input[type="submit"],
     /* Light Mode */
     background-color: lightblue;
     color: black;
-    /* Dark Mode (commented)
-    background-color: #00394d;
-    color: white;
-    */
 }
+
+/* @media (prefers-color-scheme: dark) {
+
+    button,
+    input[type="submit"],
+    .btn {
+        background-color: #00394d;
+        color: white;
+    }
+} */
 
 button:hover,
 input[type="submit"]:hover,
 .btn:hover {
-    /* Light Mode */
     background-color: #65b0ff;
     border-color: #65b0ff;
-    /* Dark Mode (commented)
-    background-color: #002546;
-    border-color: #002546;
-    */
 }
+
+/* @media (prefers-color-scheme: dark) {
+
+    button:hover,
+    input[type="submit"]:hover,
+    .btn:hover {
+        background-color: #002546;
+        border-color: #002546;
+    }
+} */
 
 button:focus,
 button:focus-visible,
@@ -208,26 +234,36 @@ input[type="register"],
     font-family: inherit;
     cursor: pointer;
     transition: all 0.25s;
-    /* Light Mode */
     background-color: lightblue;
     color: black;
-    /* Dark Mode (commented)
-    background-color: #00394d;
-    color: white;
-    */
 }
+
+/* @media (prefers-color-scheme: dark) {
+
+    button,
+    input[type="register"],
+    .btn {
+        background-color: #00394d;
+        color: white;
+    }
+} */
 
 button:hover,
 input[type="register"]:hover,
 .btn:hover {
-    /* Light Mode */
     background-color: #65b0ff;
     border-color: #65b0ff;
-    /* Dark Mode (commented)
-    background-color: #002546;
-    border-color: #002546;
-    */
 }
+
+/* @media (prefers-color-scheme: dark) {
+
+    button:hover,
+    input[type="register"]:hover,
+    .btn:hover {
+        background-color: #002546;
+        border-color: #002546;
+    }
+} */
 
 button:focus,
 button:focus-visible,
@@ -239,23 +275,31 @@ input[type="register"]:focus,
 /* Primary Button */
 .btn-primary,
 #kc-login {
-    /* Light Mode */
     background-color: lightblue;
     color: black;
-    /* Dark Mode (commented)
-    background-color: #00394d;
-    color: white;
-    */
 }
+
+/* @media (prefers-color-scheme: dark) {
+
+    .btn-primary,
+    #kc-login {
+        background-color: #00394d;
+        /* color: white; */
+    }
+} */
 
 .btn-primary:hover,
 #kc-login:hover {
-    /* Light Mode */
     background-color: #65b0ff;
-    /* Dark Mode (commented)
-    background-color: #002546;
-    */
 }
+
+/* @media (prefers-color-scheme: dark) {
+
+    .btn-primary:hover,
+    #kc-login:hover {
+        background-color: #002546;
+    }
+} */
 
 /* Info/Registration Links */
 #kc-info,
@@ -311,7 +355,7 @@ input[type="register"]:focus,
 
 
 /* Locale Selector */
-#kc-locale {
+/* #kc-locale {
     position: absolute;
     top: 2rem;
     right: 2rem;
@@ -321,12 +365,14 @@ input[type="register"]:focus,
     padding: 0.5rem 1rem;
     border-radius: 12px;
     border: 1px solid #ccc;
-    /* Light Mode */
     background-color: #d4d4ffff;
     color: black;
-    /* Dark Mode (commented)
-    background-color: rgb(45, 45, 45);
-    color: white;
-    border-color: #555;
-    */
 }
+
+@media (prefers-color-scheme: dark) {
+    #kc-locale-dropdown {
+        background-color: rgb(45, 45, 45);
+        /* color: white; */
+        border-color: #555;
+    }
+} */
