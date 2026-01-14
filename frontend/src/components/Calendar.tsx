@@ -5,7 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { Box } from "@mui/material";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
-import { Tooltip } from "@mui/material";
+import { Tooltip, Paper } from "@mui/material";
 
 import { getLang } from "../functions/getLanguage";
 import "dayjs/locale/de";
@@ -90,7 +90,7 @@ export default function CalendarAllDates() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
-      <Box sx={{ width: "100%", display:"inline-block", background: "",border: "1px solid",borderColor:"primary.main", borderRadius: "8px" }}>
+      <Paper sx={{ width: "100%", display:"inline-block", background: "",border: "1px solid",borderColor:"primary.main", borderRadius: "8px", }}>
         <DateCalendar
           showDaysOutsideCurrentMonth
           fixedWeekNumber={6}
@@ -103,7 +103,7 @@ export default function CalendarAllDates() {
             flex:1,
               display:"flex",
               flexDirection:"column",
-            backgroundColor: "white",
+            backgroundColor: "",
             borderRadius: "8px", //ecken abrunden
 
               "& .MuiDayCalendar-weekContainer": {
@@ -134,7 +134,7 @@ export default function CalendarAllDates() {
 
           }}
         />
-      </Box>
+      </Paper>
     </LocalizationProvider>
   );
 }

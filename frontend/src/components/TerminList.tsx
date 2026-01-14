@@ -12,6 +12,7 @@ import "dayjs/locale/en";
 import dayjs, { Dayjs } from "dayjs";
 import {
   Box,
+  Paper,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -224,14 +225,16 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
 
 
     return (
-        <Box sx={{ width: '100%', flex:1 ,minHeight:0, display:"flex", flexDirection:"column",overflow:"hidden",}}>
+        <Paper sx={{ width: '100%', display:"flex" ,flex:1, flexDirection:"column",overflow:"hidden", boxSizing: "border-box", border:1, borderColor:"primary.main",}}>
+
             <DataGrid
 
                 sx={{
                     minHeight:0,
-                    height:"80%",
-                    background: 'white',
-                    borderColor:"primary.main",
+                    background: '',
+                    border:"none",
+                    flex:1,
+                    padding :0,
 
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: "transparent",
@@ -362,7 +365,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
           </Box>
         </DialogContent>
       </Dialog>
-    </Box>
+     </Paper>
   );
 };
 export default TerminList;

@@ -35,13 +35,13 @@ const Home: React.FC = () => {
         <Typography variant="h6" paddingBottom={2}>
           Übersicht aller Termine
         </Typography>
-        <Paper
+        <Box
           style={{
             width: "100%",
           }}
         >
-          <Rabbit />
-        </Paper>
+          <Rabbit/>
+        </Box>
       </Box>
       <div>
         <Stack
