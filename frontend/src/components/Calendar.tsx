@@ -89,6 +89,7 @@ export default function CalendarAllDates() {
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
       <Paper sx={{ width: "100%", display:"inline-block", background: "",border: "1px solid",borderColor:"primary.main", borderRadius: "8px", }}>
         <DateCalendar
+            dayOfWeekFormatter={(day)=>day.format("ddd")}
           showDaysOutsideCurrentMonth
           fixedWeekNumber={6}
           slots={{ day: AppointmentDate }} // slots ersetzt day komponent vom Kalender durch AppointmentDate komponente
