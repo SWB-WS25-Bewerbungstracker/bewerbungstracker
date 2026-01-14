@@ -111,7 +111,7 @@ const Termine: React.FC = () => {
     const handleClose = () => setOpen(false);
 
     return (
-        <div style={{ width: '100%', height:"100vh", display:"flex", flexDirection:"column"}}>
+        <div style={{ width: '100%', height:"85vh", display:"flex", flexDirection:"column", overflow:"hidden",minHeight:0,}}>
 
             {/* ----- Leiste oben mit Button ----- */}
             <Stack
@@ -121,6 +121,7 @@ const Termine: React.FC = () => {
                 width="100%"
                 justifyContent="flex-end" // Button immer rechts
                 spacing={2}               // optional: Abstand, falls mehrere Buttons
+                sx={{flexShrink:0,}}
             >
                 <CustomButtonGroup
                     buttons={[
@@ -133,28 +134,34 @@ const Termine: React.FC = () => {
                     ]}
                 />
             </Stack>
+
         <div style={{
             display: 'flex',
             flex:"1",
             backgroundColor: '',
-            borderRadius: '8px',
+            minHeight:0,
+            gap: "1vw",
+            padding: "0 1vw",
         }}>
             <div style={{
-                width: '40%',
-                flex: '40%',        // flex-grow, flex-shrink
-                height: '100%',
+                flex: '0 0 40%',        // flex-grow, flex-shrink
+                minHeight: 0,
+                overflow: "hidden",
+                minWidth: "50px"
             }}>
                 <CalendarAllDates/>
             </div>
             <div style={{
-                width: '60%',
-                flex: '60%',
-                height: '100%',
+                minHeight:0,
+                overflow:"hidden",
+                display:"flex",
+                flex: "0 0 59%",
             }}>
                 <Rabbit open={open} handleClose={handleClose}/>
             </div>
         </div>
       </div>
+
     );
 };
 

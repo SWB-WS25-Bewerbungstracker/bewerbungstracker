@@ -52,7 +52,7 @@ function AppointmentDate(props: any) {
             outsideCurrentMonth = {outsideCurrentMonth}
             sx={{
                 color: outsideCurrentMonth ? 'text.disabled' : hasEvent ? 'white' : undefined,
-                backgroundColor: hasEvent ? "orange" : undefined,
+                backgroundColor: hasEvent ? "primary.main" : "transparent",
                 borderRadius: "8px",
                 '&:hover': {
                     backgroundColor: 'lightblue'  // Beispiel-Hover-Farbe
@@ -90,7 +90,7 @@ export default function CalendarAllDates() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
-      <Box sx={{ width: "100%", height: "100%", background: "" }}>
+      <Box sx={{ width: "100%", display:"inline-block", background: "",border: "1px solid",borderColor:"primary.main", borderRadius: "8px" }}>
         <DateCalendar
           showDaysOutsideCurrentMonth
           fixedWeekNumber={6}
@@ -103,7 +103,7 @@ export default function CalendarAllDates() {
             flex:1,
               display:"flex",
               flexDirection:"column",
-            backgroundColor: "",
+            backgroundColor: "white",
             borderRadius: "8px", //ecken abrunden
 
               "& .MuiDayCalendar-weekContainer": {
@@ -119,13 +119,15 @@ export default function CalendarAllDates() {
               },
 
               "& .MuiDayCalendar-header": {
+
                   display: "flex",
-                  border: "1px solid",
-                  borderColor: "primary.main",
                   width:"100%",
               },
 
               "& .MuiDayCalendar-weekDayLabel": {
+                  border: "2px solid",
+                  borderColor:"primary.main",
+                  borderRadius:"8px",
                   flex: 1,
                   textAlign: "center",
               },

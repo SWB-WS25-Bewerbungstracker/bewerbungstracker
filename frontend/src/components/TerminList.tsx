@@ -224,11 +224,14 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
 
 
     return (
-        <Box sx={{ height: 375, width: '100%' }}>
+        <Box sx={{ width: '100%', flex:1 ,minHeight:0, display:"flex", flexDirection:"column",overflow:"hidden",}}>
             <DataGrid
 
                 sx={{
-                    background: 'transparent',
+                    minHeight:0,
+                    height:"80%",
+                    background: 'white',
+                    borderColor:"primary.main",
 
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: "transparent",
@@ -253,18 +256,10 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
 
                 }}
 
+                hideFooter
                 rows={rows}
                 columns={columns}
                 columnVisibilityModel={{ id: false }}
-                initialState={{
-                    pagination: { paginationModel: { pageSize: 5 } },
-                    sorting: {                  //wir initialisieren die Tabelle am anfang Sortiert nach Terminen
-                        sortModel: [
-                            {field: 'datum', sort: 'asc'}
-                        ]
-                    }
-                }}
-                pageSizeOptions={[4]}
                 disableRowSelectionOnClick
 
             />
@@ -276,7 +271,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
       >
         <DialogTitle>Neuer Termin</DialogTitle>
         <DialogContent>
-          <FormControl fullWidth sx={{ marginTop: 1 }}>
+          <FormControl fullWidth required sx={{ marginTop: 1 }}>
             <InputLabel id="companySelect">Firma - Bewerbung</InputLabel>
             <Select
               labelId="companySelect"
@@ -322,16 +317,18 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
               label="appointmentName"
               value={appointmentName}
               onChange={(rabbit) => setAppointmentName(rabbit.target.value)}
+              required
             />
           </FormControl>
 
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
             <Box sx={{ display: "flex", marginTop: 2, gap: 2 }}>
-              <DatePicker label="Datum" value={date} onChange={onDateChange} />
+              <DatePicker label="Datum" value={date} onChange={onDateChange} slotProps={{textField:{required:true,}}} />
               <TimePicker
                 label="Uhrzeit"
                 value={time}
                 onChange={onTimeChange}
+                slotProps={{textField:{required:true,}}}
               />
             </Box>
           </LocalizationProvider>
