@@ -31,8 +31,8 @@ const Lang = getLang();
 
 //*************** Zeug für Dialog ****************
 interface TerminListProps {
-    open: boolean;
-    handleClose: () => void;
+    open?: boolean;
+    handleClose?: () => void;
 }
 
 
