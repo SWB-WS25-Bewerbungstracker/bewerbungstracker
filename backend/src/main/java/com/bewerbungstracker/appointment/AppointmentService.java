@@ -38,4 +38,12 @@ public class AppointmentService {
         return appointmentRepository.save(appointment);
     }
 
+    //Löschen
+    @Transactional
+    public void deleteAppointment(Integer appointmentID){
+      if(!appointmentRepository.existsById(appointmentID)){
+          throw  new IllegalArgumentException("Appointment not found: " + appointmentID);
+      }
+      appointmentRepository.deleteById(appointmentID);
+    }
 }

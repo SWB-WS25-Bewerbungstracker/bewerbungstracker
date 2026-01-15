@@ -14,7 +14,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             appt.appointmentname, 
             appt.joboffer.id, 
             appt.joboffer.jobtitle, 
-            appt.joboffer.company.companyname)
+            appt.joboffer.company.companyname,
+            appt.joboffer.contact.email)
         FROM Appointment appt
         """)
     List<AppointmentDetailDTO> getAppointments();
