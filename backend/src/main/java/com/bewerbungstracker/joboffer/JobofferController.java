@@ -29,9 +29,9 @@ public class JobofferController {
         return jobofferService.getJobofferById(id);
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteJobofferById(@PathVariable Integer id) {
-         jobofferService.deleteJobofferById(id);
+        jobofferService.deleteJobofferById(id);
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Bewerbung erfolgreich gelöscht!");
     }
