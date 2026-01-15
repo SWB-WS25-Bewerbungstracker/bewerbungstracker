@@ -28,61 +28,13 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CustomButtonGroup from "../components/ButtonGroup";
 import {  Edit } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
-
+import {sendButtonClicked} from "../functions/sendAppointments.ts";
 const Lang = getLang();
 
 //*************** Zeug für Dialog ****************
 interface TerminListProps {
     open: boolean;
-    handleClose?: () => void;
-}
-
-
-//***************** Send Button function ***********************************
-
-async function sendButtonClicked(
-    date: Dayjs,
-    time: Dayjs,
-    appointmentName:string,
-    selectedJoboffer:number,
-    closeDialog:()=> void,
-    setErrorMessage: (msg: string) => void
-
-) {
-  if (!date || !time || !appointmentName || selectedJoboffer === null) {
-      setErrorMessage("Alles ausfüllen bitte!"); // Fehler setzen
-    return;
-  }
-
-    setErrorMessage("");
-
-  const carrotForRabbit = date
-    .hour(time.hour())
-    .minute(time.minute())
-    .second(0)
-    .toISOString();
-
-  console.debug("Ich sende ans Backend:", {
-    appointmentdate: carrotForRabbit,
-    appointmentname: appointmentName,
-    jobofferID: selectedJoboffer,
-  });
-
-    try{
-        await applicationTrackerApi.post("/appointments",{
-            appointmentdate: carrotForRabbit,
-            appointmentname: appointmentName,
-            jobofferID: selectedJoboffer
-        });
-
-        closeDialog();
-        window.location.reload();
-
-    }   catch(err) {
-            console.debug(err)
-            alert("Der Hase hat die Karotte nicht geliefert :(")
-        }
-
+    handleClose: () => void;
 }
 
 
@@ -378,11 +330,11 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
                 </Box>
             )}
 
-          <Box sx={{ display: "flex", justifyContent: "center", marginTop: 1 }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 1 }}>
             <CustomButtonGroup
               buttons={[
                 {
-                  label: "Senden",
+                  label: "Submit",
                   icon: <Send />,
                   iconPosition: "end",
                   onClick: () => {
