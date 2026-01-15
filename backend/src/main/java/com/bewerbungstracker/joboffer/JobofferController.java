@@ -29,6 +29,13 @@ public class JobofferController {
         return jobofferService.getJobofferById(id);
     }
 
+    @GetMapping("/delete/{id}")
+    public ResponseEntity<String> deleteJobofferById(@PathVariable Integer id) {
+         jobofferService.deleteJobofferById(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Bewerbung erfolgreich gelöscht!");
+    }
+
     @PostMapping(path = "/inputForm", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> postJobofferInfo(@RequestBody JobofferNestedInputDTO jobofferInfo,
                                                    @AuthenticationPrincipal Jwt jwt) {

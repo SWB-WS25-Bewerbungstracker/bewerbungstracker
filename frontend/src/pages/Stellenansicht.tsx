@@ -6,6 +6,7 @@ import { parseDateToString } from "../functions/parseDate";
 import CustomButtonGroup from "../components/ButtonGroup";
 import { ArrowBack, Delete, Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import applicationTrackerApi from "../services/api";
 // import BusinessIcon from "@mui/icons-material/Business";
 
 const TitleWidth = "20%";
@@ -41,6 +42,16 @@ const Stellenansicht: React.FC = () => {
   // Falls ein Fehler auftrat, den auf der Seite ausgeben
   if (errorRetrievingJoboffer) {
     return <div>{errorRetrievingJoboffer}</div>;
+  }
+
+  // Funktion zum löschen der Joboffer
+  async function deleteJoboffer(id: string | undefined) {
+    const response = await applicationTrackerApi.delete(
+      `http://localhost:8080/joboffer/delete/${id}`
+    );
+    if (response.data === 200) {
+      window.close();
+    }
   }
 
   return (
@@ -79,6 +90,7 @@ const Stellenansicht: React.FC = () => {
               onClick: () => {
                 console.debug("Löschen Button wurde geklickt");
                 // Jeweiligen Behfel ans Backend Senden (Schnittstelle fehlt noch -> noch nicht implementiert);
+                deleteJoboffer(id);
               },
             },
           ]}

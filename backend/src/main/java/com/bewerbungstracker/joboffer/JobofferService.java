@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -81,6 +82,17 @@ public class JobofferService {
         //Save Appointments
         for(AppointmentCleanView a : jobofferInput.getAppointments()) {
             appointmentService.createAppointment(a, joboffer);
+        }
+    }
+
+    public void deleteJobofferById (Integer id) {
+        Optional<Joboffer> joboffer = jobofferRepository.findById(id);
+        if (joboffer.isPresent()) { jobofferRepository.delete(joboffer.get());}
+
+        List<Appointment> appointments = jobofferRepository.getAppointmentsByJobofferId(id);
+        for (Appointment appointment : appointments) {
+            // appointmentService.deleteAppointment(appointment); // Noch nicht implementiert
+            log.debug("Deleted Appointment: " + appointment.getId() + ", " + appointment.getAppointmentname());
         }
     }
 }

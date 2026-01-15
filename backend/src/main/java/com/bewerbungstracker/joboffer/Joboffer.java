@@ -33,11 +33,11 @@ public class Joboffer {
     @Column
     private String notes;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.REMOVE)
     @JoinColumn(name = "contact", referencedColumnName = "contactid")
     private Contact contact;
 
-    @ManyToOne
+    @ManyToOne ()
     @JoinColumn(name = "company")
     private Company company;
 
