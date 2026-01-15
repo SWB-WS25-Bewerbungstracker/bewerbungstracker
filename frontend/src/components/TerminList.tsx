@@ -26,6 +26,8 @@ import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOvervi
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CustomButtonGroup from "../components/ButtonGroup";
+import {  Edit } from "@mui/icons-material";
+import IconButton from "@mui/material/IconButton";
 
 const Lang = getLang();
 
@@ -130,8 +132,13 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
   //hier wird das array erstellt für Popup um alle daten anzuzeigen
   const { listOfJoboffers, loading, error } = useOverviewOfAllJoboffers();
 
+//*******************EDIT FUNCTION*********************************
+    const handleEdit = (row: terminListProps) => {
+        console.log("Bearbeite Termin:", row);}
 
-
+//*******************Delete FUNCTION*********************************
+    const handleDelete = (row: terminListProps) => {
+        console.log("Delete Termin:", row);}
 
     const [rows, setRows] = useState<terminListProps[]>([])
     const columns: GridColDef<(typeof rows)[number]>[] = [
@@ -191,6 +198,26 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
             flex:1,
             sortable:false,
         },
+        {
+            field: "function",
+            headerName:"",
+            width: 100,
+            sortable:false,
+            editable:false,
+            filterable:false,
+            disableColumnMenu:true,
+            align:"center",
+            renderCell:(params) =>(
+                <Box sx={{display:"flex", gap:1}}>
+                    <IconButton size="small"onClick={()=>handleEdit(params.row)}>
+                        <Edit/>
+                    </IconButton>
+                    <IconButton size="small"onClick={()=>handleDelete(params.row)}>
+                        <Delete/>
+                    </IconButton>
+                </Box>
+            )
+        }
     ];
 
   // use Effect wird immer aufgerufen beim ersten rendern.
@@ -245,6 +272,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
           "& .MuiDataGrid-columnHeader": {
             //die einzelnen überschriften
             backgroundColor: "transparent",
+            cursor:"default",
           },
 
           "& .MuiDataGrid-row": {
@@ -254,12 +282,18 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
 
             },
           },
+           '& .MuiDataGrid-row:last-child': {
+               marginBottom: 0,
+           },
 
-                    '& .MuiDataGrid-row:last-child': {
-                        marginBottom: 0,
-                    },
+           '& .MuiDataGrid-cell:focus': {
+               outline: "none",
+           },
+           "& .MuiDataGrid-cell": {
+                 cursor: "default",
+           },
 
-                }}
+         }}
 
                 hideFooter
                 rows={rows}
