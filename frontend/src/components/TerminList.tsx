@@ -28,7 +28,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CustomButtonGroup from "../components/ButtonGroup";
 import {  Edit } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
-import {sendButtonClicked} from "../functions/sendAppointments.ts";
+import {submitButtonClicked} from "../functions/sendAppointments.ts";
+import {deleteAppointment}  from "../functions/deleteAppointment.ts";
 const Lang = getLang();
 
 //*************** Zeug für Dialog ****************
@@ -89,7 +90,16 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
         console.log("Bearbeite Termin:", row);}
 
 //*******************Delete FUNCTION*********************************
-    const handleDelete = (row: terminListProps) => {
+    //zusätzliches await catch, damit fehler nicht übergangen werden aus dem backend
+    const handleDelete = async (row: terminListProps) => {
+        console.log("Delete Termin:", row.id)
+        try{
+            await deleteAppointment(row.id);
+            window.location.reload(); //vorübergangslösung. falls Zeit: useEffect als Funktion damit nur daten neu laden nicht ganze seite
+        }catch (error){
+            console.error("konnte nicht gelöscht werden")
+            throw error;
+        }
         console.log("Delete Termin:", row);}
 
     const [rows, setRows] = useState<terminListProps[]>([])
@@ -338,7 +348,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
                   icon: <Send />,
                   iconPosition: "end",
                   onClick: () => {
-                    sendButtonClicked(
+                    submitButtonClicked(
                       date,
                       time,
                       appointmentName,

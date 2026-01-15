@@ -2,7 +2,7 @@ import { Dayjs } from "dayjs";
 import applicationTrackerApi from "../services/api";
 
 
-export async function sendButtonClicked(
+export async function submitButtonClicked(
     date: Dayjs|null,
     time: Dayjs|null,
     appointmentName:string,
