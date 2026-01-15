@@ -5,7 +5,7 @@ import applicationTrackerApi from "../services/api.ts";
 import { useEffect, useState } from "react";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Save, Delete, Send } from "@mui/icons-material";
+import { Delete, Send } from "@mui/icons-material";
 import { getLang } from "../functions/getLanguage";
 import "dayjs/locale/de";
 import "dayjs/locale/en";
@@ -33,7 +33,7 @@ const Lang = getLang();
 
 //*************** Zeug für Dialog ****************
 interface TerminListProps {
-    open?: boolean;
+    open: boolean;
     handleClose?: () => void;
 }
 
@@ -49,7 +49,7 @@ async function sendButtonClicked(
     setErrorMessage: (msg: string) => void
 
 ) {
-  if (!date || !time || !appointmentName || selectedJoboffer === "") {
+  if (!date || !time || !appointmentName || selectedJoboffer === null) {
       setErrorMessage("Alles ausfüllen bitte!"); // Fehler setzen
     return;
   }
@@ -127,7 +127,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
 
 
   //***************** const für dropdown in Hinzufügen *************
-  const [selectedJoboffer, setSelectedJoboffer] = useState<number | "">(""); //Ausgewähltes Jobangebot
+  const [selectedJoboffer, setSelectedJoboffer] = useState<number | null>(null); //Ausgewähltes Jobangebot
 
   //hier wird das array erstellt für Popup um alle daten anzuzeigen
   const { listOfJoboffers, loading, error } = useOverviewOfAllJoboffers();
@@ -317,7 +317,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
               value={selectedJoboffer}
               label="Firma - Bewerbung"
               onChange={(event) =>
-                setSelectedJoboffer(event.target.value as number)
+                setSelectedJoboffer(event.target.value ? Number(event.target.value):null)
               }
               MenuProps={{
                 PaperProps: {
