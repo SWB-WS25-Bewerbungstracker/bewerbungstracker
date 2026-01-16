@@ -3,6 +3,7 @@ package com.bewerbungstracker.joboffer;
 import com.bewerbungstracker.appointment.Appointment;
 import com.bewerbungstracker.appuser.Appuser;
 import com.bewerbungstracker.company.Company;
+import com.bewerbungstracker.document.Document;
 import com.bewerbungstracker.joboffer.contact.Contact;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -48,7 +49,10 @@ public class Joboffer {
     @JoinColumn(name = "appuser")
     private Appuser appuser;
 
-    @OneToMany(mappedBy = "joboffer", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "joboffer", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Appointment> appointments;
+
+    @OneToMany(mappedBy = "joboffer", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Document> documents;
 
 }

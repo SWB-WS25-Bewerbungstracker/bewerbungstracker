@@ -59,7 +59,7 @@ public class JobofferService {
 
     public void saveJobofferInput(JobofferNestedInputDTO jobofferInput, String userEmail) {
         Company company;
-        Contact contact = null;
+
         Appuser appuser = appuserRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Authenticated user not found: " + userEmail));
 
@@ -71,6 +71,7 @@ public class JobofferService {
         else {
             company = companyService.createCompany(jobofferInput.getCompany());
         }
+        Contact contact = null;
         if (jobofferInput.getContact() != null) {
             contact = contactService.createContact(jobofferInput.getContact());
         }
@@ -87,16 +88,12 @@ public class JobofferService {
 
     @Transactional
     public void deleteJobofferById (Integer id) {
-        log.info("Service: Joboffer löschen für Id: {}", id);
-        Optional<Joboffer> joboffer = jobofferRepository.findById(id);
-        log.info("Joboffer {} zum Löschen gefunden für Id: {}", joboffer, id);
-        if (joboffer.isPresent()) { jobofferRepository.delete(joboffer.get());
+        // Id auf null prüfen -> bad Request, wenn nicht auffindbar dann 404
+        boolean jobofferExists = jobofferRepository.existsById(id);
 
-        List<Appointment> appointments = jobofferRepository.getAppointmentsByJobofferId(id);
-        for (Appointment appointment : appointments) {
-            // appointmentService.deleteAppointment(appointment); // Noch nicht implementiert
-            log.debug("Deleted Appointment: " + appointment.getId() + ", " + appointment.getAppointmentname());
-         }
+        if (jobofferExists) {
+            jobofferRepository.deleteById(id);
+            log.info("Joboffer zum Löschen gefunden für Id {} ", id);
          }  else {
         log.warn("Kein Joboffer gefunden mit Id: {}", id);
     }
