@@ -27,4 +27,10 @@ public class AppointmentController {
         appointmentService.createAppointment(input, email);
         return ResponseEntity.ok().body("Appointment successfully created!");
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAppointmentById(@PathVariable Integer id) {
+        appointmentService.deleteAppointment(id);
+        return ResponseEntity.ok().body("Appointment successfully deleted!");
+    }
 }

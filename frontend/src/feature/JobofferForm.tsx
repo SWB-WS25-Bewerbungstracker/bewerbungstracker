@@ -14,7 +14,7 @@ import {type Appointment, removeIdForNewAppointments} from "../functions/parseDa
 import {AutocompleteInput} from "../components/AutocompleteInput.tsx";
 import {useCompanyData} from "../functions/getAllCompaniesAndId.ts";
 import { useCompleteJobofferInformation } from "../functions/getJobofferById.ts";
-
+import { Send } from "@mui/icons-material";
 
 export interface AddJobofferFormProps {
     id?: string; // Id soll optional sein
@@ -280,9 +280,11 @@ const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
                 <FormSection title={"Persönliche Notizen"}>
                     <TextInput name={"jobofferNotes"} control={control} trigger={trigger} label={"Notizen"} minRows={5}/>
                 </FormSection>
-                <Button type="submit" variant={"contained"} sx={{ mt: 2, display: "block" }}>
+                <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 1 }}>
+                <Button type="submit" variant={"contained"} endIcon={<Send />} sx={{ mt: 2}}>
                     Submit
                 </Button>
+                </Box>
             </Box>
         </form>
     );

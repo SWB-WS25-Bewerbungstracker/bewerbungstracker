@@ -14,7 +14,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             appt.appointmentname, 
             appt.joboffer.id, 
             appt.joboffer.jobtitle, 
-            appt.joboffer.companyname)
+            appt.joboffer.companyname,
+            appt.joboffer.contact.email)
         FROM Appointment appt
         WHERE appt.joboffer.appuser.email = ?1
         """)

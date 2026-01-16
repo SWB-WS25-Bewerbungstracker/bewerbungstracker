@@ -3,13 +3,14 @@
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { Box } from "@mui/material";
+
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
-import { Tooltip } from "@mui/material";
+import { Tooltip, Paper } from "@mui/material";
 
 import { getLang } from "../functions/getLanguage";
 import "dayjs/locale/de";
 import "dayjs/locale/en";
+import myTheme from "../theme/theme.ts";
 
 import applicationTrackerApi from "../services/api.ts";
 import { useEffect, useState } from "react";
@@ -52,12 +53,9 @@ function AppointmentDate(props: any) {
             outsideCurrentMonth = {outsideCurrentMonth}
             sx={{
                 color: outsideCurrentMonth ? 'text.disabled' : hasEvent ? 'white' : undefined,
-                backgroundColor: hasEvent ? "orange" : undefined,
+                backgroundColor: hasEvent ? "primary.main" : "transparent",
                 borderRadius: "8px",
-                '&:hover': {
-                    backgroundColor: 'lightblue'  // Beispiel-Hover-Farbe
-
-                }
+                "&:hover": {backgroundColor:"action.hover"},
             }}
             />
         </Tooltip>
@@ -68,7 +66,6 @@ function AppointmentDate(props: any) {
 export default function CalendarAllDates() {
   const Lang = getLang(); //Liest Sprache vom browser für Kalender layout
   const [events, setEvents] = useState<CalendarDate[]>([]);
-
   //Wenn möglich extern lagern um daten nur einmal aufrufen zu müssen
   useEffect(() => {
     applicationTrackerApi
@@ -90,8 +87,9 @@ export default function CalendarAllDates() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
-      <Box sx={{ width: "100%", height: "100%", background: "" }}>
+      <Paper sx={{ width: "100%", display:"inline-block", background: "",border: "1px solid",borderColor:"primary.main", borderRadius: "8px", }}>
         <DateCalendar
+            dayOfWeekFormatter={(day)=>day.format("ddd")}
           showDaysOutsideCurrentMonth
           fixedWeekNumber={6}
           slots={{ day: AppointmentDate }} // slots ersetzt day komponent vom Kalender durch AppointmentDate komponente
@@ -100,12 +98,41 @@ export default function CalendarAllDates() {
           }}
           sx={{
             width: "100%",
-            height: "100%",
+            flex:1,
+              display:"flex",
+              flexDirection:"column",
             backgroundColor: "",
             borderRadius: "8px", //ecken abrunden
+
+              "& .MuiDayCalendar-weekContainer": {
+                  display: "flex",
+                  flex:1,
+
+              },
+
+              "& .MuiPickersDay-root": {
+              flex:1,
+              aspectRatio:"1/1",
+              maxWidth: "unset",
+              },
+
+              "& .MuiDayCalendar-header": {
+
+                  display: "flex",
+                  width:"100%",
+              },
+
+              "& .MuiDayCalendar-weekDayLabel": {
+                  border: "2px solid",
+                  borderColor:"primary.main",
+                  borderRadius:"8px",
+                  flex: 1,
+                  textAlign: "center",
+              },
+
           }}
         />
-      </Box>
+      </Paper>
     </LocalizationProvider>
   );
 }
