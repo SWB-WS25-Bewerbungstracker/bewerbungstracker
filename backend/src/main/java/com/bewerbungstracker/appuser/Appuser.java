@@ -19,7 +19,7 @@ public class Appuser {
     @Column(name = "userlname")
     private String lastname;
 
-    @Column(name = "useremail")
+    @Column(name = "useremail", unique=true)
     private String email;
 
     @ManyToOne

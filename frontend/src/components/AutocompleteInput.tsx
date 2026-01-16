@@ -3,7 +3,6 @@ import {Autocomplete, CircularProgress, type SxProps, TextField, type Theme} fro
 
 interface AutocompleteInputProps {
     name: string;       //name of the field (has to match inputDTO- and FormValues fields)
-    idName: string;
     control: any;       //controller from react-hook-form
     trigger: any;       //trigger for onBlur validation
     label: string;
@@ -16,7 +15,7 @@ interface AutocompleteInputProps {
 }
 
 
-export const AutocompleteInput = ({ name, idName, control, trigger, label, options, setValue, required, loading=false, sx}: AutocompleteInputProps) => {
+export const AutocompleteInput = ({ name, control, trigger, label, options, setValue, required, loading=false, sx}: AutocompleteInputProps) => {
     return(
         <Controller
             name={name}
@@ -40,7 +39,7 @@ export const AutocompleteInput = ({ name, idName, control, trigger, label, optio
 
                     onChange={(_, value) => {
                         if (typeof value === "object" && value) {
-                            setValue(idName, value.id, { shouldDirty: true });
+                            setValue(value.id, { shouldDirty: true });
                             renderProps.field.onChange(value.label);
                         }
                     }}
@@ -48,21 +47,21 @@ export const AutocompleteInput = ({ name, idName, control, trigger, label, optio
                     onInputChange={(_, value) => {
                         renderProps.field.onChange(value);
                         if(!value) {
-                            setValue(idName, undefined, {shouldDirty: true});
+                            setValue(undefined, {shouldDirty: true});
                         }
                     }}
                     onBlur={() => {
                         const trimmed = renderProps.field.value?.trim()
                         if (!trimmed) {
-                            setValue(idName, undefined, { shouldDirty: true });
+                            setValue(undefined, { shouldDirty: true });
                             renderProps.field.onChange("");
                             renderProps.field.onBlur();
                         } else {
                             const found = options.find(o => o.label === trimmed)
                             if(found) {
-                                setValue(idName, found.id, { shouldDirty: true});
+                                setValue(found.id, { shouldDirty: true});
                             } else {
-                                setValue(idName, undefined, { shouldDirty: true });
+                                setValue(undefined, { shouldDirty: true });
                             }
                             renderProps.field.onChange(trimmed === "" ? undefined : trimmed);
                             renderProps.field.onBlur();

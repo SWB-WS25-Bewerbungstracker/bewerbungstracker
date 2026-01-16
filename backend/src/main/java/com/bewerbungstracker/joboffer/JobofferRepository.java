@@ -14,15 +14,13 @@ public interface JobofferRepository extends JpaRepository<Joboffer, Integer> {
             SELECT new com.bewerbungstracker.joboffer.JobofferCardDTO(
                     jo.id,
                     jo.jobtitle,
-                    c.id,
-                    c.companyname,
+                    jo.companyname,
                     MIN(a.appointmentdate)
                 )
                 FROM Joboffer jo
-                LEFT JOIN jo.company c
                 LEFT JOIN Appointment a ON a.joboffer = jo AND a.appointmentdate > CURRENT_TIMESTAMP
                 WHERE jo.appuser.email = ?1
-                GROUP BY jo.id, jo.jobtitle, c.id, c.companyname
+                GROUP BY jo.id, jo.jobtitle, jo.companyname
                 ORDER BY jo.id
            """)
     List<JobofferCardDTO> getAllJoboffers(String email);
@@ -32,4 +30,14 @@ public interface JobofferRepository extends JpaRepository<Joboffer, Integer> {
 
     @Query("SELECT appt FROM Appointment appt WHERE appt.joboffer.id=:id ORDER BY appt.appointmentdate ASC")
     List<Appointment> getAppointmentsByJobofferId(@Param("id") Integer id);
+
+    @Query("""
+            SELECT DISTINCT new com.bewerbungstracker.joboffer.CompanySelectDTO(
+                        jo.companyname
+                        )
+                        FROM Joboffer jo
+                        WHERE jo.appuser.email = ?1
+                        ORDER BY jo.companyname ASC
+            """)
+    List<CompanySelectDTO> getCompanySelection(String email);
 }

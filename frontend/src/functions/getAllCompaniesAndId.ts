@@ -9,7 +9,6 @@ import applicationTrackerApi from "../services/api.ts";
 //-------------------------------------Interfaces----------------------------------------------
 // Tyo der Axios Antwort
 interface ComapnyResponse {
-  id: number;
   companyname: string;
 }
 
@@ -25,7 +24,7 @@ export async function getAllCompanies() {
   try {
     // Axios Anfrage
     const response = await applicationTrackerApi.get(
-      "http://localhost:8080/companies"
+      "http://localhost:8080/joboffer/companies"
     );
     // Antwort weitergeben auf aufrufende Funktion
     return response.data;
@@ -52,7 +51,7 @@ export function useCompanyData() {
 
       // Umwandlung der Daten in ein Array von Firmennamen
       const companyList = response.map((company: ComapnyResponse) => ({
-        id: company.id,
+        id: company.companyname,
         name: company.companyname,
       }));
 

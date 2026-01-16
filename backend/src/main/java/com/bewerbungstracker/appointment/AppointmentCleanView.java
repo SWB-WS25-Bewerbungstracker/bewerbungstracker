@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 @Data
 @RequiredArgsConstructor
 public class AppointmentCleanView {
-    private Integer id;
+    private Integer appointmentId;
     private LocalDateTime appointmentDate;
     private String appointmentName;
 
     public AppointmentCleanView(Appointment appointment) {
-        this.id = appointment.getId();
+        this.appointmentId = appointment.getId();
         this.appointmentDate = appointment.getAppointmentdate();
         this.appointmentName = appointment.getAppointmentname();
     }

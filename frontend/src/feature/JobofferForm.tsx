@@ -1,4 +1,4 @@
-import {Stack, Typography, Button, Box} from "@mui/material"
+import {Stack, Typography, Button, Box, CircularProgress, Alert} from "@mui/material"
 import {useForm} from "react-hook-form";
 import {TextInput} from "../components/TextInput.tsx";
 import FormSection from "../components/FormSection.tsx";
@@ -24,14 +24,11 @@ export interface AddJobofferFormProps {
 const validationSchema = z.object({
     jobofferName: z.string("Pflichtfeld").min(1, "Pflichtfeld"),
     jobofferDescription: z.string().optional(),
-    company: z.object({
-        companyId: z.number().int().optional(),
-        companyName: z.string("Pflichtfeld").min(1, "Pflichtfeld"),
-        companyEmployees: z.number().int().min(0).optional(),
-        companyLogo: z.string().optional(),
-        companyAddress: AddressSchema.optional()
+    companyName: z.string("Pflichtfeld").min(1, "Pflichtfeld"),
+    companyEmployees: z.number().int().min(0).optional(),
+    companyLogo: z.string().optional(),
+    companyAddress: AddressSchema.optional(),
 
-        }),
     contact: z.object({
         contactFirstName: z.string().optional(),
         contactLastName: z.string().optional(),
@@ -50,13 +47,10 @@ const validationSchema = z.object({
 interface FormValues {
     jobofferName: string;
     jobofferDescription?: string;
-    company: {
-        companyId?: number;
-        companyName: string;
-        companyEmployees?: number;
-        companyLogo?: string;
-        companyAddress?: AddressFormValues;
-    };
+    companyName: string;
+    companyEmployees?: number;
+    companyLogo?: string;
+    companyAddress?: AddressFormValues;
     contact?: {
         contactFirstName?: string;
         contactLastName?: string;
@@ -73,15 +67,13 @@ interface FormValues {
 
 //Test form
 const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
-    const { handleSubmit, control, trigger, setValue, watch, reset } = useForm<FormValues>({
+    const { handleSubmit, control, trigger, setValue, reset } = useForm<FormValues>({
         resolver: zodResolver(validationSchema),
         mode: "onBlur",
         reValidateMode: "onBlur",
         defaultValues: {
             jobofferName: "",
-            company: {
-                companyName: "",
-            },
+            companyName: "",
         },
     });
 
@@ -103,18 +95,21 @@ const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
             jobofferDescription: jobofferCompleteInformation.jobofferDescription,
             jobofferNotes: jobofferCompleteInformation.jobofferNotes,
 
-            company: {
-                companyId: jobofferCompleteInformation.companyId,
-                companyName: jobofferCompleteInformation.companyName,
-                companyEmployees: jobofferCompleteInformation.companyEmployees,
-                companyAddress: {
-                    addressStreet: jobofferCompleteInformation.addressStreet,
-                    addressZipCode: jobofferCompleteInformation.addressZipCode,
-                    addressCity: jobofferCompleteInformation.addressCity,
-                    addressCountry: jobofferCompleteInformation.addressCountry,
-                },
+            companyName: jobofferCompleteInformation.companyName,
+            companyEmployees: jobofferCompleteInformation.companyEmployees,
+            companyAddress: {
+                addressStreet: jobofferCompleteInformation.addressStreet,
+                addressStreetNumber: jobofferCompleteInformation.addressStreetNumber,
+                addressZipCode: jobofferCompleteInformation.addressZipCode,
+                addressCity: jobofferCompleteInformation.addressCity,
+                addressCountry: jobofferCompleteInformation.addressCountry,
             },
-
+            contact: {
+                contactFirstName: jobofferCompleteInformation.contactFirstName,
+                contactLastName: jobofferCompleteInformation.contactLastName,
+                contactEmail: jobofferCompleteInformation.contactEmail,
+                contactPhoneNumber: jobofferCompleteInformation.contactPhone,
+            },
             salaryMinimum: jobofferCompleteInformation.jobofferMinimumWage,
             salaryMaximum: jobofferCompleteInformation.jobofferMaximumWage,
             perks: undefined,
@@ -129,12 +124,13 @@ const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
 
     const [appointments, setAppointments] =useState<Appointment[]>([]);
 
-    //watch input of company to disable other company fields if company matches existing company.
-    const companyName = watch("company.companyName").trim();
-    const companyId   = watch("company.companyId");
-    const companyMatched =
-        !!companyId ||
-        listOfCompanies.some(c => c.name === companyName);
+    if(loadingStateJoboffer) {
+        return <CircularProgress />
+    }
+
+    if (errorRetrievingJoboffer) {
+        return <Alert severity="error">{errorRetrievingJoboffer}</Alert>;
+    }
 
     const onSubmit = async (data: FormValues) => {
         //remove empty contact object
@@ -142,8 +138,8 @@ const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
             delete data.contact;
         }
         //remove empty address object
-        if (data.company.companyAddress && Object.values(data.company.companyAddress).every(v => v === undefined)) {
-            delete data.company.companyAddress;
+        if (data.companyAddress && Object.values(data.companyAddress).every(v => v === undefined)) {
+            delete data.companyAddress;
         }
 
         data = JSON.parse(JSON.stringify(data)); //remove undefined fields
@@ -214,8 +210,7 @@ const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
                     <TextInput name={"jobofferDescription"} control={control} trigger={trigger} label={"Kurzbeschreibung der Stelle"} minRows={5}/>
                 </FormSection>
                 <FormSection title={"Firma"} direction={"row"}>
-                    <AutocompleteInput name={"company.companyName"}
-                                       idName={"company.companyId"}
+                    <AutocompleteInput name={"companyName"}
                                        control={control}
                                        trigger={trigger}
                                        label={"Name der Firma"}
@@ -229,15 +224,14 @@ const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
                                        loading={loadingCompanies}
                                        sx={{flex: "0 0 70%"}}
                     />
-                    <TextInput name ={"company.companyEmployees"}
+                    <TextInput name ={"companyEmployees"}
                                control={control}
                                trigger={trigger}
                                label={"Anzahl Mitarbeiter"}
                                type={"number"}
-                               disabled={companyMatched}
                     />
                 </FormSection>
-                <AddressForm control={control} trigger={trigger} baseName={"company.companyAddress"}/>
+                <AddressForm control={control} trigger={trigger} baseName={"companyAddress"}/>
                 <FormSection title={"Distanz"} direction={"row"}>
                     <TextInput name={"distanceLength"} control={control} trigger={trigger} label={"Strecke"}/>
                     <TextInput name ={"distanceTime"} control={control} trigger={trigger} label={"Fahrtzeit"}/>

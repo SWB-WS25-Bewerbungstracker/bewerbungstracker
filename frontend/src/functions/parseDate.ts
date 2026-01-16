@@ -1,5 +1,5 @@
 export interface Appointment {
-  appointmentId: number | string;
+  appointmentId?: number | string;
   appointmentDate: string;
   appointmentName: string;
 }
@@ -76,22 +76,19 @@ export function parseDateToString(passedDate?: string): string | undefined {
 /* ----------------------------------Funktion zum Entfernen der Ids neu erstellter Termine ---------------------------------- */
 
 export function removeIdForNewAppointments(
-  tmpAppointments: Appointment[]
+    tmpAppointments: Appointment[]
 ): Appointment[] {
-  console.debug("Funktion zum Entfernen neuer Appointment Ids aufgerufen");
-  if (!tmpAppointments) {
-    console.debug("Keine Appointments gefunden");
-    return [];
-  } else {
-    return tmpAppointments.map((appointment: Appointment) => {
-      return {
-        // Behalte alle anderen Felder des Appointment-Objekts bei
-        ...appointment,
-        // Wenn die appointmentId mit 'new_' beginnt, auf einen leeren String setzen
-        appointmentId: /^new_/.test(appointment.appointmentId as string) // KI: Regex Test: /^new_/.test(value)
-          ? ""
-          : appointment.appointmentId,
-      };
-    });
-  }
+    console.debug("Funktion zum Entfernen neuer Appointment Ids aufgerufen");
+    if (!tmpAppointments) {
+        console.debug("Keine Appointments gefunden");
+        return [];
+    } else {
+        return tmpAppointments.map(({appointmentId, ...rest}) => {
+            //If appointment is new only return the data without id
+            if(appointmentId && /^new_/.test(appointmentId as string)){
+                return rest;
+            }
+            return {appointmentId, ...rest};
+        });
+    }
 }
