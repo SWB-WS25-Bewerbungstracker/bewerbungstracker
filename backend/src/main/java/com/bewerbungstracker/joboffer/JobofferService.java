@@ -85,8 +85,11 @@ public class JobofferService {
         }
     }
 
+    @Transactional
     public void deleteJobofferById (Integer id) {
+        log.info("Service: Joboffer löschen für Id: {}", id);
         Optional<Joboffer> joboffer = jobofferRepository.findById(id);
+        log.info("Joboffer {} zum Löschen gefunden für Id: {}", joboffer, id);
         if (joboffer.isPresent()) { jobofferRepository.delete(joboffer.get());}
 
         List<Appointment> appointments = jobofferRepository.getAppointmentsByJobofferId(id);
