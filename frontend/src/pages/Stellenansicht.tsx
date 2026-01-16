@@ -47,14 +47,16 @@ const Stellenansicht: React.FC = () => {
   // Funktion zum löschen der Joboffer
   async function deleteJoboffer(id: string | undefined) {
     if (id) {
-      console.debug(`Joboffer Löschen für Id: ${parseInt(id, 10)}`);
+      const joboffer_id = parseInt(id, 10);
+      console.debug(`Joboffer Löschen für Id: ${joboffer_id}`);
       try {
         const response = await applicationTrackerApi.delete(
-          `http://localhost:8080/joboffer/delete/${parseInt(id, 10)}`
+          `/joboffer/delete/${joboffer_id}`
         );
         console.debug(`Status Joboffer Löschen: ${response.status}`);
         if (response.status === 200) {
-          window.close();
+          // redirect noch hinzufügen
+          navigate(`/bewerbungen`);
         }
       } catch (error) {
         console.debug(

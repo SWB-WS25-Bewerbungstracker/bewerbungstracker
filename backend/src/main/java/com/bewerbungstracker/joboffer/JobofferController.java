@@ -31,8 +31,9 @@ public class JobofferController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteJobofferById(@PathVariable Integer id) {
-        log.info("Controller: Joboffer löschen für Id: {}", id);
+        log.info("Controller: Joboffer löschen Request erhalten für Id: {}", id);
         jobofferService.deleteJobofferById(id);
+        log.info("Controller: Joboffer erfolgreich gelöscht");
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Bewerbung erfolgreich gelöscht!");
     }
