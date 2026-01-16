@@ -1,21 +1,5 @@
-/*
- * Custom Keycloak Login Theme
- * Based on colors from frontend/src/App.css
- * 
- * Light Mode Colors (Active):
- * - Background: white
- * - Text: black
- * - Link: black (hover: #000046)
- * - Button Background: lightblue (hover: #65b0ff)
- * 
- * Dark Mode Colors (Commented for future use):
- * - Background: rgb(32, 32, 32)
- * - Text: white
- * - Link: white (hover: light-blue)
- * - Button Background: #00394d (hover: #002546)
- */
-
 /* Reset and Base Styles */
+
 * {
     margin: 0;
     padding: 0;
@@ -35,17 +19,12 @@ body {
     align-items: center;
     min-width: 100%;
     min-height: 100vh;
-    /* Light Mode */
     background-color: white !important;
     background-image: none !important;
     border-radius: 24px !important;
     color: black;
-    /* Dark Mode (commented)
-    background-color: rgb(32, 32, 32);
-    color: white;
-    */
 
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: Inter, sans-serif;
     line-height: 1.5;
     font-weight: 400;
     font-synthesis: none;
@@ -54,15 +33,24 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #000000ff !important;
+        color: white;
+    }
+}
+
 /* Login Container */
 .login-pf body {
-    /* Light Mode */
     background-color: #d4d4ffff !important;
     background-image: none !important;
-    /* Dark Mode (commented)
-    background-color: rgb(32, 32, 32);
-    */
     border-radius: 24px !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    .login-pf body {
+        background-color: #000000ff !important;
+    }
 }
 
 /* Override Keycloak default background */
@@ -73,25 +61,6 @@ body {
     border-radius: 24px;
 }
 
-#kc-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 48px;
-    border-radius: 24px !important;
-}
-
-#kc-container-wrapper {
-    width: 100%;
-    max-width: 500px;
-    padding: 3rem;
-    border-radius: 24px !important;
-    background-color: white;
-    /* Optional: Add subtle shadow for depth */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
 
 /* Header */
 #kc-header {
@@ -102,11 +71,13 @@ body {
 #kc-header-wrapper {
     font-size: 2.4rem;
     font-weight: 600;
-    /* Light Mode */
     color: black;
-    /* Dark Mode (commented)
-    color: white;
-    */
+}
+
+@media (prefers-color-scheme: dark) {
+    #kc-header-wrapper {
+        color: white;
+    }
 }
 
 /* Labels */
@@ -115,11 +86,13 @@ label {
     margin-bottom: 0.5rem;
     font-size: 1.4rem;
     font-weight: 500;
-    /* Light Mode */
-    color: black;
-    /* Dark Mode (commented)
-    color: white;
-    */
+    color: #000000ff;
+}
+
+@media (prefers-color-scheme: dark) {
+    label {
+        color: white;
+    }
 }
 
 /* Smaller labels for username and password fields */
@@ -138,28 +111,43 @@ input[type="email"] {
     font-size: 1.4rem;
     border: 1px solid #ccc;
     border-radius: 16px;
-    /* Light Mode */
     background-color: white;
     color: black;
-    /* Dark Mode (commented)
-    background-color: rgb(45, 45, 45);
-    color: white;
-    border-color: #555;
-    */
+}
+
+@media (prefers-color-scheme: dark) {
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+        background-color: #252525ff;
+        color: white;
+        border-color: #555;
+    }
 }
 
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="email"]:focus {
     outline: none;
-    border-color: lightblue;
-    box-shadow: 0 0 0 3px rgba(173, 216, 230, 0.3);
+    border-color: #85a1ffff;
+    box-shadow: 0 0 0 3px rgba(133, 161, 255, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="email"]:focus {
+        border-color: #002d57ff;
+        box-shadow: 0 0 0 3px rgba(0, 45, 87, 0.3);
+    }
 }
 
 /* Buttons */
 button,
 input[type="submit"],
-.btn {
+.btn, input[class="pf-c-button"]{
     border-radius: 20px;
     border: 1px solid transparent;
     padding: 0.8em 1.6em;
@@ -168,25 +156,36 @@ input[type="submit"],
     font-family: inherit;
     cursor: pointer;
     transition: all 0.25s;
-    /* Light Mode */
-    background-color: lightblue;
-    color: black;
-    /* Dark Mode (commented)
-    background-color: #00394d;
-    color: white;
-    */
+    background-color: #85a1ffff;
+    color: #000000ff;
+}
+
+@media (prefers-color-scheme: dark) {
+
+    button,
+    input[type="submit"],
+    .btn, input[class="pf-c-button"] {
+        background-color: #002d57ff;
+        color: white;
+    }
 }
 
 button:hover,
 input[type="submit"]:hover,
-.btn:hover {
-    /* Light Mode */
+.btn:hover, input[class="pf-c-button"]:hover {
     background-color: #65b0ff;
     border-color: #65b0ff;
-    /* Dark Mode (commented)
-    background-color: #002546;
-    border-color: #002546;
-    */
+}
+
+@media (prefers-color-scheme: dark) {
+
+    button:hover,
+    input[type="submit"]:hover,
+    .btn:hover, input[class="pf-c-button"]:hover {
+        background-color: #001f3d;
+        border-color: #001f3d;
+        color: white;
+    }
 }
 
 button:focus,
@@ -196,25 +195,35 @@ input[type="submit"]:focus,
     outline: 4px auto -webkit-focus-ring-color;
 }
 
-/* Primary Button */
+/* Primary Button (Login & Register) */
 .btn-primary,
-#kc-login {
-    /* Light Mode */
-    background-color: lightblue;
-    color: black;
-    /* Dark Mode (commented)
-    background-color: #00394d;
-    color: white;
-    */
+    .pf-c-button.pf-m-primary.pf-m-block.btn-lg{
+    background-color: #85a1ffff;
+    color: #000000ff;
+}
+
+@media (prefers-color-scheme: dark) {
+
+    .btn-primary,
+    .pf-c-button.pf-m-primary.pf-m-block.btn-lg{
+        background-color: #002d57ff;
+        color: white;
+    }
 }
 
 .btn-primary:hover,
-#kc-login:hover {
-    /* Light Mode */
+    .pf-c-button.pf-m-primary.pf-m-block.btn-lg:hover{
     background-color: #65b0ff;
-    /* Dark Mode (commented)
-    background-color: #002546;
-    */
+}
+
+@media (prefers-color-scheme: dark) {
+
+    .btn-primary:hover,
+    .pf-c-button.pf-m-primary.pf-m-block.btn-lg:hover
+    {
+        background-color: #001f3d;
+        color: white;
+    }
 }
 
 /* Info/Registration Links */
@@ -229,38 +238,6 @@ input[type="submit"]:focus,
     font-size: 1.3rem;
 }
 
-/* Alert Messages */
-.alert {
-    padding: 1rem 1.5rem;
-    margin-bottom: 1.5rem;
-    border-radius: 16px;
-    font-size: 1.3rem;
-}
-
-.alert-error {
-    background-color: #fee;
-    border: 1px solid #fcc;
-    color: #c33;
-}
-
-.alert-warning {
-    background-color: #ffc;
-    border: 1px solid #fc6;
-    color: #963;
-}
-
-.alert-success {
-    background-color: #efe;
-    border: 1px solid #cfc;
-    color: #3c3;
-}
-
-.alert-info {
-    background-color: #eff;
-    border: 1px solid #cff;
-    color: #399;
-}
-
 /* Main Keycloak Login Card Container - Rounded Edges */
 .login-pf-page .card-pf,
 .card-pf {
@@ -268,25 +245,22 @@ input[type="submit"]:focus,
     overflow: hidden;
 }
 
+@media (prefers-color-scheme: dark) {
 
-
-/* Locale Selector */
-#kc-locale {
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
+    .login-pf-page .card-pf,
+    .card-pf {
+        background-color: #252525ff;
+    }
 }
 
-#kc-locale-dropdown {
-    padding: 0.5rem 1rem;
-    border-radius: 12px;
-    border: 1px solid #ccc;
-    /* Light Mode */
-    background-color: #d4d4ffff;
-    color: black;
-    /* Dark Mode (commented)
-    background-color: rgb(45, 45, 45);
-    color: white;
-    border-color: #555;
-    */
+/* Form Groups - Fix white rectangle under password field */
+.form-group,
+.pf-c-input-group {
+    background-color: transparent !important;
+}
+
+/* Ensure all form elements have transparent backgrounds */
+.form-control-feedback,
+.help-block {
+    background-color: transparent !important;
 }

@@ -29,11 +29,10 @@ const Bewerbungen: React.FC = () => {
       <Stack
         padding={2}
         direction={"row"}
-        spacing={"auto"}
         width={"100%"}
         alignItems={"center"}
+        justifyContent="flex-end"
       >
-        <h1>Bewerbungen</h1>
         <Box>
           <CustomButtonGroup
             buttons={[

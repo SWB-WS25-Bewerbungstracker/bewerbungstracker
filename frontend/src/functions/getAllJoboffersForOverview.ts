@@ -32,7 +32,7 @@ interface JobofferResponse {
 export interface JobofferOverview {
   jobofferId: number;
   jobofferName: string;
-  companyID?: number;
+  //companyID?: number;
   companyName?: string;
   companyImage?: string;
   nextAppointment?: string;

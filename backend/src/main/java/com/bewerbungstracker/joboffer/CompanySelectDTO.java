@@ -1,4 +1,4 @@
-package com.bewerbungstracker.company;
+package com.bewerbungstracker.joboffer;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CompanySelectDTO {
-    private Integer id;
     private String companyname;
 }

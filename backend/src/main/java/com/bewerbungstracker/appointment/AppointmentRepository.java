@@ -10,12 +10,21 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     @Query("""
         SELECT new com.bewerbungstracker.appointment.AppointmentDetailDTO(
             appt.id,
-            appt.appointmentdate, 
+            appt.appointmentdate,
             appt.appointmentname, 
-            appt.joboffer.id, 
+            appt.joboffer.id,
             appt.joboffer.jobtitle, 
-            appt.joboffer.company.companyname)
+            appt.joboffer.companyname,
+            appt.joboffer.contact.email)
         FROM Appointment appt
+        WHERE appt.joboffer.appuser.email = ?1
         """)
-    List<AppointmentDetailDTO> getAppointments();
+    List<AppointmentDetailDTO> getAppointmentDetails(String email);
+
+
+    @Query("""
+        SELECT appt FROM Appointment appt
+        WHERE appt.joboffer.appuser.email = ?1 AND appt.joboffer.id = ?2
+    """)
+    List<Appointment> getAppointmentsByJoboffer(String email, Integer jobofferId);
 }

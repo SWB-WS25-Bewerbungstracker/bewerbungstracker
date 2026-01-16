@@ -20,4 +20,6 @@ public class AppointmentDetailDTO {
     String joboffername;
 
     String companyname;
+
+    String contact;
 }

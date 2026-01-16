@@ -15,8 +15,9 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
 
     @GetMapping
-    public List<AppointmentDetailDTO> getAllAppointments() {
-        return appointmentService.getAllAppointments();
+    public List<AppointmentDetailDTO> getAllAppointments(@AuthenticationPrincipal Jwt jwt) {
+        String email = jwt.getClaimAsString("email");
+        return appointmentService.getAllAppointmentsWithDetails(email);
     }
 
     @PostMapping
@@ -25,5 +26,11 @@ public class AppointmentController {
         String email = jwt.getClaimAsString("email");
         appointmentService.createAppointment(input, email);
         return ResponseEntity.ok().body("Appointment successfully created!");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAppointmentById(@PathVariable Integer id) {
+        appointmentService.deleteAppointment(id);
+        return ResponseEntity.ok().body("Appointment successfully deleted!");
     }
 }
