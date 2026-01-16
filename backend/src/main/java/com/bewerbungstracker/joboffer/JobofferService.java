@@ -112,8 +112,7 @@ public class JobofferService {
         //Check if existing Appointment was deleted and delete it
         for (Appointment a : existingAppointments) {
             if (!incomingIds.contains(a.getId())) {
-                log.debug("Deleted Appointment: " + a.getId() + ", " + a.getAppointmentname());
-                //TODO: delete Appoinmtent
+                appointmentService.deleteAppointment(a.getId());
             }
         }
 
