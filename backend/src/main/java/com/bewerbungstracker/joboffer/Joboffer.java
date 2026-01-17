@@ -4,6 +4,7 @@ import com.bewerbungstracker.appointment.Appointment;
 import com.bewerbungstracker.address.Address;
 import com.bewerbungstracker.appuser.Appuser;
 import com.bewerbungstracker.joboffer.contact.Contact;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -45,7 +46,7 @@ public class Joboffer {
     @Column
     private String logo;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "companyaddress")
     private Address address;
 
@@ -62,5 +63,6 @@ public class Joboffer {
     private Appuser appuser;
 
     @OneToMany(mappedBy = "joboffer", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
     private List<Appointment> appointments;
 }
