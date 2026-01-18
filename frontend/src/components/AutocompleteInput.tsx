@@ -75,7 +75,7 @@ export const AutocompleteInput = ({ name, control, trigger, label, options, setV
                             label={label}
                             required={required}
                             error={!!renderProps.fieldState.error}
-                            helperText={renderProps.fieldState.error?.message ?? " "}
+                            helperText={renderProps.fieldState.error?.message}
                             slotProps={{
                                 input: {
                                     ...params.InputProps,

@@ -39,7 +39,6 @@ const validationSchema = z.object({
     distanceTime: z.string().optional(),
     salaryMinimum: z.number().optional(),
     salaryMaximum: z.number().optional(),
-    perks: z.string().optional(),
     jobofferNotes: z.string().optional(),
 })
 
@@ -61,7 +60,6 @@ interface FormValues {
     distanceTime?: string;
     salaryMinimum?: number;
     salaryMaximum?:number;
-    perks?: string;
     jobofferNotes?: string;
 }
 
@@ -112,7 +110,6 @@ const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
             },
             salaryMinimum: jobofferCompleteInformation.jobofferMinimumWage,
             salaryMaximum: jobofferCompleteInformation.jobofferMaximumWage,
-            perks: undefined,
         });
 
         setAppointments(jobofferCompleteInformation.appointments ?? [])
@@ -164,7 +161,7 @@ const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
                 );
                 console.debug(response.status)
                 if (response.status === 201 || response.status === 200) {
-                    //window.close();
+                    window.close();
                 }
             } else {
                 const response = await applicationTrackerApi.post("/joboffer/inputForm", payload,
@@ -176,7 +173,7 @@ const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
                 );
                 console.debug(response.status)
                 if (response.status === 201 || response.status === 200) {
-                    //window.close();
+                    window.close();
                 }
             }
         } catch(error) {
@@ -240,7 +237,6 @@ const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
                     <Stack
                         direction="row"
                         spacing={1}
-                        paddingLeft={1}
                         paddingBottom={1}
                     >
                         <TextInput name={"contact.contactFirstName"} control={control} trigger={trigger} label={"Vorname"}/>
@@ -249,17 +245,18 @@ const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
                     <Stack
                         direction="row"
                         spacing={1}
-                        paddingLeft={1}
                         paddingBottom={1}
                     >
                         <TextInput name={"contact.contactPhoneNumber"} control={control} trigger={trigger} label={"Telefonnummer"}/>
                         <TextInput name ={"contact.contactEmail"} control={control} trigger={trigger} label={"Email"}/>
                     </Stack>
                 </FormSection>
-                <AddAppointments
-                    appointments={appointments}
-                    onAppointmentChange={setAppointments}
-                />
+                <FormSection title={"Termine"}>
+                    <AddAppointments
+                        appointments={appointments}
+                        onAppointmentChange={setAppointments}
+                    />
+                </FormSection>
                 <FormSection title={"Gehaltsspielraum"} direction={"row"}>
                     <TextInput name ={"salaryMinimum"}
                                control={control}
@@ -274,16 +271,13 @@ const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
                                type={"number"}
                     />
                 </FormSection>
-                <FormSection title={"Perks und Benefits"}>
-                    <TextInput name={"perks"} control={control} trigger={trigger} label={"Perks"} minRows={5}/>
-                </FormSection>
                 <FormSection title={"Persönliche Notizen"}>
                     <TextInput name={"jobofferNotes"} control={control} trigger={trigger} label={"Notizen"} minRows={5}/>
                 </FormSection>
-                <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 1 }}>
-                <Button type="submit" variant={"contained"} endIcon={<Send />} sx={{ mt: 2}}>
-                    Submit
-                </Button>
+                <Box sx={{ display: "flex", justifyContent: "flex-end"}}>
+                    <Button type="submit" variant={"contained"} endIcon={<Send/>}>
+                        Submit
+                    </Button>
                 </Box>
             </Box>
         </form>
