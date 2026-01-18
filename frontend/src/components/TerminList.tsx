@@ -310,7 +310,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
           <FormControl fullWidth sx={{ marginTop: 1 }}>
             <InputLabel id="appointmanetName"></InputLabel>
             <TextField
-              label="appointmentName"
+              label="Terminname"
               value={appointmentName}
               onChange={(rabbit) => setAppointmentName(rabbit.target.value)}
               required

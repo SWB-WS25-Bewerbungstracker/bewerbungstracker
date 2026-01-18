@@ -28,13 +28,7 @@ const Home: React.FC = () => {
     const handleClose = () => setOpen(false);
   return (
     <div>
-      <Box sx={{display:"flex",alignItems:"center", justifyContent:"space-between", px:2, marginBottom:2, paddingTop:2, spacing:2}}>
-        <Typography variant="h6">
-            Übersicht aller Termine
-        </Typography>
-
-
-
+      <Box sx={{display:"flex",alignItems:"center", justifyContent:"flex-end", px:2, marginBottom:2, paddingTop:2, spacing:2}}>
             <CustomButtonGroup
                 buttons={[
                     {
@@ -69,11 +63,8 @@ const Home: React.FC = () => {
           spacing={"auto"}
           width={"100%"}
           alignItems={"baseline"}
-          justifyContent={"space-between"}
+          justifyContent={"flex-end"}
         >
-          <Typography variant="h6">
-            Übersicht aller Stellenausschreibungen
-          </Typography>
           <Box>
             <CustomButtonGroup
               buttons={[
