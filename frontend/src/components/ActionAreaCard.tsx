@@ -51,6 +51,8 @@ export default function ActionAreaCard({
       sx={{
         //maxWidth: "100%", // füllt komplette Breite aus
         height: "100%", // füllt komplette Höhe aus
+        border:1,
+        borderColor:"primary.main"
         //display: "flex", // macht die Karte flexibel groß (je nach Containergröße)
         //boxSizing: "border-box", // sorgt dafür, dass Padding und Border nicht die Gesamtbreite überschreiten
         //flexDirection: "column", // Inhalte vertikal anordnen

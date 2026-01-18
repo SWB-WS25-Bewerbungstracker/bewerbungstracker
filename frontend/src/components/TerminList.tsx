@@ -1,6 +1,5 @@
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { parseDatePassed } from "../functions/parseDateFromIso";
-//import axios from "axios"; // für HHTP Requests( PUT, GET, etc.)
 import applicationTrackerApi from "../services/api.ts";
 import { useEffect, useState } from "react";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
@@ -43,7 +42,6 @@ interface TerminListProps {
 //**************** INTERFACE *************************
 export interface terminListProps {
   id: number;
-  //datumSort: string; //datum als ISO string um soriteren zu können.
   datum: string;
   uhrzeit: string;
   firmaName?: string;
@@ -172,10 +170,10 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
             align:"center",
             renderCell:(params) =>(
                 <Box sx={{display:"flex", gap:1}}>
-                    <IconButton size="small"onClick={()=>handleEdit(params.row)}>
+                    <IconButton size="small" onClick={()=>handleEdit(params.row)}>
                         <Edit/>
                     </IconButton>
-                    <IconButton size="small"onClick={()=>handleDelete(params.row)}>
+                    <IconButton size="small" onClick={()=>handleDelete(params.row)}>
                         <Delete/>
                     </IconButton>
                 </Box>
@@ -192,7 +190,6 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
                 const appointmentList = response.data
 
                     .map((t: BackendTermin): terminListProps => {
-                        //const parsed = parseDatePassed(t.appointmentdate);
 
                         return{
                             id: t.appointmentID,
@@ -213,8 +210,6 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
                 setRows(appointmentList)
             });
     },[]);
-
-
 
     return (
         <Paper sx={{ width: '100%', display:"flex" ,flex:1, flexDirection:"column",overflow:"hidden", boxSizing: "border-box", border:1, borderColor:"primary.main",height: height||"auto",}}>
@@ -324,14 +319,20 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
           </FormControl>
 
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
-            <Box sx={{ display: "flex", marginTop: 2, gap: 2 }}>
-              <DatePicker label="Datum" value={date} onChange={onDateChange} slotProps={{textField:{required:true,}}} />
-              <TimePicker
-                label="Uhrzeit"
-                value={time}
-                onChange={onTimeChange}
-                slotProps={{textField:{required:true,}}}
-              />
+            <Box sx={{ display: "flex", marginTop: 2, gap: 3 }}>
+
+                <DatePicker
+                    label="Datum"
+                    value={date}
+                    onChange={onDateChange}
+                    slotProps={{textField:{required:true,}}}
+                />
+                <TimePicker
+                    label="Uhrzeit"
+                    value={time}
+                    onChange={onTimeChange}
+                    slotProps={{textField:{required:true,}}}
+                />
             </Box>
           </LocalizationProvider>
 
