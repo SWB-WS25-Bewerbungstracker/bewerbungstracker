@@ -121,7 +121,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
             field: 'terminName',
             headerName: 'Terminart',
             width: 185,
-            editable: true,
+            editable: false,
             align: 'left',
         },
         {
@@ -154,7 +154,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
         {
             field: 'contact',
             headerName: 'E-Mail',
-            editable: true,
+            editable: false,
             align: 'left',
             flex:1,
             sortable:false,
@@ -169,11 +169,14 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
             disableColumnMenu:true,
             align:"center",
             renderCell:(params) =>(
-                <Box sx={{display:"flex", gap:1,alignContent:"center",height:"100%" }}>
-                    <IconButton size="small" onClick={()=>handleEdit(params.row)}>
+                <Box sx={{display:"flex", gap:1,alignContent:"center",height:"100%",
+                }}>
+                    <IconButton size="small" onClick={()=>handleEdit(params.row)}
+                                sx={{"&:hover": {backgroundColor: "transparent",},}}>
                         <Edit/>
                     </IconButton>
-                    <IconButton size="small" onClick={()=>handleDelete(params.row)}>
+                    <IconButton size="small" onClick={()=>handleDelete(params.row)}
+                                sx={{"&:hover": {backgroundColor: "transparent",},}}>
                         <Delete/>
                     </IconButton>
                 </Box>
@@ -221,33 +224,31 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
                     border:"none",
                     flex:1,
                     padding :0,
-
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "",
-          },
-
           "& .MuiDataGrid-columnHeader": {
             //die einzelnen überschriften
             backgroundColor: "transparent",
             cursor:"default",
           },
-
-          "& .MuiDataGrid-row": {
-            marginBottom: "0px",
-            "&:hover": {
-                backgroundColor: undefined,
-
-            },
+          '& .MuiDataGrid-columnHeader:focus': {
+                 outline: "none",
           },
-           '& .MuiDataGrid-row:last-child': {
-               marginBottom: 0,
-           },
-
-           '& .MuiDataGrid-cell:focus': {
-               outline: "none",
-           },
+          '& .MuiDataGrid-columnHeader:focus-within': {
+                outline: "none",
+          },
            "& .MuiDataGrid-cell": {
                  cursor: "default",
+           },
+           '& .MuiDataGrid-cell:focus': {
+                 outline: "none",
+           },
+           '& .MuiDataGrid-cell:focus-within': {
+                  outline: "none",
+           },
+           "& .MuiIconButton-root:focus-visible": {
+                 outline: "none",
+           },
+           "& .MuiIconButton-root:focus": {
+                 outline: "none",
            },
 
          }}
