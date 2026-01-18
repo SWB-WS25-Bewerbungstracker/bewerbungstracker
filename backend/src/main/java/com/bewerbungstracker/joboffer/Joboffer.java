@@ -1,10 +1,14 @@
 package com.bewerbungstracker.joboffer;
 
+import com.bewerbungstracker.appointment.Appointment;
 import com.bewerbungstracker.address.Address;
 import com.bewerbungstracker.appuser.Appuser;
 import com.bewerbungstracker.joboffer.contact.Contact;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Table(name = "joboffer")
 @Entity
@@ -42,11 +46,11 @@ public class Joboffer {
     @Column
     private String logo;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "companyaddress")
     private Address address;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.REMOVE)
     @JoinColumn(name = "contact", referencedColumnName = "contactid")
     private Contact contact;
 
@@ -58,4 +62,7 @@ public class Joboffer {
     @JoinColumn(name = "appuser")
     private Appuser appuser;
 
+    @OneToMany(mappedBy = "joboffer", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
+    private List<Appointment> appointments;
 }

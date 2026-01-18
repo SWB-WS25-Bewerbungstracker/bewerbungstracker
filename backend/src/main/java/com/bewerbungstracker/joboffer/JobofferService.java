@@ -125,4 +125,17 @@ public class JobofferService {
         }
         jobofferRepository.save(joboffer);
     }
+
+    @Transactional
+    public void deleteJobofferById (Integer id) {
+        // Id auf null prüfen -> bad Request, wenn nicht auffindbar dann 404
+        boolean jobofferExists = jobofferRepository.existsById(id);
+
+        if (jobofferExists) {
+            jobofferRepository.deleteById(id);
+            log.info("Joboffer zum Löschen gefunden für Id {} ", id);
+         }  else {
+        log.warn("Kein Joboffer gefunden mit Id: {}", id);
+    }
+    }
 }
