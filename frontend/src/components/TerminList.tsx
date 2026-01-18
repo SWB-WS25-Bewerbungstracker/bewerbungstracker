@@ -263,7 +263,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
                 columns={columns}
                 columnVisibilityModel={{ id: false }}
                 disableRowSelectionOnClick
-
+                initialState={{sorting:{sortModel:[{field:"datum", sort:"asc",},],},}}
             />
 
       <Dialog
