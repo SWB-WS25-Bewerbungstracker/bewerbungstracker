@@ -169,7 +169,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
             disableColumnMenu:true,
             align:"center",
             renderCell:(params) =>(
-                <Box sx={{display:"flex", gap:1}}>
+                <Box sx={{display:"flex", gap:1,alignContent:"center",height:"100%" }}>
                     <IconButton size="small" onClick={()=>handleEdit(params.row)}>
                         <Edit/>
                     </IconButton>
@@ -215,7 +215,6 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
         <Paper sx={{ width: '100%', display:"flex" ,flex:1, flexDirection:"column",overflow:"hidden", boxSizing: "border-box", border:1, borderColor:"primary.main",height: height||"auto",}}>
 
             <DataGrid
-
                 sx={{
                     minHeight:0,
                     background: '',
@@ -319,7 +318,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
           </FormControl>
 
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
-            <Box sx={{ display: "flex", marginTop: 2, gap: 3 }}>
+            <Box sx={{ display: "flex", marginTop: 2, gap: 3, justifyContent:"space-between",  }}>
 
                 <DatePicker
                     label="Datum"
@@ -342,7 +341,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
                 </Box>
             )}
 
-          <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 1 }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 2 }}>
             <CustomButtonGroup
               buttons={[
                 {

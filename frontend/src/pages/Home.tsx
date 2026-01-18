@@ -6,7 +6,8 @@ import {
   useOverviewOfAllJoboffers,
   type JobofferOverview,
 } from "../functions/getAllJoboffersForOverview";
-import Rabbit from "../components/TerminList"; //die TerminListe
+import Rabbit from "../components/TerminList";
+import {useState} from "react"; //die TerminListe
 
 const Home: React.FC = () => {
   const { listOfJoboffers, loading, error } = useOverviewOfAllJoboffers();
@@ -21,30 +22,45 @@ const Home: React.FC = () => {
       image: joboffer.companyImage || "", // Standardwert falls null, undefined order leerer String
     })
   );
+    const [open, setOpen] = useState(false);
 
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
   return (
     <div>
-      <Box padding={2}>
-        <Typography variant="h4">Startseite</Typography>
-        <Typography>
-          Hier findest du alle deiner Stellenausschreibungen und Termine auf
-          einen Blick
+      <Box sx={{display:"flex",alignItems:"center", justifyContent:"space-between", px:2, marginBottom:3, paddingTop:2, spacing:2}}>
+        <Typography variant="h6">
+            Übersicht aller Termine
         </Typography>
-      </Box>
-      <Box padding={2}>
-        <Typography variant="h6" paddingBottom={2}>
-          Übersicht aller Termine
-        </Typography>
-        <Box
-          style={{
+
+
+
+            <CustomButtonGroup
+                buttons={[
+                    {
+                        label: "Hinzufügen",
+                        icon: <Add />,
+                        iconPosition: "start",
+                        onClick: handleOpen,
+                    },
+                ]}
+            />
+
+    </Box>
+    <Box
+          sx={{
             width: "100%",
+            px:3,
+            marginTop:5
           }}
         >
-          <Rabbit open={false}
-                   handleClose={()=>{}}
-                  height="32vh"/>
-        </Box>
-      </Box>
+          <Rabbit open={open}
+                   handleClose={handleClose}
+                  height="32vh"
+          />
+
+    </Box>
+        
       <div>
         <Stack
           paddingTop={2}
