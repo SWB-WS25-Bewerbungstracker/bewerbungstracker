@@ -40,7 +40,9 @@ const Home: React.FC = () => {
             width: "100%",
           }}
         >
-          <Rabbit/>
+          <Rabbit open={false}
+                   handleClose={()=>{}}
+                  height="32vh"/>
         </Box>
       </Box>
       <div>

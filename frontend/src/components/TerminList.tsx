@@ -36,6 +36,7 @@ const Lang = getLang();
 interface TerminListProps {
     open: boolean;
     handleClose: () => void;
+    height?: string|number;
 }
 
 
@@ -63,7 +64,7 @@ export interface BackendTermin {
 
 //************ MUI Komponente mit einigen anpassungen beginnt ****************
 
-const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
+const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
 
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -216,7 +217,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
 
 
     return (
-        <Paper sx={{ width: '100%', display:"flex" ,flex:1, flexDirection:"column",overflow:"hidden", boxSizing: "border-box", border:1, borderColor:"primary.main",}}>
+        <Paper sx={{ width: '100%', display:"flex" ,flex:1, flexDirection:"column",overflow:"hidden", boxSizing: "border-box", border:1, borderColor:"primary.main",height: height||"auto",}}>
 
             <DataGrid
 
