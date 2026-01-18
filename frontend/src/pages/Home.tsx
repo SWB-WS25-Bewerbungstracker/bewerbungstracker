@@ -28,7 +28,7 @@ const Home: React.FC = () => {
     const handleClose = () => setOpen(false);
   return (
     <div>
-      <Box sx={{display:"flex",alignItems:"center", justifyContent:"space-between", px:2, marginBottom:3, paddingTop:2, spacing:2}}>
+      <Box sx={{display:"flex",alignItems:"center", justifyContent:"space-between", px:2, marginBottom:2, paddingTop:2, spacing:2}}>
         <Typography variant="h6">
             Übersicht aller Termine
         </Typography>
@@ -51,7 +51,7 @@ const Home: React.FC = () => {
           sx={{
             width: "100%",
             px:3,
-            marginTop:5
+            marginTop:3
           }}
         >
           <Rabbit open={open}
