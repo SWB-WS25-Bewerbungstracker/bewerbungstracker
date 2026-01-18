@@ -264,3 +264,47 @@ input[type="submit"]:focus,
 .help-block {
     background-color: transparent !important;
 }
+
+/* Links in plane */
+a, a:hover {
+    color: black;
+}
+
+@media (prefers-color-scheme: dark) {
+    a, a:hover {
+        color: white;
+    }
+}
+
+.required, .col-xs-12.col-sm-12.col-md-12.col-lg-12, .pf-c-form__label.pf-c-form__label-text {
+    display: inline-block;
+    vertical-align: middle;
+}
+/* Change Eye Color to white */
+@media (prefers-color-scheme: dark) {
+    .fa.fa-eye, .fa.fa-eye-slash {
+        filter: brightness(1) invert(1);
+    }
+    .pf-c-button.pf-m-control{
+        background: white;
+    }
+}
+
+.pf-c-button.pf-m-control{
+    background: transparent;
+    margin-left: 2px;
+}
+
+.pf-c-button.pf-m-control::after {
+    border: 1px solid #ccc;
+    border-radius: 16px;
+    background: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+    .pf-c-button.pf-m-control::after {
+        border: 1px solid #555;
+        border-radius: 16px;
+        /* background: transparent; */
+    }
+}
