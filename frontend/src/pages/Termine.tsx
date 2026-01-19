@@ -103,7 +103,7 @@ import Rabbit from '../components/TerminList'; //die TerminListe
 import { Stack } from "@mui/material";
 import CustomButtonGroup from "../components/ButtonGroup";
 import { Add } from "@mui/icons-material";
-
+import { Box } from "@mui/material";
 const Termine: React.FC = () => {
     const [open, setOpen] = useState(false);
 
@@ -111,7 +111,7 @@ const Termine: React.FC = () => {
     const handleClose = () => setOpen(false);
 
     return (
-        <div style={{ width: '100%', height:"85vh", display:"flex", flexDirection:"column", overflow:"hidden",minHeight:0,}}>
+        <Box sx={{ width: '100%', height:"85vh", display:"flex", flexDirection:"column", overflow:"hidden",minHeight:0,}}>
 
             {/* ----- Leiste oben mit Button ----- */}
             <Stack
@@ -122,7 +122,7 @@ const Termine: React.FC = () => {
                 justifyContent="flex-end" // Button immer rechts
                 spacing={2}               // optional: Abstand, falls mehrere Buttons
                 sx={{flexShrink:0,}}
-                marginBottom={3}
+                marginBottom={1}
             >
                 <CustomButtonGroup
                     buttons={[
@@ -136,32 +136,34 @@ const Termine: React.FC = () => {
                 />
             </Stack>
 
-        <div style={{
+        <Box sx={{
             display: 'flex',
             flex:"1",
             backgroundColor: '',
             minHeight:0,
             gap: "1vw",
-            padding: "0 1vw",
+            px:3,
         }}>
-            <div style={{
+            <Box sx={{
+                px:0,
                 flex: '0 0 40%',        // flex-grow, flex-shrink
                 minHeight: 0,
                 overflow: "hidden",
                 minWidth: "50px"
             }}>
                 <CalendarAllDates/>
-            </div>
-            <div style={{
+            </Box>
+            <Box sx={{
+                px:0,
                 minHeight:0,
                 overflow:"hidden",
                 display:"flex",
                 flex: "0 0 59%",
             }}>
                 <Rabbit open={open} handleClose={handleClose}/>
-            </div>
-        </div>
-      </div>
+            </Box>
+        </Box>
+      </Box>
 
     );
 };

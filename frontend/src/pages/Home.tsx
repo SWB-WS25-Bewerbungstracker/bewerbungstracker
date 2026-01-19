@@ -6,7 +6,8 @@ import {
   useOverviewOfAllJoboffers,
   type JobofferOverview,
 } from "../functions/getAllJoboffersForOverview";
-import Rabbit from "../components/TerminList"; //die TerminListe
+import Rabbit from "../components/TerminList";
+import {useState} from "react"; //die TerminListe
 
 const Home: React.FC = () => {
   const { listOfJoboffers, loading, error } = useOverviewOfAllJoboffers();
@@ -21,28 +22,39 @@ const Home: React.FC = () => {
       image: joboffer.companyImage || "", // Standardwert falls null, undefined order leerer String
     })
   );
+    const [open, setOpen] = useState(false);
 
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
   return (
     <div>
-      <Box padding={2}>
-        <Typography variant="h4">Startseite</Typography>
-        <Typography>
-          Hier findest du alle deiner Stellenausschreibungen und Termine auf
-          einen Blick
-        </Typography>
-      </Box>
-      <Box padding={2}>
-        <Typography variant="h6" paddingBottom={2}>
-          Übersicht aller Termine
-        </Typography>
-        <Box
-          style={{
+      <Box sx={{display:"flex",alignItems:"center", justifyContent:"flex-end", px:2, marginBottom:2, paddingTop:2, spacing:2}}>
+            <CustomButtonGroup
+                buttons={[
+                    {
+                        label: "Hinzufügen",
+                        icon: <Add />,
+                        iconPosition: "start",
+                        onClick: handleOpen,
+                    },
+                ]}
+            />
+
+    </Box>
+    <Box
+          sx={{
             width: "100%",
+            px:3,
+            marginTop:3
           }}
         >
-          <Rabbit/>
-        </Box>
-      </Box>
+          <Rabbit open={open}
+                   handleClose={handleClose}
+                  height="32vh"
+          />
+
+    </Box>
+        
       <div>
         <Stack
           paddingTop={2}
@@ -51,11 +63,8 @@ const Home: React.FC = () => {
           spacing={"auto"}
           width={"100%"}
           alignItems={"baseline"}
-          justifyContent={"space-between"}
+          justifyContent={"flex-end"}
         >
-          <Typography variant="h6">
-            Übersicht aller Stellenausschreibungen
-          </Typography>
           <Box>
             <CustomButtonGroup
               buttons={[

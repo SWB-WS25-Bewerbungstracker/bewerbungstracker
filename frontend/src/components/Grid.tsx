@@ -19,6 +19,7 @@ export default function CardGrid({ data }: CardGridProps) {
         width: "100%", // volle Bildschirmbreite
         boxSizing: "border-box", // Padding bei der Berechnung der Gesamtbreite berücksichtigen
         padding: 2, // Padding für den ganzen Container außenrum
+        paddingTop:0,
       }}
     >
       <Grid

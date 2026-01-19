@@ -1,6 +1,5 @@
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { parseDatePassed } from "../functions/parseDateFromIso";
-//import axios from "axios"; // für HHTP Requests( PUT, GET, etc.)
 import applicationTrackerApi from "../services/api.ts";
 import { useEffect, useState } from "react";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
@@ -36,13 +35,13 @@ const Lang = getLang();
 interface TerminListProps {
     open: boolean;
     handleClose: () => void;
+    height?: string|number;
 }
 
 
 //**************** INTERFACE *************************
 export interface terminListProps {
   id: number;
-  //datumSort: string; //datum als ISO string um soriteren zu können.
   datum: string;
   uhrzeit: string;
   firmaName?: string;
@@ -63,7 +62,7 @@ export interface BackendTermin {
 
 //************ MUI Komponente mit einigen anpassungen beginnt ****************
 
-const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
+const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
 
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -122,7 +121,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
             field: 'terminName',
             headerName: 'Terminart',
             width: 185,
-            editable: true,
+            editable: false,
             align: 'left',
         },
         {
@@ -155,7 +154,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
         {
             field: 'contact',
             headerName: 'E-Mail',
-            editable: true,
+            editable: false,
             align: 'left',
             flex:1,
             sortable:false,
@@ -170,11 +169,14 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
             disableColumnMenu:true,
             align:"center",
             renderCell:(params) =>(
-                <Box sx={{display:"flex", gap:1}}>
-                    <IconButton size="small"onClick={()=>handleEdit(params.row)}>
+                <Box sx={{display:"flex", gap:1,alignContent:"center",height:"100%",
+                }}>
+                    <IconButton size="small" onClick={()=>handleEdit(params.row)}
+                                sx={{"&:hover": {backgroundColor: "transparent",},}}>
                         <Edit/>
                     </IconButton>
-                    <IconButton size="small"onClick={()=>handleDelete(params.row)}>
+                    <IconButton size="small" onClick={()=>handleDelete(params.row)}
+                                sx={{"&:hover": {backgroundColor: "transparent",},}}>
                         <Delete/>
                     </IconButton>
                 </Box>
@@ -191,7 +193,6 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
                 const appointmentList = response.data
 
                     .map((t: BackendTermin): terminListProps => {
-                        //const parsed = parseDatePassed(t.appointmentdate);
 
                         return{
                             id: t.appointmentID,
@@ -213,46 +214,41 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
             });
     },[]);
 
-
-
     return (
-        <Paper sx={{ width: '100%', display:"flex" ,flex:1, flexDirection:"column",overflow:"hidden", boxSizing: "border-box", border:1, borderColor:"primary.main",}}>
+        <Paper sx={{ width: '100%', display:"flex" ,flex:1, flexDirection:"column",overflow:"hidden", boxSizing: "border-box", border:1, borderColor:"primary.main",height: height||"auto",}}>
 
             <DataGrid
-
                 sx={{
                     minHeight:0,
                     background: '',
                     border:"none",
                     flex:1,
                     padding :0,
-
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "",
-          },
-
           "& .MuiDataGrid-columnHeader": {
             //die einzelnen überschriften
             backgroundColor: "transparent",
             cursor:"default",
           },
-
-          "& .MuiDataGrid-row": {
-            marginBottom: "0px",
-            "&:hover": {
-                backgroundColor: undefined,
-
-            },
+          '& .MuiDataGrid-columnHeader:focus': {
+                 outline: "none",
           },
-           '& .MuiDataGrid-row:last-child': {
-               marginBottom: 0,
-           },
-
-           '& .MuiDataGrid-cell:focus': {
-               outline: "none",
-           },
+          '& .MuiDataGrid-columnHeader:focus-within': {
+                outline: "none",
+          },
            "& .MuiDataGrid-cell": {
                  cursor: "default",
+           },
+           '& .MuiDataGrid-cell:focus': {
+                 outline: "none",
+           },
+           '& .MuiDataGrid-cell:focus-within': {
+                  outline: "none",
+           },
+           "& .MuiIconButton-root:focus-visible": {
+                 outline: "none",
+           },
+           "& .MuiIconButton-root:focus": {
+                 outline: "none",
            },
 
          }}
@@ -262,7 +258,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
                 columns={columns}
                 columnVisibilityModel={{ id: false }}
                 disableRowSelectionOnClick
-
+                initialState={{sorting:{sortModel:[{field:"datum", sort:"asc",},],},}}
             />
 
       <Dialog
@@ -315,7 +311,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
           <FormControl fullWidth sx={{ marginTop: 1 }}>
             <InputLabel id="appointmanetName"></InputLabel>
             <TextField
-              label="appointmentName"
+              label="Terminname"
               value={appointmentName}
               onChange={(rabbit) => setAppointmentName(rabbit.target.value)}
               required
@@ -323,14 +319,20 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
           </FormControl>
 
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
-            <Box sx={{ display: "flex", marginTop: 2, gap: 2 }}>
-              <DatePicker label="Datum" value={date} onChange={onDateChange} slotProps={{textField:{required:true,}}} />
-              <TimePicker
-                label="Uhrzeit"
-                value={time}
-                onChange={onTimeChange}
-                slotProps={{textField:{required:true,}}}
-              />
+            <Box sx={{ display: "flex", marginTop: 2, gap: 3, justifyContent:"space-between",  }}>
+
+                <DatePicker
+                    label="Datum"
+                    value={date}
+                    onChange={onDateChange}
+                    slotProps={{textField:{required:true,}}}
+                />
+                <TimePicker
+                    label="Uhrzeit"
+                    value={time}
+                    onChange={onTimeChange}
+                    slotProps={{textField:{required:true,}}}
+                />
             </Box>
           </LocalizationProvider>
 
@@ -340,7 +342,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose}) => {
                 </Box>
             )}
 
-          <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 1 }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 2 }}>
             <CustomButtonGroup
               buttons={[
                 {
