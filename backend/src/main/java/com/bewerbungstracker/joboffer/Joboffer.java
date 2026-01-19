@@ -32,9 +32,6 @@ public class Joboffer {
     private Integer wagemax;
 
     @Column
-    private Integer rating;
-
-    @Column
     private String notes;
 
     @Column(nullable = false)
@@ -53,10 +50,6 @@ public class Joboffer {
     @ManyToOne (cascade = CascadeType.REMOVE)
     @JoinColumn(name = "contact", referencedColumnName = "contactid")
     private Contact contact;
-
-    /*@ManyToOne
-    @JoinColumn(name = "company")
-    private Company company;*/
 
     @ManyToOne()
     @JoinColumn(name = "appuser")

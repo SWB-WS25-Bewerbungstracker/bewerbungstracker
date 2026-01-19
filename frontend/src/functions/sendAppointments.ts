@@ -22,7 +22,7 @@ export async function submitButtonClicked(
         .hour(time.hour())
         .minute(time.minute())
         .second(0)
-        .toISOString();
+        .format("YYYY-MM-DDTHH:mm:ss");
 
     console.debug("Ich sende ans Backend:", {
         appointmentdate: carrotForRabbit,

@@ -30,7 +30,6 @@ export const AddressForm = ({ control, trigger, baseName }: { control: any; trig
             <Stack
                 direction="row"
                 spacing={1}
-                paddingLeft={1}
                 paddingBottom={1}
             >
                 <TextInput name={`${baseName}.addressStreet`} control={control} trigger={trigger} label={"Straße"}/>
@@ -39,7 +38,6 @@ export const AddressForm = ({ control, trigger, baseName }: { control: any; trig
             <Stack
                 direction="row"
                 spacing={1}
-                paddingLeft={1}
                 paddingBottom={1}
             >
                 <TextInput name={`${baseName}.addressZipCode`} control={control} trigger={trigger} label={"PLZ"} sx={{flex: "0 0 20%"}}/>

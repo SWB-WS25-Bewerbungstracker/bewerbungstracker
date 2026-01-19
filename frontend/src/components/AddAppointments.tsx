@@ -127,7 +127,7 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
       // dann daraus ein neues Appointment erstellen
       const newAppointment: Appointment = {
         appointmentId: appointmentData?.appointmentId || `new_${Date.now()}`, // KI Fehlerbehebung: Falls keine ID, neuen Termin anlegen
-        appointmentDate: combinedDateAndTime.toISOString(),
+        appointmentDate: combinedDateAndTime.format("YYYY-MM-DDTHH:mm:ss"),
         appointmentName,
       };
 
@@ -186,7 +186,6 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
   /* ----------------------------------Termin Input Formular---------------------------------- */
 
   return (
-    <Paper>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
         <Stack direction={"row"} spacing={2} alignItems={"center"}>
           <DatePicker
@@ -282,7 +281,6 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
           </ul>
         )}
       </LocalizationProvider>
-    </Paper>
   );
 };
 

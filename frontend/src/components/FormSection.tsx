@@ -11,7 +11,7 @@ export interface FormSectionProps {
 
 const FormSection = ({title, children, direction}: FormSectionProps) =>
     (
-        <Paper sx={{p: 2}}>
+        <Paper sx={{paddingBottom: 1, border: 1, borderColor: "primary.main"}}>
             <Stack
                 direction={"row"}
                 alignItems={"center"}

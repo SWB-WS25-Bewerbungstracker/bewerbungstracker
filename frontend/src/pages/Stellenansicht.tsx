@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom";
 import applicationTrackerApi from "../services/api";
 // import BusinessIcon from "@mui/icons-material/Business";
 
-const TitleWidth = "20%";
+const TitleMinWidth = "150px";
+const TitleWidth = "25vw";
 
 //-------------------------------------Seite----------------------------------------------
 const Stellenansicht: React.FC = () => {
@@ -137,15 +138,15 @@ const Stellenansicht: React.FC = () => {
 
         {/* ----------------------------Stellenname---------------------------- */}
         <Stack direction="column" spacing={2}>
-          <Paper>
+          <Paper sx={{border: 1, borderColor: "primary.main"}}>
             <Typography variant="h5">
               {jobofferCompleteInformation.jobofferName}
             </Typography>
           </Paper>
           {/* ----------------------------Termine---------------------------- */}
-          <Paper>
+          <Paper sx={{border: 1, borderColor: "primary.main"}}>
             <Stack direction={"row"} spacing={2} alignItems={"center"}>
-              <Box minWidth={TitleWidth}>
+              <Box minWidth={TitleMinWidth} width={TitleWidth}>
                 <Typography variant="h6"> Termine </Typography>
               </Box>
               {/* Termien als Liste */}
@@ -153,7 +154,7 @@ const Stellenansicht: React.FC = () => {
               {jobofferCompleteInformation.appointments &&
               jobofferCompleteInformation.appointments.length > 0 ? (
                 // KI Bugfixing: map läuft auch bei leerem Array, daher Prüfen ob Array Länge > 0 hat
-                <ul>
+                <ul style={{margin: 0, paddingLeft: 22}}>
                   {jobofferCompleteInformation.appointments.map(
                     (appointment) => {
                       return (
@@ -180,35 +181,24 @@ const Stellenansicht: React.FC = () => {
             </Stack>
           </Paper>
           {/* ----------------------------Beschreibung---------------------------- */}
-          <Paper>
-            <Typography variant="h6">Beschreibung</Typography>
-            {jobofferCompleteInformation.jobofferDescription ? (
-              <Typography variant="body1">
-                {jobofferCompleteInformation.jobofferDescription}
-              </Typography>
-            ) : (
-              <Typography> Noch keine Beschreibung angegeben </Typography>
-            )}
-          </Paper>
-          {/* ----------------------------Rating---------------------------- */}
-          <Paper>
+          <Paper sx={{border: 1, borderColor: "primary.main"}}>
             <Stack alignItems={"baseline"}>
-              <Box minWidth={TitleWidth}>
-                <Typography variant="h6"> Rating </Typography>
+              <Box minWidth={TitleMinWidth} width={TitleWidth}>
+                <Typography variant="h6">Beschreibung</Typography>
               </Box>
-              {jobofferCompleteInformation.jobofferRating ? (
-                <Typography variant="body1">
-                  {jobofferCompleteInformation.jobofferRating}
-                </Typography>
-              ) : (
-                <Typography> Noch kein Rating angegeben</Typography>
-              )}
+                {jobofferCompleteInformation.jobofferDescription ? (
+                  <Typography variant="body1">
+                    {jobofferCompleteInformation.jobofferDescription}
+                  </Typography>
+                ) : (
+                  <Typography> Noch keine Beschreibung angegeben </Typography>
+                )}
             </Stack>
           </Paper>
           {/* ----------------------------Gehalt---------------------------- */}
-          <Paper>
-            <Stack alignItems={"baseline"}>
-              <Box minWidth={TitleWidth}>
+          <Paper sx={{border: 1, borderColor: "primary.main"}}>
+            <Stack alignItems={"baseline"} >
+              <Box minWidth={TitleMinWidth} width={TitleWidth}>
                 <Typography variant="h6"> Gehalt </Typography>
               </Box>
               {jobofferCompleteInformation.jobofferMinimumWage &&
@@ -232,10 +222,10 @@ const Stellenansicht: React.FC = () => {
             </Stack>
           </Paper>
           {/* ----------------------------Unternehmen und Mitarbeiteranzahl---------------------------- */}
-          <Paper>
+          <Paper sx={{border: 1, borderColor: "primary.main"}}>
             {jobofferCompleteInformation.companyName ? (
               <Stack direction={"row"}>
-                <Box minWidth={TitleWidth}>
+                <Box minWidth={TitleMinWidth} width={TitleWidth}>
                   <Typography variant="h6">
                     {jobofferCompleteInformation.companyName}
                   </Typography>
@@ -243,7 +233,7 @@ const Stellenansicht: React.FC = () => {
 
                 {jobofferCompleteInformation.companyEmployees ? (
                   <Stack alignItems={"baseline"}>
-                    <Box minWidth={TitleWidth}>
+                    <Box minWidth={"20%"}>
                       <Typography variant="body1">
                         Mitarbeiteranzahl:
                       </Typography>
@@ -261,9 +251,9 @@ const Stellenansicht: React.FC = () => {
             )}
           </Paper>
           {/* ----------------------------Adresse---------------------------- */}
-          <Paper>
-            <Stack direction={"row"} spacing={2} alignItems={"center"}>
-              <Box minWidth={TitleWidth}>
+          <Paper sx={{border: 1, borderColor: "primary.main"}}>
+            <Stack direction={"row"} spacing={1} alignItems={"center"}>
+              <Box minWidth={TitleMinWidth} width={TitleWidth}>
                 <Typography variant="h6"> Adresse </Typography>
               </Box>
               {jobofferCompleteInformation.addressId ? (
@@ -293,10 +283,10 @@ const Stellenansicht: React.FC = () => {
               )}
             </Stack>
           </Paper>
-          {/* ----------------------------Adresse---------------------------- */}
-          <Paper>
-            <Stack direction={"row"} spacing={2} alignItems={"center"}>
-              <Box minWidth={TitleWidth}>
+          {/* ----------------------------Contact---------------------------- */}
+          <Paper sx={{border: 1, borderColor: "primary.main"}}>
+            <Stack direction={"row"} spacing={1} alignItems={"center"}>
+              <Box minWidth={TitleMinWidth} width={TitleWidth}>
                 <Typography variant="h6"> Kontaktperson </Typography>
               </Box>
               {jobofferCompleteInformation.contactId ? (
@@ -318,10 +308,12 @@ const Stellenansicht: React.FC = () => {
               )}
             </Stack>
           </Paper>
-          {/* ----------------------------Adresse---------------------------- */}
-          <Paper>
-            <Stack direction={"column"}>
-              <Typography variant="h6">Notizen: </Typography>
+          {/* ----------------------------Notizen---------------------------- */}
+          <Paper sx={{border: 1, borderColor: "primary.main"}}>
+            <Stack alignItems={"baseline"}>
+              <Box minWidth={TitleMinWidth} width={TitleWidth}>
+                <Typography variant="h6">Notizen: </Typography>
+              </Box>
               {jobofferCompleteInformation.jobofferNotes ? (
                 <Typography variant="body1">
                   {jobofferCompleteInformation.jobofferNotes}

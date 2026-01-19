@@ -67,7 +67,7 @@ export const TextInput = ({
                     onChange={(e) => handleInputChange(e, renderProps.field, type)}
                     onBlur={() => handleBlur(renderProps.field, trigger, name, type)}
                     error={!!renderProps.fieldState.error}
-                    helperText={renderProps.fieldState.error?.message ?? " "}
+                    helperText={renderProps.fieldState.error?.message}
                     fullWidth
                     label={label}
                     multiline={minRows > 1}
