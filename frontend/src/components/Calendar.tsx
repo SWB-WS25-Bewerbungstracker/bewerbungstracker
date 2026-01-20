@@ -3,13 +3,16 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import { Tooltip, Paper } from "@mui/material";
+import { useEffect, useState } from "react";
+import type { PickersDayProps } from "@mui/x-date-pickers/PickersDay";
+
+import { parseDatePassed } from "../functions/parseDateFromIso";
+import applicationTrackerApi from "../services/api.ts";
 import { getLang } from "../functions/getLanguage";
+
 import "dayjs/locale/de";
 import "dayjs/locale/en";
-import applicationTrackerApi from "../services/api.ts";
-import { useEffect, useState } from "react";
-import { parseDatePassed } from "../functions/parseDateFromIso";
-import type { PickersDayProps } from "@mui/x-date-pickers/PickersDay";
+
 /***************************
  der Standard Kalender von MUI rendert jeden Tag die interne Komponente PickersDay.
  PickersDay bekommtProps wie z.B. select, disable etc aber auch day (das angezeigte Datum).
@@ -28,12 +31,9 @@ interface AppointmentDayProps extends PickersDayProps{
 }
 
 function AppointmentDate(props: AppointmentDayProps) {
-    const { day, events = [], outsideCurrentMonth, ...other} = props; //...other übergibt alle übrigen Props ohne manuell zu übergeben
-
+  const { day, events = [], outsideCurrentMonth, ...other} = props; //...other übergibt alle übrigen Props ohne manuell zu übergeben
   const dateStr = day.format("YYYY-MM-DD"); //das Datum 'day' ins richtige Format bringen
   const hasEvent = events.some((e: CalendarDate) => e.datum === dateStr); //event.some() prüft ob minfdestens ein Event in events am aktuellen Datum ist
-
-  // Nur Events dieses Tages um einen Text für hover zu bekommen
   const dayEvents = events.filter((ev: CalendarDate) => ev.datum === dateStr);
   const hoverText = dayEvents.map(
     (ev) => `${ev.firmaName} - (${ev.uhrzeit}) ${ev.terminName} `
@@ -45,8 +45,8 @@ function AppointmentDate(props: AppointmentDayProps) {
         arrow
         placement="top"
         >
-        <PickersDay     // stellt einen einzelnen Tag im Kalender dar
-            {...other}  //auch hier, alle Props an PickersDay übergeben ohne sie nochmal in day oder events zu entpacken
+        <PickersDay
+            {...other}
             day={day}
             outsideCurrentMonth = {outsideCurrentMonth}
             sx={{
@@ -72,7 +72,7 @@ export default function CalendarAllDates() {
         const mappedCalemndar = response.data.map((t: any) => {
           const parsed  = parseDatePassed(t.appointmentdate) as string[]; // uhrzeit:parsed kann null sien => fehler. durch as string versichern wir, dass es nie null ist => nicht mehr als fehler markiert
           return {
-            datum: t.appointmentdate.split("T")[0], //Teilt an 'T' in datum und Uhrzeit in array mit [0] wird datum abgerufen. [1] ist der 2. Teil im array also Uhrzeit
+            datum: t.appointmentdate.split("T")[0],
             uhrzeit: parsed[2],
             terminName: t.appointmentname,
             firmaName: t.companyname,
@@ -84,12 +84,13 @@ export default function CalendarAllDates() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
-      <Paper sx={{ width: "100%", display:"inline-block", background: "",border: "1px solid",borderColor:"primary.main", borderRadius: "8px", }}>
+      <Paper sx={{ width: "100%", display:"inline-block",border: "1px solid",borderColor:"primary.main", borderRadius: "8px", }}>
         <DateCalendar
             dayOfWeekFormatter={(day)=>day.format("ddd")}
           showDaysOutsideCurrentMonth
           fixedWeekNumber={6}
-          slots={{ day: AppointmentDate }} // slots ersetzt day komponent vom Kalender durch AppointmentDate komponente
+            //Mui rendert standartmäßig Pickersday. hier ersetzt durch slots um events mit reinbringen zu können.
+          slots={{ day: AppointmentDate }}
           slotProps={{
             day: { events, } as AppointmentDayProps //Liefert Prop "events" mit an an AppointmentDate
           }}
@@ -98,27 +99,20 @@ export default function CalendarAllDates() {
             flex:1,
               display:"flex",
               flexDirection:"column",
-            backgroundColor: "",
             borderRadius: "8px",
-
               "& .MuiDayCalendar-weekContainer": {
                   display: "flex",
                   flex:1,
-
               },
-
               "& .MuiPickersDay-root": {
               flex:1,
               aspectRatio:"1/1",
               maxWidth: "unset",
               },
-
               "& .MuiDayCalendar-header": {
-
                   display: "flex",
                   width:"100%",
               },
-
               "& .MuiDayCalendar-weekDayLabel": {
                   border: "2px solid",
                   borderColor:"primary.main",
@@ -126,7 +120,6 @@ export default function CalendarAllDates() {
                   flex: 1,
                   textAlign: "center",
               },
-
           }}
         />
       </Paper>
