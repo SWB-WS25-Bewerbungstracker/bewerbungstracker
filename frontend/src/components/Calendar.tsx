@@ -6,7 +6,7 @@ import { Tooltip, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import type { PickersDayProps } from "@mui/x-date-pickers/PickersDay";
 
-import { parseDateFromIso } from "../functions/parseDateFromIso";
+import { parseDateFromIso } from "../functions/parseDate";
 import applicationTrackerApi from "../services/api.ts";
 import { getLang } from "../functions/getLanguage";
 
@@ -61,10 +61,10 @@ export default function CalendarAllDates() {
   //Wenn möglich extern lagern um daten nur einmal aufrufen zu müssen
   useEffect(() => {
     applicationTrackerApi
-      .get("http://localhost:8080/appointments")
+      .get("/appointments")
       .then((response) => {
         const mappedCalemndar = response.data.map((t: any) => {
-          const parsed = parseDateFromIsO(t.appointmentdate) as string[];
+          const parsed = parseDateFromIso(t.appointmentdate) as string[];
           return {
             datum: t.appointmentdate.split("T")[0],
             uhrzeit: parsed[2],
@@ -88,7 +88,6 @@ export default function CalendarAllDates() {
           borderRadius: "8px",
         }}
       >
-      <Paper sx={{ width: "100%", display:"inline-block",border: "1px solid",borderColor:"primary.main", borderRadius: "8px", }}>
         <DateCalendar
           dayOfWeekFormatter={(day) => day.format("ddd")}
           showDaysOutsideCurrentMonth

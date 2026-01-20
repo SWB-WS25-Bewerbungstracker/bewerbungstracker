@@ -26,7 +26,7 @@ import {submitButtonClicked} from "../functions/sendAppointments.ts";
 import {deleteAppointment}  from "../functions/deleteAppointment.ts";
 import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOverview";
 import { getLang } from "../functions/getLanguage";
-import { parseDatePassed } from "../functions/parseDateFromIso";
+import { parseDateFromIso } from "../functions/parseDate";
 import CustomButtonGroup from "../components/ButtonGroup";
 import applicationTrackerApi from "../services/api.ts";
 
@@ -103,7 +103,7 @@ const TerminList: React.FC<TerminListDialogProps> = ({open, handleClose, height}
             sortable: true,
 
             renderCell: (params) => {
-                const parsed = parseDatePassed(params.value as string);
+                const parsed = parseDateFromIso(params.value as string);
                 return <span>{parsed?.[1]}</span>;
             }
         },
@@ -118,7 +118,7 @@ const TerminList: React.FC<TerminListDialogProps> = ({open, handleClose, height}
             sortable: false,
 
             renderCell: (params) => {
-                const parsed = parseDatePassed(params.value as string);
+                const parsed = parseDateFromIso(params.value as string);
                 return <span>{parsed?.[2]}</span>;}
         },
         {
