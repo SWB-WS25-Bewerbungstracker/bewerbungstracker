@@ -35,18 +35,6 @@ Im Projekt verzeichnis:
 docker compose up
 ```
 
-**Keycloak User anlegen**
-1. Im Browser auf "http://authentication:7080" navigieren.
-2. Auf bt-realm wechseln.
-3. Unter Users einen neuen User anlegen
-   mit einer in der Datenbank hinterlegten Mail anlegen.\
-   Emails aus der Test Datenbank:
-    - a.rogner@example.net
-    - om39456@example.com
-    - tycho.u@example.net
-    - belinda64@example.net
-    - henrike.briemer@example.com
-
 **Starten vom Frontend**
 Im Frontend Verzeichnis:
 1. Packages installieren:
