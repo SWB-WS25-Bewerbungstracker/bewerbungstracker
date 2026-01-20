@@ -11,15 +11,14 @@ interface CardGridProps {
 }
 
 // Haupt-Komponente, die das Grid enthält
-export default function CardGrid({ data }: CardGridProps) {
-  // console.debug('Daten an CardGrid:', data); // Debugging
+export default function CardGrid({ data }: Readonly<CardGridProps>) {
   return (
     <Box
       sx={{
         width: "100%", // volle Bildschirmbreite
         boxSizing: "border-box", // Padding bei der Berechnung der Gesamtbreite berücksichtigen
         padding: 2, // Padding für den ganzen Container außenrum
-        paddingTop:0,
+        paddingTop: 0,
       }}
     >
       <Grid

@@ -35,7 +35,7 @@ export function parseDateFromIso(isoDate: string): string[] | null {
 
 // Funktion, um ein Datum in einen String für den nächsten Termin umzuwandeln
 export function parseDateToNextAppointmentString(
-  passedDate?: string
+  passedDate?: string,
 ): string | undefined {
   // Versuchen, die Rückgabewerte der parseDatePassed-Funktion zu entpacken, falls dieser existiert
   if (passedDate) {
@@ -76,19 +76,19 @@ export function parseDateToString(passedDate?: string): string | undefined {
 /* ----------------------------------Funktion zum Entfernen der Ids neu erstellter Termine ---------------------------------- */
 
 export function removeIdForNewAppointments(
-    tmpAppointments: Appointment[]
+  tmpAppointments: Appointment[],
 ): Appointment[] {
-    console.debug("Funktion zum Entfernen neuer Appointment Ids aufgerufen");
-    if (!tmpAppointments) {
-        console.debug("Keine Appointments gefunden");
-        return [];
-    } else {
-        return tmpAppointments.map(({appointmentId, ...rest}) => {
-            //If appointment is new only return the data without id
-            if(appointmentId && /^new_/.test(appointmentId as string)){
-                return rest;
-            }
-            return {appointmentId, ...rest};
-        });
-    }
+  console.debug("Funktion zum Entfernen neuer Appointment Ids aufgerufen");
+  if (tmpAppointments) {
+    return tmpAppointments.map(({ appointmentId, ...rest }) => {
+      //If appointment is new only return the data without id
+      if (appointmentId && /^new_/.test(appointmentId as string)) {
+        return rest;
+      }
+      return { appointmentId, ...rest };
+    });
+  } else {
+    console.debug("Keine Appointments gefunden");
+    return [];
+  }
 }

@@ -89,13 +89,13 @@ export async function getAllJobofferInformationById(id: string | number) {
   try {
     // Daten mit Axios holen
     const response = await applicationTrackerApi.get<JobofferResponse>(
-      `http://localhost:8080/joboffer/${id}`
+      `http://localhost:8080/joboffer/${id}`,
     );
 
     // Debugging
     console.debug(
       `Antwort vom Server zur API /joboffer/${id} (= alle Informationen zu einer Joboffer): `,
-      response
+      response,
     );
 
     // KI Verbesserung: Prüfen, ob Daten vorhanden sind
@@ -115,7 +115,6 @@ export async function getAllJobofferInformationById(id: string | number) {
 //-------------------------------------Custom-Hook----------------------------------------------
 // Custom Hook, der die Joboffers abruft und den Ladezustand verwaltet sowie die Fehlerbehandlung übernimmt
 export function useCompleteJobofferInformation(id?: string) {
-  // const [variableName, setMethodName] = useState<type>(initialState); // Element, dass das enthält, wird neu geladen, wenn sich die variable ändert
   const [jobofferCompleteInformation, setJoboffer] =
     useState<JobofferCompleteInformation>(); // Joboffers speichern
   const [loadingStateJoboffer, setLoading] = useState<boolean>(true); // Ladezustand speichern
@@ -180,7 +179,7 @@ export function useCompleteJobofferInformation(id?: string) {
                   appointmentDate: appointment.appointmentDate,
                   appointmentName: appointment.appointmentName,
                 };
-              }
+              },
             ),
           };
           // Speichern der zugewiesenen Joboffer Details Daten
@@ -194,7 +193,7 @@ export function useCompleteJobofferInformation(id?: string) {
           // Fehlerantwort vom Server (z.B. 404, 500)
           if (err.response) {
             setError(
-              `Fehler vom Server: ${err.response.status} - ${err.response.statusText}`
+              `Fehler vom Server: ${err.response.status} - ${err.response.statusText}`,
             );
           }
           // Keine Antwort vom Server (z.B. Netzwerkprobleme)

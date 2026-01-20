@@ -1,6 +1,5 @@
 import { Navigate } from "react-router-dom";
 import keycloak from "../keycloak";
-import type { JSX } from "react/jsx-runtime";
 
 interface PrivateRouteProps {
   children: React.ReactNode;

@@ -14,7 +14,7 @@ import myTheme from "../theme/theme.ts";
 
 import applicationTrackerApi from "../services/api.ts";
 import { useEffect, useState } from "react";
-import { parseDatePassed } from "../functions/parseDateFromIso";
+import { parseDateFromIso } from "../functions/parseDate";
 /***************************
  der Standard Kalender von MUI rendert jeden Tag die interne Komponente PickersDay.
  PickersDay bekommtProps wie z.B. select, disable etc aber auch day (das angezeigte Datum).
@@ -30,7 +30,7 @@ interface CalendarDate {
 }
 
 function AppointmentDate(props: any) {
-    const { day, events = [], outsideCurrentMonth, ...other} = props; //...other übergibt alle übrigen Props ohne manuell zu übergeben
+  const { day, events = [], outsideCurrentMonth, ...other } = props; //...other übergibt alle übrigen Props ohne manuell zu übergeben
 
   const dateStr = day.format("YYYY-MM-DD"); //das Datum 'day' ins richtige Format bringen
   const hasEvent = events.some((e: CalendarDate) => e.datum === dateStr); //event.some() prüft ob minfdestens ein Event in events am aktuellen Datum ist
@@ -38,29 +38,32 @@ function AppointmentDate(props: any) {
   // Nur Events dieses Tages um einen Text für hover zu bekommen
   const dayEvents = events.filter((ev: CalendarDate) => ev.datum === dateStr);
   const hoverText = dayEvents.map(
-    (ev) => `${ev.firmaName} - (${ev.uhrzeit}) ${ev.terminName} `
+    (ev) => `${ev.firmaName} - (${ev.uhrzeit}) ${ev.terminName} `,
   );
 
-    return (
-        <Tooltip // erstellt bim Hovern ein Hiweisfenster mit dem Inhalt hoverText
-        title={hasEvent ? hoverText :""}
-        arrow
-        placement="top"
-        >
-        <PickersDay     // stellt einen einzelnen Tag im Kalender dar
-            {...other}  //auch hier, alle Props an PickersDay übergeben ohne sie nochmal in day oder events zu entpacken
-            day={day}
-            outsideCurrentMonth = {outsideCurrentMonth}
-            sx={{
-                color: outsideCurrentMonth ? 'text.disabled' : hasEvent ? 'white' : undefined,
-                backgroundColor: hasEvent ? "primary.main" : "transparent",
-                borderRadius: "8px",
-                "&:hover": {backgroundColor:"action.hover"},
-            }}
-            />
-        </Tooltip>
-
-    );
+  return (
+    <Tooltip // erstellt bim Hovern ein Hiweisfenster mit dem Inhalt hoverText
+      title={hasEvent ? hoverText : ""}
+      arrow
+      placement="top"
+    >
+      <PickersDay // stellt einen einzelnen Tag im Kalender dar
+        {...other} //auch hier, alle Props an PickersDay übergeben ohne sie nochmal in day oder events zu entpacken
+        day={day}
+        outsideCurrentMonth={outsideCurrentMonth}
+        sx={{
+          color: outsideCurrentMonth
+            ? "text.disabled"
+            : hasEvent
+              ? "white"
+              : undefined,
+          backgroundColor: hasEvent ? "primary.main" : "transparent",
+          borderRadius: "8px",
+          "&:hover": { backgroundColor: "action.hover" },
+        }}
+      />
+    </Tooltip>
+  );
 }
 
 export default function CalendarAllDates() {
@@ -72,7 +75,7 @@ export default function CalendarAllDates() {
       .get("http://localhost:8080/appointments")
       .then((response) => {
         const mappedCalemndar = response.data.map((t: any) => {
-          const parsed = parseDatePassed(t.appointmentdate);
+          const parsed = parseDateFromIso(t.appointmentdate);
           return {
             datum: t.appointmentdate.split("T")[0], //Teilt an 'T' in datum und Uhrzeit in array mit [0] wird datum abgerufen. [1] ist der 2. Teil im array also Uhrzeit
             uhrzeit: parsed[2],
@@ -87,9 +90,18 @@ export default function CalendarAllDates() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
-      <Paper sx={{ width: "100%", display:"inline-block", background: "",border: "1px solid",borderColor:"primary.main", borderRadius: "8px", }}>
+      <Paper
+        sx={{
+          width: "100%",
+          display: "inline-block",
+          background: "",
+          border: "1px solid",
+          borderColor: "primary.main",
+          borderRadius: "8px",
+        }}
+      >
         <DateCalendar
-            dayOfWeekFormatter={(day)=>day.format("ddd")}
+          dayOfWeekFormatter={(day) => day.format("ddd")}
           showDaysOutsideCurrentMonth
           fixedWeekNumber={6}
           slots={{ day: AppointmentDate }} // slots ersetzt day komponent vom Kalender durch AppointmentDate komponente
@@ -98,38 +110,35 @@ export default function CalendarAllDates() {
           }}
           sx={{
             width: "100%",
-            flex:1,
-              display:"flex",
-              flexDirection:"column",
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
             backgroundColor: "",
             borderRadius: "8px", //ecken abrunden
 
-              "& .MuiDayCalendar-weekContainer": {
-                  display: "flex",
-                  flex:1,
+            "& .MuiDayCalendar-weekContainer": {
+              display: "flex",
+              flex: 1,
+            },
 
-              },
-
-              "& .MuiPickersDay-root": {
-              flex:1,
-              aspectRatio:"1/1",
+            "& .MuiPickersDay-root": {
+              flex: 1,
+              aspectRatio: "1/1",
               maxWidth: "unset",
-              },
+            },
 
-              "& .MuiDayCalendar-header": {
+            "& .MuiDayCalendar-header": {
+              display: "flex",
+              width: "100%",
+            },
 
-                  display: "flex",
-                  width:"100%",
-              },
-
-              "& .MuiDayCalendar-weekDayLabel": {
-                  border: "2px solid",
-                  borderColor:"primary.main",
-                  borderRadius:"8px",
-                  flex: 1,
-                  textAlign: "center",
-              },
-
+            "& .MuiDayCalendar-weekDayLabel": {
+              border: "2px solid",
+              borderColor: "primary.main",
+              borderRadius: "8px",
+              flex: 1,
+              textAlign: "center",
+            },
           }}
         />
       </Paper>

@@ -28,31 +28,17 @@ export default function ActionAreaCard({
   description1 = "",
   description2 = "",
   image = "",
-}: ActionAreaCardProps) {
+}: Readonly<ActionAreaCardProps>) {
   // Debugging
-  /*
-  console.debug(
-    "Daten an ActionAreaCard: ",
-    "ID: ",
-    id,
-    "Title: ",
-    title,
-    "Description 1: ",
-    description1,
-    "Description 2: ",
-    description2,
-    "Image: ",
-    image
-  );
-*/
+
   // Card Component
   return (
     <Card
       sx={{
         //maxWidth: "100%", // füllt komplette Breite aus
         height: "100%", // füllt komplette Höhe aus
-        border:1,
-        borderColor:"primary.main"
+        border: 1,
+        borderColor: "primary.main",
         //display: "flex", // macht die Karte flexibel groß (je nach Containergröße)
         //boxSizing: "border-box", // sorgt dafür, dass Padding und Border nicht die Gesamtbreite überschreiten
         //flexDirection: "column", // Inhalte vertikal anordnen

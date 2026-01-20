@@ -1,13 +1,11 @@
-import { useParams } from "react-router-dom"; // Zum Verarbeiten der mitgegeben Parameter
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { useParams, useNavigate } from "react-router-dom"; // Zum Verarbeiten der mitgegeben Parameter
 import { Box, Paper, Stack, SvgIcon, Typography } from "@mui/material";
 import { useCompleteJobofferInformation } from "../functions/getJobofferById";
 import { parseDateToString } from "../functions/parseDate";
 import CustomButtonGroup from "../components/ButtonGroup";
 import { ArrowBack, Delete, Edit } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 import applicationTrackerApi from "../services/api";
-// import BusinessIcon from "@mui/icons-material/Business";
+import BusinessIcon from "@mui/icons-material/Business";
 
 const TitleMinWidth = "150px";
 const TitleWidth = "25vw";
@@ -79,7 +77,6 @@ const Stellenansicht: React.FC = () => {
               iconPosition: "start",
               onClick: () => {
                 console.debug("Zurück Button wurde geklickt");
-                //window.close();
                 navigate("/bewerbungen");
               },
             },
@@ -113,7 +110,7 @@ const Stellenansicht: React.FC = () => {
       {/* ----------------------------Daten anzeigen---------------------------- */}
       <Box padding={2}>
         {/* ----------------------------Unternehmenslogo---------------------------- */}
-        {/*
+
         <Box
           sx={{
             display: "flex",
@@ -134,7 +131,6 @@ const Stellenansicht: React.FC = () => {
             />
           )}
         </Box>
-        */}
 
         {/* ----------------------------Stellenname---------------------------- */}
         <Stack direction="column" spacing={2}>
