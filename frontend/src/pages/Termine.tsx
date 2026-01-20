@@ -111,7 +111,7 @@ const Termine: React.FC = () => {
     const handleClose = () => setOpen(false);
 
     return (
-        <Box sx={{ width: '100%', minHeight:"85vh", display:"flex", flexDirection:"column",minHeight:0,}}>
+        <Box sx={{ width: '100%', minHeight:"85vh", display:"flex", flexDirection:"column",}}>
 
             {/* ----- Leiste oben mit Button ----- */}
             <Stack

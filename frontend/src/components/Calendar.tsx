@@ -1,16 +1,15 @@
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import { Tooltip, Paper } from "@mui/material";
-
 import { getLang } from "../functions/getLanguage";
 import "dayjs/locale/de";
 import "dayjs/locale/en";
 import applicationTrackerApi from "../services/api.ts";
 import { useEffect, useState } from "react";
 import { parseDatePassed } from "../functions/parseDateFromIso";
+import type { PickersDayProps } from "@mui/x-date-pickers/PickersDay";
 /***************************
  der Standard Kalender von MUI rendert jeden Tag die interne Komponente PickersDay.
  PickersDay bekommtProps wie z.B. select, disable etc aber auch day (das angezeigte Datum).
@@ -24,8 +23,11 @@ interface CalendarDate {
   firmaName: string;
   uhrzeit: string;
 }
+interface AppointmentDayProps extends PickersDayProps{
+    events?: CalendarDate[];
+}
 
-function AppointmentDate(props: any) {
+function AppointmentDate(props: AppointmentDayProps) {
     const { day, events = [], outsideCurrentMonth, ...other} = props; //...other übergibt alle übrigen Props ohne manuell zu übergeben
 
   const dateStr = day.format("YYYY-MM-DD"); //das Datum 'day' ins richtige Format bringen
@@ -51,7 +53,7 @@ function AppointmentDate(props: any) {
                 color: outsideCurrentMonth ? 'text.disabled' : hasEvent ? 'white' : undefined,
                 backgroundColor: hasEvent ? "primary.main" : "transparent",
                 borderRadius: "8px",
-                "&:hover": {backgroundColor:"action.hover"},
+                "&:hover": {backgroundColor:hasEvent ? "primary.dark":"action.hover"},
             }}
             />
         </Tooltip>
@@ -68,7 +70,7 @@ export default function CalendarAllDates() {
       .get("http://localhost:8080/appointments")
       .then((response) => {
         const mappedCalemndar = response.data.map((t: any) => {
-          const parsed = parseDatePassed(t.appointmentdate);
+          const parsed  = parseDatePassed(t.appointmentdate) as string[]; // uhrzeit:parsed kann null sien => fehler. durch as string versichern wir, dass es nie null ist => nicht mehr als fehler markiert
           return {
             datum: t.appointmentdate.split("T")[0], //Teilt an 'T' in datum und Uhrzeit in array mit [0] wird datum abgerufen. [1] ist der 2. Teil im array also Uhrzeit
             uhrzeit: parsed[2],
@@ -89,7 +91,7 @@ export default function CalendarAllDates() {
           fixedWeekNumber={6}
           slots={{ day: AppointmentDate }} // slots ersetzt day komponent vom Kalender durch AppointmentDate komponente
           slotProps={{
-            day: { events: events }, //Liefert Prop "events" mit an an AppointmentDate
+            day: { events, } as AppointmentDayProps //Liefert Prop "events" mit an an AppointmentDate
           }}
           sx={{
             width: "100%",
