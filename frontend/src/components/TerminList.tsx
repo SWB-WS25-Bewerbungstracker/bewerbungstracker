@@ -1,36 +1,36 @@
-import { DataGrid, type GridColDef } from "@mui/x-data-grid";
-import { parseDatePassed } from "../functions/parseDateFromIso";
-import applicationTrackerApi from "../services/api.ts";
 import { useEffect, useState } from "react";
+import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Delete, Send } from "@mui/icons-material";
-import { getLang } from "../functions/getLanguage";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import "dayjs/locale/de";
 import "dayjs/locale/en";
 import dayjs, { Dayjs } from "dayjs";
 import {
-  Box,
-  Paper,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Select,
-  TextField,
-  MenuItem,
-  FormControl,
-  InputLabel,
+    Box,
+    Paper,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    Select,
+    TextField,
+    MenuItem,
+    FormControl,
+    InputLabel,
 } from "@mui/material";
-import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOverview";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import CustomButtonGroup from "../components/ButtonGroup";
-import {  Edit } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
+import { Delete, Send, Edit } from "@mui/icons-material";
+
 import {submitButtonClicked} from "../functions/sendAppointments.ts";
 import {deleteAppointment}  from "../functions/deleteAppointment.ts";
-const Lang = getLang();
+import { useOverviewOfAllJoboffers } from "../functions/getAllJoboffersForOverview";
+import { getLang } from "../functions/getLanguage";
+import { parseDatePassed } from "../functions/parseDateFromIso";
+import CustomButtonGroup from "../components/ButtonGroup";
+import applicationTrackerApi from "../services/api.ts";
 
+const Lang = getLang();
 interface TerminListDialogProps {
     open: boolean;
     handleClose: () => void;
@@ -54,7 +54,6 @@ export interface BackendTermin {
   contact: string;
 }
 
-//************ MUI Komponente mit einigen anpassungen beginnt ****************
 const TerminList: React.FC<TerminListDialogProps> = ({open, handleClose, height}) => {
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -68,16 +67,9 @@ const TerminList: React.FC<TerminListDialogProps> = ({open, handleClose, height}
   const handleEdit = (row: AppointmentRow) => {
         console.log("Bearbeite Termin:", row);}
 
-    //zusätzliches await catch, damit fehler nicht übergangen werden aus dem backend
     const handleDelete = async (row: AppointmentRow) => {
-        console.log("Delete Termin:", row.id)
-        try{
             await deleteAppointment(row.id);
             window.location.reload(); //vorübergangslösung. falls Zeit: useEffect als Funktion damit nur daten neu laden nicht ganze seite
-        }catch (error){
-            console.error("konnte nicht gelöscht werden")
-            throw error;
-        }
     }
 
     const [rows, setRows] = useState<AppointmentRow[]>([])
@@ -114,7 +106,6 @@ const TerminList: React.FC<TerminListDialogProps> = ({open, handleClose, height}
                 const parsed = parseDatePassed(params.value as string);
                 return <span>{parsed?.[1]}</span>;
             }
-
         },
         {
             field: 'uhrzeit',
@@ -163,16 +154,11 @@ const TerminList: React.FC<TerminListDialogProps> = ({open, handleClose, height}
         }
     ];
 
-  // use Effect wird immer aufgerufen beim ersten rendern.
   useEffect(() => {
     applicationTrackerApi.get("/appointments").then((response) => {
-        console.log("Response from backend:", response.data);
       const today = new Date();
-
                 const appointmentList = response.data
-
                     .map((t: BackendTermin): AppointmentRow => {
-
                         return{
                             id: t.appointmentID,
                             datum: t.appointmentdate,
@@ -270,7 +256,7 @@ const TerminList: React.FC<TerminListDialogProps> = ({open, handleClose, height}
                   Bitte erst eine Bewerbung erstellen
                 </MenuItem>
               ) : (
-                (listOfJoboffers ?? []) // fix: wir schauen ob listOfJoboffers NULL/undefined ist. wenn nicht nutzen wir es. wenn doch, geben wir leeres array.
+                (listOfJoboffers ?? [])
                   .sort((a, b) => a.companyName!.localeCompare(b.companyName!)) //sortiere dropdown alphabetisch nach company name
                   .map((offer) => (
                     <MenuItem key={offer.jobofferId} value={offer.jobofferId}>
