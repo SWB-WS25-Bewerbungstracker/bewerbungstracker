@@ -157,6 +157,7 @@ const TerminList: React.FC<TerminListDialogProps> = ({open, handleClose, height}
   useEffect(() => {
     applicationTrackerApi.get("/appointments").then((response) => {
       const today = new Date();
+      today.setHours(0,0,0,0);
                 const appointmentList = response.data
                     .map((t: BackendTermin): AppointmentRow => {
                         return{
