@@ -1,4 +1,3 @@
-
 import { useParams } from "react-router-dom";
 import CustomButtonGroup from "../components/ButtonGroup";
 import { Stack } from "@mui/material";
@@ -14,7 +13,7 @@ const FormularBewerbungHinzufuegen: React.FC = () => {
 
   return (
     <div>
-      <Stack padding={2} justifyContent={"space-between"}>
+      <Stack padding={2} alignContent={"start"}>
         <CustomButtonGroup
           buttons={[
             {
@@ -29,22 +28,9 @@ const FormularBewerbungHinzufuegen: React.FC = () => {
             },
           ]}
         />
-        <CustomButtonGroup
-          buttons={[
-            {
-              label: "Löschen",
-              icon: <Delete />,
-              iconPosition: "start",
-              onClick: () => {
-                console.debug("Löschen Button wurde geklickt");
-                // Jeweiligen Behfel ans Backend Senden (Schnittstelle fehlt noch -> noch nicht implementiert);
-              },
-            },
-          ]}
-        />
       </Stack>
       {/*Altes Formular: <AddJobofferForm id={id} /> */}
-      <JobofferForm id={id}/>
+      <JobofferForm id={id} />
     </div>
   );
 };
