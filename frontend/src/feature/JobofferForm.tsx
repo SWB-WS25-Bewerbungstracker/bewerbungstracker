@@ -1,286 +1,359 @@
-import {Stack, Typography, Button, Box, CircularProgress, Alert} from "@mui/material"
-import {useForm} from "react-hook-form";
-import {TextInput} from "../components/TextInput.tsx";
+import {
+  Stack,
+  Typography,
+  Button,
+  Box,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
+import { useForm } from "react-hook-form";
+import { TextInput } from "../components/TextInput.tsx";
 import FormSection from "../components/FormSection.tsx";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AddressSchema , type AddressFormValues, AddressForm } from "../components/AddressForm.tsx";
+import {
+  AddressSchema,
+  type AddressFormValues,
+  AddressForm,
+} from "../components/AddressForm.tsx";
 import applicationTrackerApi from "../services/api.ts";
 import axios from "axios";
 
-import {useEffect, useState} from "react";
-import AddAppointments from "../components/AddAppointments.tsx";
-import {type Appointment, removeIdForNewAppointments} from "../functions/parseDate";
-import {AutocompleteInput} from "../components/AutocompleteInput.tsx";
-import {useCompanyData} from "../functions/getAllCompaniesAndId.ts";
+import { useEffect, useState } from "react";
+import AppointmentsForm from "../components/AppointmentsForm.tsx";
+import {
+  type Appointment,
+  removeIdForNewAppointments,
+} from "../functions/parseDate";
+import { AutocompleteInput } from "../components/AutocompleteInput.tsx";
+import { useCompanyData } from "../functions/getAllCompaniesAndId.ts";
 import { useCompleteJobofferInformation } from "../functions/getJobofferById.ts";
 import { Send } from "@mui/icons-material";
 
 export interface AddJobofferFormProps {
-    id?: string; // Id soll optional sein
+  id?: string; // Id soll optional sein
 }
 
 //Setting up  some basic validation with zod
 const validationSchema = z.object({
-    jobofferName: z.string("Pflichtfeld").min(1, "Pflichtfeld"),
-    jobofferDescription: z.string().optional(),
-    companyName: z.string("Pflichtfeld").min(1, "Pflichtfeld"),
-    companyEmployees: z.number().int().min(0).optional(),
-    companyLogo: z.string().optional(),
-    companyAddress: AddressSchema.optional(),
+  jobofferName: z.string("Pflichtfeld").min(1, "Pflichtfeld"),
+  jobofferDescription: z.string().optional(),
+  companyName: z.string("Pflichtfeld").min(1, "Pflichtfeld"),
+  companyEmployees: z.number().int().min(0).optional(),
+  companyLogo: z.string().optional(),
+  companyAddress: AddressSchema.optional(),
 
-    contact: z.object({
-        contactFirstName: z.string().optional(),
-        contactLastName: z.string().optional(),
-        contactPhoneNumber: z.string().optional(),
-        contactEmail: z.string().optional(),
-    }).optional(),
-    distanceLength: z.string().optional(),
-    distanceTime: z.string().optional(),
-    salaryMinimum: z.number().optional(),
-    salaryMaximum: z.number().optional(),
-    jobofferNotes: z.string().optional(),
-})
+  contact: z
+    .object({
+      contactFirstName: z.string().optional(),
+      contactLastName: z.string().optional(),
+      contactPhoneNumber: z.string().optional(),
+      contactEmail: z.string().optional(),
+    })
+    .optional(),
+  distanceLength: z.string().optional(),
+  distanceTime: z.string().optional(),
+  salaryMinimum: z.number().optional(),
+  salaryMaximum: z.number().optional(),
+  jobofferNotes: z.string().optional(),
+});
 
 //interface type for the useform and data (this structure will be sent to the backend but some values maybe undefined)
 interface FormValues {
-    jobofferName: string;
-    jobofferDescription?: string;
-    companyName: string;
-    companyEmployees?: number;
-    companyLogo?: string;
-    companyAddress?: AddressFormValues;
-    contact?: {
-        contactFirstName?: string;
-        contactLastName?: string;
-        contactPhoneNumber?: string;
-        contactEmail?: string;
-    };
-    distanceLength?: string;
-    distanceTime?: string;
-    salaryMinimum?: number;
-    salaryMaximum?:number;
-    jobofferNotes?: string;
+  jobofferName: string;
+  jobofferDescription?: string;
+  companyName: string;
+  companyEmployees?: number;
+  companyLogo?: string;
+  companyAddress?: AddressFormValues;
+  contact?: {
+    contactFirstName?: string;
+    contactLastName?: string;
+    contactPhoneNumber?: string;
+    contactEmail?: string;
+  };
+  distanceLength?: string;
+  distanceTime?: string;
+  salaryMinimum?: number;
+  salaryMaximum?: number;
+  jobofferNotes?: string;
 }
 
 //Test form
-const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
-    const { handleSubmit, control, trigger, setValue, reset } = useForm<FormValues>({
-        resolver: zodResolver(validationSchema),
-        mode: "onBlur",
-        reValidateMode: "onBlur",
-        defaultValues: {
-            jobofferName: "",
-            companyName: "",
-        },
+const JobofferForm: React.FC<AddJobofferFormProps> = ({ id }) => {
+  const { handleSubmit, control, trigger, setValue, reset } =
+    useForm<FormValues>({
+      resolver: zodResolver(validationSchema),
+      mode: "onBlur",
+      reValidateMode: "onBlur",
+      defaultValues: {
+        jobofferName: "",
+        companyName: "",
+      },
     });
 
-    // Um welchen Vorgang handelt es sich? (Bearbeiten oder Hinzufügen (default)?)
-    const isEdit = Boolean(id);
+  // Um welchen Vorgang handelt es sich? (Bearbeiten oder Hinzufügen (default)?)
+  const isEdit = Boolean(id);
 
-    const title = isEdit? "Stelle bearbeiten": "Stelle hinzufügen";
+  const title = isEdit ? "Stelle bearbeiten" : "Stelle hinzufügen";
 
-    /* ----------------------------------Bisherige Daten holen---------------------------------- */
-    // Daten mithilfe externer Funktion laden
-    const { jobofferCompleteInformation, loadingStateJoboffer, errorRetrievingJoboffer } =
-        useCompleteJobofferInformation(id);
+  /* ----------------------------------Bisherige Daten holen---------------------------------- */
+  // Daten mithilfe externer Funktion laden
+  const {
+    jobofferCompleteInformation,
+    loadingStateJoboffer,
+    errorRetrievingJoboffer,
+  } = useCompleteJobofferInformation(id);
 
-    useEffect(() => {
-        if (!jobofferCompleteInformation) return;
+  useEffect(() => {
+    if (!jobofferCompleteInformation) return;
 
-        reset({
-            jobofferName: jobofferCompleteInformation.jobofferName,
-            jobofferDescription: jobofferCompleteInformation.jobofferDescription,
-            jobofferNotes: jobofferCompleteInformation.jobofferNotes,
+    reset({
+      jobofferName: jobofferCompleteInformation.jobofferName,
+      jobofferDescription: jobofferCompleteInformation.jobofferDescription,
+      jobofferNotes: jobofferCompleteInformation.jobofferNotes,
 
-            companyName: jobofferCompleteInformation.companyName,
-            companyEmployees: jobofferCompleteInformation.companyEmployees,
-            companyAddress: {
-                addressStreet: jobofferCompleteInformation.addressStreet,
-                addressStreetNumber: jobofferCompleteInformation.addressStreetNumber,
-                addressZipCode: jobofferCompleteInformation.addressZipCode,
-                addressCity: jobofferCompleteInformation.addressCity,
-                addressCountry: jobofferCompleteInformation.addressCountry,
-            },
-            contact: {
-                contactFirstName: jobofferCompleteInformation.contactFirstName,
-                contactLastName: jobofferCompleteInformation.contactLastName,
-                contactEmail: jobofferCompleteInformation.contactEmail,
-                contactPhoneNumber: jobofferCompleteInformation.contactPhone,
-            },
-            salaryMinimum: jobofferCompleteInformation.jobofferMinimumWage,
-            salaryMaximum: jobofferCompleteInformation.jobofferMaximumWage,
-        });
+      companyName: jobofferCompleteInformation.companyName,
+      companyEmployees: jobofferCompleteInformation.companyEmployees,
+      companyAddress: {
+        addressStreet: jobofferCompleteInformation.addressStreet,
+        addressStreetNumber: jobofferCompleteInformation.addressStreetNumber,
+        addressZipCode: jobofferCompleteInformation.addressZipCode,
+        addressCity: jobofferCompleteInformation.addressCity,
+        addressCountry: jobofferCompleteInformation.addressCountry,
+      },
+      contact: {
+        contactFirstName: jobofferCompleteInformation.contactFirstName,
+        contactLastName: jobofferCompleteInformation.contactLastName,
+        contactEmail: jobofferCompleteInformation.contactEmail,
+        contactPhoneNumber: jobofferCompleteInformation.contactPhone,
+      },
+      salaryMinimum: jobofferCompleteInformation.jobofferMinimumWage,
+      salaryMaximum: jobofferCompleteInformation.jobofferMaximumWage,
+    });
 
-        setAppointments(jobofferCompleteInformation.appointments ?? [])
-    }, [id, jobofferCompleteInformation, reset]);
+    setAppointments(jobofferCompleteInformation.appointments ?? []);
+  }, [id, jobofferCompleteInformation, reset]);
 
+  // Verwendung des Custom Hooks, um die Firmen- und Ladezustandsdaten zu holen
+  const { listOfCompanies, loadingCompanies } = useCompanyData();
 
-    // Verwendung des Custom Hooks, um die Firmen- und Ladezustandsdaten zu holen
-    const { listOfCompanies, loadingCompanies } = useCompanyData();
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
 
-    const [appointments, setAppointments] =useState<Appointment[]>([]);
+  if (loadingStateJoboffer) {
+    return <CircularProgress />;
+  }
 
-    if(loadingStateJoboffer) {
-        return <CircularProgress />
+  if (errorRetrievingJoboffer) {
+    return <Alert severity="error">{errorRetrievingJoboffer}</Alert>;
+  }
+
+  const onSubmit = async (data: FormValues) => {
+    //remove empty contact object
+    if (
+      data.contact &&
+      Object.values(data.contact).every((v) => v === undefined)
+    ) {
+      delete data.contact;
+    }
+    //remove empty address object
+    if (
+      data.companyAddress &&
+      Object.values(data.companyAddress).every((v) => v === undefined)
+    ) {
+      delete data.companyAddress;
     }
 
-    if (errorRetrievingJoboffer) {
-        return <Alert severity="error">{errorRetrievingJoboffer}</Alert>;
-    }
+    data = JSON.parse(JSON.stringify(data)); //remove undefined fields
 
-    const onSubmit = async (data: FormValues) => {
-        //remove empty contact object
-        if (data.contact && Object.values(data.contact).every(v => v === undefined)) {
-            delete data.contact;
-        }
-        //remove empty address object
-        if (data.companyAddress && Object.values(data.companyAddress).every(v => v === undefined)) {
-            delete data.companyAddress;
-        }
-
-        data = JSON.parse(JSON.stringify(data)); //remove undefined fields
-
-        const payload = {
-            ...data,
-            jobofferId: id,
-            appointments: appointments.length > 0 ? removeIdForNewAppointments(appointments) : [],
-        }
-        console.debug("onSubmit", payload); //log payload data
-        //try Post
-        try {
-            if(isEdit){
-                const response = await applicationTrackerApi.put(
-                    "http://localhost:8080/joboffer/editForm", // Backend Schnittstelle
-                    payload, // zu sendende Daten (automatisch als JSON)
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
-                console.debug(response.status)
-                if (response.status === 201 || response.status === 200) {
-                    window.close();
-                }
-            } else {
-                const response = await applicationTrackerApi.post("/joboffer/inputForm", payload,
-                    {
-                    headers: {
-                        "Content-Type": "application/json",
-                        },
-                    }
-                );
-                console.debug(response.status)
-                if (response.status === 201 || response.status === 200) {
-                    window.close();
-                }
-            }
-        } catch(error) {
-            // Axios-Fehlerbehandlung
-            if (axios.isAxiosError(error)) {
-                console.error("Axios error:", error.response?.data || error.message);
-            } else {
-                console.error("Unexpected error:", error);
-            }
-        }
+    const payload = {
+      ...data,
+      jobofferId: id,
+      appointments:
+        appointments.length > 0 ? removeIdForNewAppointments(appointments) : [],
     };
+    console.debug("onSubmit", payload); //log payload data
+    //try Post
+    try {
+      if (isEdit) {
+        const response = await applicationTrackerApi.put(
+          "http://localhost:8080/joboffer/editForm", // Backend Schnittstelle
+          payload, // zu sendende Daten (automatisch als JSON)
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        );
+        console.debug(response.status);
+        if (response.status === 201 || response.status === 200) {
+          window.close();
+        }
+      } else {
+        const response = await applicationTrackerApi.post(
+          "/joboffer/inputForm",
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        );
+        console.debug(response.status);
+        if (response.status === 201 || response.status === 200) {
+          window.close();
+        }
+      }
+    } catch (error) {
+      // Axios-Fehlerbehandlung
+      if (axios.isAxiosError(error)) {
+        console.error("Axios error:", error.response?.data || error.message);
+      } else {
+        console.error("Unexpected error:", error);
+      }
+    }
+  };
 
-
-    return (
-
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <Box
-                sx={{
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                    justifyContent: "center",
-                    alignContent: "center",
-                    padding: 2,
-                }}
-            >
-                <Typography variant="h4">{ title }</Typography>
-                <FormSection title={"Stelle"}>
-                    <TextInput name={"jobofferName"} control={control} trigger={trigger} label={"Titel der Stelle"} required/>
-                    <TextInput name={"jobofferDescription"} control={control} trigger={trigger} label={"Kurzbeschreibung der Stelle"} minRows={5}/>
-                </FormSection>
-                <FormSection title={"Firma"} direction={"row"}>
-                    <AutocompleteInput name={"companyName"}
-                                       control={control}
-                                       trigger={trigger}
-                                       label={"Name der Firma"}
-                                       options={listOfCompanies.map(
-                                               (company) => (
-                                                   {label: company.name, id: company.id}
-                                               )
-                                           )}
-                                       setValue={setValue}
-                                       required
-                                       loading={loadingCompanies}
-                                       sx={{flex: "0 0 70%"}}
-                    />
-                    <TextInput name ={"companyEmployees"}
-                               control={control}
-                               trigger={trigger}
-                               label={"Anzahl Mitarbeiter"}
-                               type={"number"}
-                    />
-                </FormSection>
-                <AddressForm control={control} trigger={trigger} baseName={"companyAddress"}/>
-                <FormSection title={"Distanz"} direction={"row"}>
-                    <TextInput name={"distanceLength"} control={control} trigger={trigger} label={"Strecke"}/>
-                    <TextInput name ={"distanceTime"} control={control} trigger={trigger} label={"Fahrtzeit"}/>
-                </FormSection>
-                <FormSection title={"Kontakt"}>
-                    <Stack
-                        direction="row"
-                        spacing={1}
-                        paddingBottom={1}
-                    >
-                        <TextInput name={"contact.contactFirstName"} control={control} trigger={trigger} label={"Vorname"}/>
-                        <TextInput name ={"contact.contactLastName"} control={control} trigger={trigger} label={"Nachname"}/>
-                    </Stack>
-                    <Stack
-                        direction="row"
-                        spacing={1}
-                        paddingBottom={1}
-                    >
-                        <TextInput name={"contact.contactPhoneNumber"} control={control} trigger={trigger} label={"Telefonnummer"}/>
-                        <TextInput name ={"contact.contactEmail"} control={control} trigger={trigger} label={"Email"}/>
-                    </Stack>
-                </FormSection>
-                <FormSection title={"Termine"}>
-                    <AddAppointments
-                        appointments={appointments}
-                        onAppointmentChange={setAppointments}
-                    />
-                </FormSection>
-                <FormSection title={"Gehaltsspielraum"} direction={"row"}>
-                    <TextInput name ={"salaryMinimum"}
-                               control={control}
-                               trigger={trigger}
-                               label={"Minimum"}
-                               type={"number"}
-                    />
-                    <TextInput name ={"salaryMaximum"}
-                               control={control}
-                               trigger={trigger}
-                               label={"Maximum"}
-                               type={"number"}
-                    />
-                </FormSection>
-                <FormSection title={"Persönliche Notizen"}>
-                    <TextInput name={"jobofferNotes"} control={control} trigger={trigger} label={"Notizen"} minRows={5}/>
-                </FormSection>
-                <Box sx={{ display: "flex", justifyContent: "flex-end"}}>
-                    <Button type="submit" variant={"contained"} endIcon={<Send/>}>
-                        Submit
-                    </Button>
-                </Box>
-            </Box>
-        </form>
-    );
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          justifyContent: "center",
+          alignContent: "center",
+          padding: 2,
+        }}
+      >
+        <Typography variant="h4">{title}</Typography>
+        <FormSection title={"Stelle"}>
+          <TextInput
+            name={"jobofferName"}
+            control={control}
+            trigger={trigger}
+            label={"Titel der Stelle"}
+            required
+          />
+          <TextInput
+            name={"jobofferDescription"}
+            control={control}
+            trigger={trigger}
+            label={"Kurzbeschreibung der Stelle"}
+            minRows={5}
+          />
+        </FormSection>
+        <FormSection title={"Firma"} direction={"row"}>
+          <AutocompleteInput
+            name={"companyName"}
+            control={control}
+            trigger={trigger}
+            label={"Name der Firma"}
+            options={listOfCompanies.map((company) => ({
+              label: company.name,
+              id: company.id,
+            }))}
+            setValue={setValue}
+            required
+            loading={loadingCompanies}
+            sx={{ flex: "0 0 70%" }}
+          />
+          <TextInput
+            name={"companyEmployees"}
+            control={control}
+            trigger={trigger}
+            label={"Anzahl Mitarbeiter"}
+            type={"number"}
+          />
+        </FormSection>
+        <AddressForm
+          control={control}
+          trigger={trigger}
+          baseName={"companyAddress"}
+        />
+        <FormSection title={"Distanz"} direction={"row"}>
+          <TextInput
+            name={"distanceLength"}
+            control={control}
+            trigger={trigger}
+            label={"Strecke"}
+          />
+          <TextInput
+            name={"distanceTime"}
+            control={control}
+            trigger={trigger}
+            label={"Fahrtzeit"}
+          />
+        </FormSection>
+        <FormSection title={"Kontakt"}>
+          <Stack direction="row" spacing={1} paddingBottom={1}>
+            <TextInput
+              name={"contact.contactFirstName"}
+              control={control}
+              trigger={trigger}
+              label={"Vorname"}
+            />
+            <TextInput
+              name={"contact.contactLastName"}
+              control={control}
+              trigger={trigger}
+              label={"Nachname"}
+            />
+          </Stack>
+          <Stack direction="row" spacing={1} paddingBottom={1}>
+            <TextInput
+              name={"contact.contactPhoneNumber"}
+              control={control}
+              trigger={trigger}
+              label={"Telefonnummer"}
+            />
+            <TextInput
+              name={"contact.contactEmail"}
+              control={control}
+              trigger={trigger}
+              label={"Email"}
+            />
+          </Stack>
+        </FormSection>
+        <FormSection title={"Termine"}>
+          <AppointmentsForm
+            appointments={appointments}
+            onAppointmentChange={setAppointments}
+          />
+        </FormSection>
+        <FormSection title={"Gehaltsspielraum"} direction={"row"}>
+          <TextInput
+            name={"salaryMinimum"}
+            control={control}
+            trigger={trigger}
+            label={"Minimum"}
+            type={"number"}
+          />
+          <TextInput
+            name={"salaryMaximum"}
+            control={control}
+            trigger={trigger}
+            label={"Maximum"}
+            type={"number"}
+          />
+        </FormSection>
+        <FormSection title={"Persönliche Notizen"}>
+          <TextInput
+            name={"jobofferNotes"}
+            control={control}
+            trigger={trigger}
+            label={"Notizen"}
+            minRows={5}
+          />
+        </FormSection>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button type="submit" variant={"contained"} endIcon={<Send />}>
+            Submit
+          </Button>
+        </Box>
+      </Box>
+    </form>
+  );
 };
 export default JobofferForm;

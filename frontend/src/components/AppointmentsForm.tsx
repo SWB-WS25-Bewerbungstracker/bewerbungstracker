@@ -25,7 +25,7 @@ export interface AddDateAndTimeProps {
 const Lang = getLang();
 
 // Komponente, die seperate Datum und Zeiteingabe erlaubt und diese kombiniert
-const AddAppointments: React.FC<AddDateAndTimeProps> = ({
+const AppointmentsForm: React.FC<AddDateAndTimeProps> = ({
   appointments,
   onAppointmentChange,
 }: AddDateAndTimeProps) => {
@@ -282,4 +282,4 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
   );
 };
 
-export default AddAppointments;
+export default AppointmentsForm;
