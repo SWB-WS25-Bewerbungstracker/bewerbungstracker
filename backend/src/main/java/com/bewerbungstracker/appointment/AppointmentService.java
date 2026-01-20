@@ -42,11 +42,11 @@ public class AppointmentService {
     }
 
     public Appointment updateAppointment (AppointmentCleanView appointment) {
-        Appointment _appointment = appointmentRepository.findById(appointment.getAppointmentId()).orElseThrow(
+        Appointment existingAppointment = appointmentRepository.findById(appointment.getAppointmentId()).orElseThrow(
                 () -> new IllegalArgumentException("Appointment not found: " + appointment.getAppointmentId()));
-        _appointment.setAppointmentdate(appointment.getAppointmentDate());
-        _appointment.setAppointmentname(appointment.getAppointmentName());
-        return _appointment;
+        existingAppointment.setAppointmentdate(appointment.getAppointmentDate());
+        existingAppointment.setAppointmentname(appointment.getAppointmentName());
+        return existingAppointment;
     }
 
 

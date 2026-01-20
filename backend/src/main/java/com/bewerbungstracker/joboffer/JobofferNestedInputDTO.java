@@ -14,11 +14,9 @@ public class JobofferNestedInputDTO {
     private Integer jobofferId = null;
     private String jobofferName;
     private String jobofferDescription;
-    //private Integer jobofferRating;
     private Integer salaryMinimum;
     private Integer salaryMaximum;
     private String jobofferNotes;
-    //private String perks;
     private String companyName;
     private Integer companyEmployees;
     private String companyLogo;
