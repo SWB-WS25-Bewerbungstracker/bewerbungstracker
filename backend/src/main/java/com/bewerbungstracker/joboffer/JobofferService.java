@@ -34,10 +34,7 @@ public class JobofferService {
     private final JobofferConverter jobofferConverter;
 
     public List<JobofferCardDTO> getAllJoboffers(String email) {
-        System.out.println("Email vom Token: " + email);
-        List<JobofferCardDTO> result = jobofferRepository.getAllJoboffers(email);
-        System.out.println("Size: " + result.size());
-        return result;
+        return jobofferRepository.getAllJoboffers(email);
     }
 
     public JobofferDTO getJobofferById(Integer offerid) {

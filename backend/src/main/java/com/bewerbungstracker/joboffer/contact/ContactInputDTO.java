@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ContactInputDTO {
-    //private Integer contactId;
     private String contactFirstName;
     private String contactLastName;
     private String contactEmail;

@@ -29,10 +29,10 @@ public class ContactService {
         if (input == null && contact != null) { //contact data was deleted
             contactRepository.delete(contact);
             contact = null;
-        } else if (input != null && contact == null) {  //contact created
-            contact = createContact(input);
         } else if (input != null && contact != null) {  //contact updated
             contactConverter.toEntity(contact, input);
+        } else if (input != null) {  //contact created
+            contact = createContact(input);
         }
 
         return contact;

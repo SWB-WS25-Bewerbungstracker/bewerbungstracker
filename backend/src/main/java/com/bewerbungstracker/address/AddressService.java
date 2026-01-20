@@ -29,7 +29,7 @@ public class AddressService {
         } else if(address != null && input == null){
             addressRepository.delete(address);
             address = null;
-        } else if(address != null && input != null){
+        } else if(address != null){
             address = converter.toEntity(address, input);
         }
         return address;

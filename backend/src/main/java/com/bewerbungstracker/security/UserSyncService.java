@@ -2,15 +2,16 @@ package com.bewerbungstracker.security;
 
 import com.bewerbungstracker.appuser.Appuser;
 import com.bewerbungstracker.appuser.AppuserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class UserSyncService {
-    @Autowired
-    private AppuserRepository userRepository;
+
+    private final AppuserRepository userRepository;
 
     @Transactional
     public void syncUser(Jwt jwt) {
