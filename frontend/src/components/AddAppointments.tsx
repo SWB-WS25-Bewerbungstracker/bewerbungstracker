@@ -4,7 +4,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Box, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Box, Stack, TextField, Typography } from "@mui/material";
 import CustomButtonGroup from "./ButtonGroup";
 import { Save, Edit, Delete } from "@mui/icons-material";
 import { useEffect, useState } from "react";
@@ -39,7 +39,7 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
   const [editMode, setEditMode] = useState<boolean>(false);
   // einzelner Termin mit dem gearbeitet wird
   const [appointmentData, setAppointmentData] = useState<Appointment | null>(
-    null
+    null,
   );
 
   // KI: Aktiviere das UTC-Plugins
@@ -69,7 +69,7 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
 
   // KI: Speichern des Termin-Namens
   const onAppointmentNameChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setAppointmentName(event.target.value);
   };
@@ -143,7 +143,7 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
             // Termine durchsuchen, bis Appointment mit gleicher Id des 'neuen' Appointments gefunden
             apptointment.appointmentId === appointmentData.appointmentId
               ? newAppointment // Wenn Termin mit gleicher ID schon existiert -> Termin ersetzen
-              : apptointment // Ansonsten unverändert lassen
+              : apptointment, // Ansonsten unverändert lassen
         );
       } else {
         // Neuen Termin hinten hinzufügen
@@ -177,7 +177,7 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
     // Kopie aller Termine erstellen,
     // ausgenommen des zu entfernenden Termins
     const updatedAppointments = appointments.filter(
-      (appointment) => appointment.appointmentId !== appointmentId
+      (appointment) => appointment.appointmentId !== appointmentId,
     );
     // Termin entfernt und die Änderungen werden übergeben
     onAppointmentChange(updatedAppointments);
@@ -186,101 +186,99 @@ const AddAppointments: React.FC<AddDateAndTimeProps> = ({
   /* ----------------------------------Termin Input Formular---------------------------------- */
 
   return (
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
-        <Stack direction={"row"} spacing={2} alignItems={"center"}>
-          <DatePicker
-            fixedWeekNumber={6}
-            label="Datum"
-            value={date}
-            onChange={onDateChange}
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
+      <Stack direction={"row"} spacing={2} alignItems={"center"}>
+        <DatePicker
+          fixedWeekNumber={6}
+          label="Datum"
+          value={date}
+          onChange={onDateChange}
+        />
+        <TimePicker
+          label="Zeit"
+          value={time}
+          ampm={false}
+          onChange={onTimeChange}
+        />
+        <TextField
+          // Darstellung
+          sx={{ m: 1, width: "98%" }}
+          id="DateName"
+          label="Terminname"
+          variant="outlined"
+          // Zuweisung der Daten für Übergabe
+          value={appointmentName}
+          onChange={onAppointmentNameChange}
+          slotProps={{
+            input: {},
+          }}
+        />
+        <Box>
+          <CustomButtonGroup
+            buttons={[
+              {
+                label: "",
+                icon: <Save />,
+                iconPosition: "start",
+                onClick: handleSave,
+              },
+            ]}
           />
-          <TimePicker
-            label="Zeit"
-            value={time}
-            ampm={false}
-            onChange={onTimeChange}
-          />
-          <TextField
-            // Darstellung
-            sx={{ m: 1, width: "98%" }}
-            id="DateName"
-            label="Terminname"
-            variant="outlined"
-            // Zuweisung der Daten für Übergabe
-            value={appointmentName}
-            onChange={onAppointmentNameChange}
-            slotProps={{
-              input: {},
-            }}
-          />
-          <Box>
-            <CustomButtonGroup
-              buttons={[
-                {
-                  label: "",
-                  icon: <Save />,
-                  iconPosition: "start",
-                  onClick: handleSave,
-                },
-              ]}
-            />
-          </Box>
-        </Stack>
+        </Box>
+      </Stack>
 
-        <Typography variant="body1" sx={{ marginTop: 2 }}>
-          Hinzugefügte Termine:
-        </Typography>
-        {/* ---------------Anzeige der Termine--------------- */}
-        {/* Wenn noch keine Termine hinzugefügt, das so erkennbar machen */}
-        {appointments.length === 0 ? (
-          <Typography variant="body2">
-            Noch keine Termine hinzugefügt.
-          </Typography>
-        ) : (
-          /* Wenn Termine hinzugefügt, dann diese als Liste anzeigen */
-          <ul>
-            {appointments.map((appointment, index) => (
-              <li key={index}>
-                <Stack
-                  direction={"row"}
-                  spacing={1}
-                  padding={1}
-                  justifyContent={"space-between"}
-                >
-                  {/* Termin auflisten */}
-                  <Typography variant="body1">
-                    {`${appointment.appointmentName} - ${parseDateToString(
-                      appointment.appointmentDate
-                    )}`}
-                  </Typography>
-                  {/* Bearbeiten und Löschen für jeden Termin ermöglichen */}
-                  <CustomButtonGroup
-                    buttons={[
-                      /* Bearbeiten Button für jeden Termin anzeigen*/
-                      {
-                        label: "",
-                        icon: <Edit />,
-                        iconPosition: "start",
-                        onClick: () => {
-                          // Aufruf für den Bearbeitungsmodus
-                          handleEdit(appointment); // Falls nötig, übergebe die Terminliste erneut
-                        },
+      <Typography variant="body1" sx={{ marginTop: 2 }}>
+        Hinzugefügte Termine:
+      </Typography>
+      {/* ---------------Anzeige der Termine--------------- */}
+      {/* Wenn noch keine Termine hinzugefügt, das so erkennbar machen */}
+      {appointments.length === 0 ? (
+        <Typography variant="body2">Noch keine Termine hinzugefügt.</Typography>
+      ) : (
+        /* Wenn Termine hinzugefügt, dann diese als Liste anzeigen */
+        <ul>
+          {appointments.map((appointment, index) => (
+            <li key={index}>
+              <Stack
+                direction={"row"}
+                spacing={1}
+                padding={1}
+                justifyContent={"space-between"}
+              >
+                {/* Termin auflisten */}
+                <Typography variant="body1">
+                  {`${appointment.appointmentName} - ${parseDateToString(
+                    appointment.appointmentDate,
+                  )}`}
+                </Typography>
+                {/* Bearbeiten und Löschen für jeden Termin ermöglichen */}
+                <CustomButtonGroup
+                  buttons={[
+                    /* Bearbeiten Button für jeden Termin anzeigen*/
+                    {
+                      label: "",
+                      icon: <Edit />,
+                      iconPosition: "start",
+                      onClick: () => {
+                        // Aufruf für den Bearbeitungsmodus
+                        handleEdit(appointment); // Falls nötig, übergebe die Terminliste erneut
                       },
-                      /* Löschen Button für jeden Termin anzeigen*/
-                      {
-                        label: "",
-                        icon: <Delete />,
-                        iconPosition: "start",
-                        onClick: () => handleDelete(appointment.appointmentId),
-                      },
-                    ]}
-                  />
-                </Stack>
-              </li>
-            ))}
-          </ul>
-        )}
-      </LocalizationProvider>
+                    },
+                    /* Löschen Button für jeden Termin anzeigen*/
+                    {
+                      label: "",
+                      icon: <Delete />,
+                      iconPosition: "start",
+                      onClick: () => handleDelete(appointment.appointmentId),
+                    },
+                  ]}
+                />
+              </Stack>
+            </li>
+          ))}
+        </ul>
+      )}
+    </LocalizationProvider>
   );
 };
 

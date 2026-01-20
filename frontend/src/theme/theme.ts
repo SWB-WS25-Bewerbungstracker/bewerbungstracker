@@ -230,8 +230,6 @@ export const theme = (mode: "light" | "dark"): ThemeOptions => ({
   },
 });
 
-//export const customComponents: ThemeOptions["components"] = {};
-
 // Theme erstellen
 const customTheme = createTheme({
   ...theme(getSystemMode()),

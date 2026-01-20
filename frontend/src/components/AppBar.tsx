@@ -1,19 +1,22 @@
 import * as React from "react";
 import {
-    AppBar,
-    Box,
-    Toolbar,
-    IconButton,
-    Typography,
-    Container,
-    Avatar,
-    Button,
-    Tooltip,
-    MenuItem,
-    Menu,
-    SvgIcon,
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Container,
+  Avatar,
+  Button,
+  Tooltip,
+  MenuItem,
+  Menu,
+  SvgIcon,
 } from "@mui/material";
-import { Menu as MenuIcon, Business as BusinessIcon} from "@mui/icons-material";
+import {
+  Menu as MenuIcon,
+  Business as BusinessIcon,
+} from "@mui/icons-material";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import keycloak from "../keycloak";
 import MyLittleDrawer from "./Drawer";
@@ -23,19 +26,17 @@ const pages = [
   { name: "Home", path: "/" },
   { name: "Termine", path: "/termine" },
   { name: "Bewerbungen", path: "/bewerbungen" },
-
 ];
-
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
+    null,
   );
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
+    null,
   );
   const navigate = useNavigate();
   const actualLocation = useLocation();
@@ -43,19 +44,19 @@ function ResponsiveAppBar() {
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-//  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-//    setAnchorElUser(event.currentTarget);
-//  };
+  //  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+  //    setAnchorElUser(event.currentTarget);
+  //  };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
- // const handleCloseUserMenu = () => {
+  // const handleCloseUserMenu = () => {
   //  setAnchorElUser(null);
- // };
-    const handleDrawerOpen = () => setDrawerOpen(true);
-    const handleDrawerClose = () => setDrawerOpen(false);
+  // };
+  const handleDrawerOpen = () => setDrawerOpen(true);
+  const handleDrawerClose = () => setDrawerOpen(false);
 
   // Logout-Funktion (später hier einfügen)
   const handleLogout = () => {
@@ -65,7 +66,6 @@ function ResponsiveAppBar() {
     // - Zurücksetzen des Auth-Status im Zustand
     // - Weiterleitung zur Login-Seite
     keycloak.logout();
-    navigate("/login");
     console.debug("User logged out");
   };
 
@@ -186,34 +186,39 @@ function ResponsiveAppBar() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => {
-                const isActive = actualLocation.pathname === page.path;
-                return(
+              const isActive = actualLocation.pathname === page.path;
+              return (
                 <Button
-                    key={page.name}
-                    component={Link}
-                    to={page.path}
-                    onClick={handleCloseNavMenu}
-                    sx={{
-                        my: 2,
-                        color: "white",
-                        display: "block",
-                        boxShadow: "none",
-                        backgroundColor: isActive ? "rgba(255,255,255,0.2)" : "transparent",
-                    }}
+                  key={page.name}
+                  component={Link}
+                  to={page.path}
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    my: 2,
+                    color: "white",
+                    display: "block",
+                    boxShadow: "none",
+                    backgroundColor: isActive
+                      ? "rgba(255,255,255,0.2)"
+                      : "transparent",
+                  }}
                 >
-                    {page.name}
+                  {page.name}
                 </Button>
-                )
+              );
             })}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-
             <Tooltip title="Einstellungen öffnen">
               <IconButton onClick={handleDrawerOpen} sx={{ p: 0 }}>
-                <Avatar sx={{color:"black"}} alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar
+                  sx={{ color: "black" }}
+                  alt="Remy Sharp"
+                  src="/static/images/avatar/2.jpg"
+                />
               </IconButton>
             </Tooltip>
-            <MyLittleDrawer open={drawerOpen} onClose={handleDrawerClose}/>
+            <MyLittleDrawer open={drawerOpen} onClose={handleDrawerClose} />
           </Box>
         </Toolbar>
       </Container>

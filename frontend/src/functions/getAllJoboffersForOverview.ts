@@ -50,13 +50,13 @@ export async function getOverviewOfAllJoboffers() {
   try {
     // Daten mit Axios holen
     const response = await applicationTrackerApi.get(
-      "http://localhost:8080/joboffer"
+      "http://localhost:8080/joboffer",
     );
 
     // Debugging
     console.debug(
       "Antwort vom Server zur API /joboffer (= Liste aller Joboffers für Overview): ",
-      response
+      response,
     );
 
     // Weitergabe der Daten an aufrufende Funktion
@@ -73,7 +73,6 @@ export async function getOverviewOfAllJoboffers() {
 //-------------------------------------Custom-Hook----------------------------------------------
 // Custom Hook, der die Joboffers abruft und den Ladezustand verwaltet sowie die Fehlerbehandlung übernimmt
 export function useOverviewOfAllJoboffers(use: UseCase = "overview") {
-  // const [variableName, setMethodName] = useState<type>(initialState); // Element, dass das enthält, wird neu geladen, wenn sich die variable ändert
   const [listOfJoboffers, setJobofferList] = useState<JobofferOverview[]>([]);
   const [listOfJoboffersAndCompanyNames, setJobofferDropDownList] = useState<
     JobofferAndCompany[]
@@ -96,38 +95,37 @@ export function useOverviewOfAllJoboffers(use: UseCase = "overview") {
         // KI: Hinweis bekommen, dass nicht geprüft wurde, ob überhaupt Daten im Backend zu senden sind (kein Fehler, sondern einfach nichts zu holen)
         if (response.length === 0) {
           setError("Es sind noch keine Stellenausschreibungen hinterlegt.");
-        } else {
+        } else if (use == "addAppointment") {
           // Wenn der Verwendungszweck das Hinzufügen eines Termins ist
-          if (use == "addAppointment") {
-            const JoboffersForDropdown = response.map(
-              (joboffer: JobofferResponse) => {
-                return {
-                  jobofferId: joboffer.jobofferid,
-                  jobofferAndCompanyName: `${joboffer.joboffername} + " - " + ${joboffer.companyname}`,
-                };
-              }
-            );
-            setJobofferDropDownList(JoboffersForDropdown);
-          }
-          // Wenn der Verwendungszweck die Übersicht aller Stellen ist
-          else {
-            const JoboffersForOverview = response.map(
-              (joboffer: JobofferResponse) => {
-                return {
-                  jobofferId: joboffer.jobofferid,
-                  jobofferName: joboffer.joboffername,
-                  companyID: joboffer.companyid,
-                  companyName: joboffer.companyname,
-                  companyImage: "", // Default: Leerer String, da momentan noch kein Bild mitgegeben wird
-                  nextAppointment: parseDateToNextAppointmentString(
-                    joboffer.nextapptdate
-                  ),
-                };
-              }
-            );
-            // Wenn der Verwendungszweck die Übersichtskarten sind
-            setJobofferList(JoboffersForOverview); // Joboffers speichern
-          }
+
+          const JoboffersForDropdown = response.map(
+            (joboffer: JobofferResponse) => {
+              return {
+                jobofferId: joboffer.jobofferid,
+                jobofferAndCompanyName: `${joboffer.joboffername} + " - " + ${joboffer.companyname}`,
+              };
+            },
+          );
+          setJobofferDropDownList(JoboffersForDropdown);
+        }
+        // Wenn der Verwendungszweck die Übersicht aller Stellen ist
+        else {
+          const JoboffersForOverview = response.map(
+            (joboffer: JobofferResponse) => {
+              return {
+                jobofferId: joboffer.jobofferid,
+                jobofferName: joboffer.joboffername,
+                companyID: joboffer.companyid,
+                companyName: joboffer.companyname,
+                companyImage: "", // Default: Leerer String, da momentan noch kein Bild mitgegeben wird
+                nextAppointment: parseDateToNextAppointmentString(
+                  joboffer.nextapptdate,
+                ),
+              };
+            },
+          );
+          // Wenn der Verwendungszweck die Übersichtskarten sind
+          setJobofferList(JoboffersForOverview); // Joboffers speichern
         }
       } catch (err: unknown) {
         // Fehlerbehandlung im Falle eines Fehlers bei der API-Anfrage (basierend auf KI Troubleshooting Tips)
@@ -137,7 +135,7 @@ export function useOverviewOfAllJoboffers(use: UseCase = "overview") {
           // Fehlerantwort vom Server (z.B. 404, 500)
           if (err.response) {
             setError(
-              `Fehler vom Server: ${err.response.status} - ${err.response.statusText}`
+              `Fehler vom Server: ${err.response.status} - ${err.response.statusText}`,
             );
           }
           // Keine Antwort vom Server (z.B. Netzwerkprobleme)

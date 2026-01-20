@@ -6,7 +6,7 @@ import { Tooltip, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import type { PickersDayProps } from "@mui/x-date-pickers/PickersDay";
 
-import { parseDatePassed } from "../functions/parseDateFromIso";
+import { parseDateFromIso } from "../functions/parseDateFromIso";
 import applicationTrackerApi from "../services/api.ts";
 import { getLang } from "../functions/getLanguage";
 
@@ -30,7 +30,7 @@ function AppointmentDate(props: AppointmentDayProps) {
   const hasEvent = events.some((e: CalendarDate) => e.datum === dateStr); //event.some() prüft ob minfdestens ein Event in events am aktuellen Datum ist
   const dayEvents = events.filter((ev: CalendarDate) => ev.datum === dateStr);
   const hoverText = dayEvents.map(
-    (ev) => `${ev.firmaName} - (${ev.uhrzeit}) ${ev.terminName} `
+    (ev) => `${ev.firmaName} - (${ev.uhrzeit}) ${ev.terminName} `,
   );
 
     return (
@@ -64,7 +64,7 @@ export default function CalendarAllDates() {
       .get("http://localhost:8080/appointments")
       .then((response) => {
         const mappedCalemndar = response.data.map((t: any) => {
-          const parsed  = parseDatePassed(t.appointmentdate) as string[]; // uhrzeit:parsed kann null sien => fehler. durch as string versichern wir, dass es nie null ist => nicht mehr als fehler markiert
+          const parsed = parseDateFromIsO(t.appointmentdate) as string[];
           return {
             datum: t.appointmentdate.split("T")[0],
             uhrzeit: parsed[2],
@@ -78,9 +78,19 @@ export default function CalendarAllDates() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
+      <Paper
+        sx={{
+          width: "100%",
+          display: "inline-block",
+          background: "",
+          border: "1px solid",
+          borderColor: "primary.main",
+          borderRadius: "8px",
+        }}
+      >
       <Paper sx={{ width: "100%", display:"inline-block",border: "1px solid",borderColor:"primary.main", borderRadius: "8px", }}>
         <DateCalendar
-            dayOfWeekFormatter={(day)=>day.format("ddd")}
+          dayOfWeekFormatter={(day) => day.format("ddd")}
           showDaysOutsideCurrentMonth
           fixedWeekNumber={6}
             //Mui rendert standartmäßig Pickersday. hier ersetzt durch slots um events mit reinbringen zu können.

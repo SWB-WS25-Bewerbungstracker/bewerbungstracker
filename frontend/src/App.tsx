@@ -11,9 +11,7 @@ import ResponsiveAppBar from "./components/AppBar";
 import Home from "./pages/Home";
 import Termine from "./pages/Termine";
 import Bewerbungen from "./pages/Bewerbungen";
-import Dokumente from "./pages/Dokumente";
 import Einstellungen from "./pages/Einstellungen";
-import Login from "./pages/Login";
 import Profil from "./pages/Profil";
 import Stellenansicht from "./pages/Stellenansicht";
 import FormularBewerbungHinzufuegen from "./pages/FormularBewerbung";
@@ -34,7 +32,6 @@ function App() {
       <div className="content">
         <ReactKeycloakProvider authClient={keycloak}>
           <Routes>
-            <Route path="/login" element={<Login />} />
             <Route
               path="/"
               element={
@@ -56,14 +53,6 @@ function App() {
               element={
                 <PrivateRoute>
                   <Bewerbungen />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/dokumente"
-              element={
-                <PrivateRoute>
-                  <Dokumente />
                 </PrivateRoute>
               }
             />

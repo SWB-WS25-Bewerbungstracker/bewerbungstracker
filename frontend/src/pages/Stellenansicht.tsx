@@ -1,13 +1,11 @@
-import { useParams } from "react-router-dom"; // Zum Verarbeiten der mitgegeben Parameter
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { useParams, useNavigate } from "react-router-dom"; // Zum Verarbeiten der mitgegeben Parameter
 import { Box, Paper, Stack, SvgIcon, Typography } from "@mui/material";
 import { useCompleteJobofferInformation } from "../functions/getJobofferById";
 import { parseDateToString } from "../functions/parseDate";
 import CustomButtonGroup from "../components/ButtonGroup";
 import { ArrowBack, Delete, Edit } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 import applicationTrackerApi from "../services/api";
-// import BusinessIcon from "@mui/icons-material/Business";
+import BusinessIcon from "@mui/icons-material/Business";
 
 const TitleMinWidth = "150px";
 const TitleWidth = "25vw";
@@ -28,7 +26,7 @@ const Stellenansicht: React.FC = () => {
   } = useCompleteJobofferInformation(id);
 
   console.debug(
-    JSON.stringify(jobofferCompleteInformation?.appointments, null, 2)
+    JSON.stringify(jobofferCompleteInformation?.appointments, null, 2),
   );
 
   // Prüfen ob überhaupt Daten empfangen wurden
@@ -52,16 +50,16 @@ const Stellenansicht: React.FC = () => {
       console.debug(`Joboffer Löschen für Id: ${joboffer_id}`);
       try {
         const response = await applicationTrackerApi.delete(
-          `/joboffer/delete/${joboffer_id}`
+          `/joboffer/delete/${joboffer_id}`,
         );
         console.debug(`Status Joboffer Löschen: ${response.status}`);
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 204) {
           // redirect noch hinzufügen
           navigate(`/bewerbungen`);
         }
       } catch (error) {
         console.debug(
-          `Beim Löschen der Joboffer ist ein Fehler aufgetreten: ${error}`
+          `Beim Löschen der Joboffer ist ein Fehler aufgetreten: ${error}`,
         );
       }
     }
@@ -79,7 +77,6 @@ const Stellenansicht: React.FC = () => {
               iconPosition: "start",
               onClick: () => {
                 console.debug("Zurück Button wurde geklickt");
-                //window.close();
                 navigate("/bewerbungen");
               },
             },
@@ -113,7 +110,7 @@ const Stellenansicht: React.FC = () => {
       {/* ----------------------------Daten anzeigen---------------------------- */}
       <Box padding={2}>
         {/* ----------------------------Unternehmenslogo---------------------------- */}
-        {/*
+
         <Box
           sx={{
             display: "flex",
@@ -134,17 +131,16 @@ const Stellenansicht: React.FC = () => {
             />
           )}
         </Box>
-        */}
 
         {/* ----------------------------Stellenname---------------------------- */}
         <Stack direction="column" spacing={2}>
-          <Paper sx={{border: 1, borderColor: "primary.main"}}>
+          <Paper sx={{ border: 1, borderColor: "primary.main" }}>
             <Typography variant="h5">
               {jobofferCompleteInformation.jobofferName}
             </Typography>
           </Paper>
           {/* ----------------------------Termine---------------------------- */}
-          <Paper sx={{border: 1, borderColor: "primary.main"}}>
+          <Paper sx={{ border: 1, borderColor: "primary.main" }}>
             <Stack direction={"row"} spacing={2} alignItems={"center"}>
               <Box minWidth={TitleMinWidth} width={TitleWidth}>
                 <Typography variant="h6"> Termine </Typography>
@@ -154,7 +150,7 @@ const Stellenansicht: React.FC = () => {
               {jobofferCompleteInformation.appointments &&
               jobofferCompleteInformation.appointments.length > 0 ? (
                 // KI Bugfixing: map läuft auch bei leerem Array, daher Prüfen ob Array Länge > 0 hat
-                <ul style={{margin: 0, paddingLeft: 22}}>
+                <ul style={{ margin: 0, paddingLeft: 22 }}>
                   {jobofferCompleteInformation.appointments.map(
                     (appointment) => {
                       return (
@@ -170,7 +166,7 @@ const Stellenansicht: React.FC = () => {
                           </Stack>
                         </li>
                       );
-                    }
+                    },
                   )}
                 </ul>
               ) : (
@@ -181,23 +177,23 @@ const Stellenansicht: React.FC = () => {
             </Stack>
           </Paper>
           {/* ----------------------------Beschreibung---------------------------- */}
-          <Paper sx={{border: 1, borderColor: "primary.main"}}>
+          <Paper sx={{ border: 1, borderColor: "primary.main" }}>
             <Stack alignItems={"baseline"}>
               <Box minWidth={TitleMinWidth} width={TitleWidth}>
                 <Typography variant="h6">Beschreibung</Typography>
               </Box>
-                {jobofferCompleteInformation.jobofferDescription ? (
-                  <Typography variant="body1">
-                    {jobofferCompleteInformation.jobofferDescription}
-                  </Typography>
-                ) : (
-                  <Typography> Noch keine Beschreibung angegeben </Typography>
-                )}
+              {jobofferCompleteInformation.jobofferDescription ? (
+                <Typography variant="body1">
+                  {jobofferCompleteInformation.jobofferDescription}
+                </Typography>
+              ) : (
+                <Typography> Noch keine Beschreibung angegeben </Typography>
+              )}
             </Stack>
           </Paper>
           {/* ----------------------------Gehalt---------------------------- */}
-          <Paper sx={{border: 1, borderColor: "primary.main"}}>
-            <Stack alignItems={"baseline"} >
+          <Paper sx={{ border: 1, borderColor: "primary.main" }}>
+            <Stack alignItems={"baseline"}>
               <Box minWidth={TitleMinWidth} width={TitleWidth}>
                 <Typography variant="h6"> Gehalt </Typography>
               </Box>
@@ -222,7 +218,7 @@ const Stellenansicht: React.FC = () => {
             </Stack>
           </Paper>
           {/* ----------------------------Unternehmen und Mitarbeiteranzahl---------------------------- */}
-          <Paper sx={{border: 1, borderColor: "primary.main"}}>
+          <Paper sx={{ border: 1, borderColor: "primary.main" }}>
             {jobofferCompleteInformation.companyName ? (
               <Stack direction={"row"}>
                 <Box minWidth={TitleMinWidth} width={TitleWidth}>
@@ -251,7 +247,7 @@ const Stellenansicht: React.FC = () => {
             )}
           </Paper>
           {/* ----------------------------Adresse---------------------------- */}
-          <Paper sx={{border: 1, borderColor: "primary.main"}}>
+          <Paper sx={{ border: 1, borderColor: "primary.main" }}>
             <Stack direction={"row"} spacing={1} alignItems={"center"}>
               <Box minWidth={TitleMinWidth} width={TitleWidth}>
                 <Typography variant="h6"> Adresse </Typography>
@@ -284,7 +280,7 @@ const Stellenansicht: React.FC = () => {
             </Stack>
           </Paper>
           {/* ----------------------------Contact---------------------------- */}
-          <Paper sx={{border: 1, borderColor: "primary.main"}}>
+          <Paper sx={{ border: 1, borderColor: "primary.main" }}>
             <Stack direction={"row"} spacing={1} alignItems={"center"}>
               <Box minWidth={TitleMinWidth} width={TitleWidth}>
                 <Typography variant="h6"> Kontaktperson </Typography>
@@ -309,7 +305,7 @@ const Stellenansicht: React.FC = () => {
             </Stack>
           </Paper>
           {/* ----------------------------Notizen---------------------------- */}
-          <Paper sx={{border: 1, borderColor: "primary.main"}}>
+          <Paper sx={{ border: 1, borderColor: "primary.main" }}>
             <Stack alignItems={"baseline"}>
               <Box minWidth={TitleMinWidth} width={TitleWidth}>
                 <Typography variant="h6">Notizen: </Typography>
