@@ -111,7 +111,7 @@ const Termine: React.FC = () => {
     const handleClose = () => setOpen(false);
 
     return (
-        <Box sx={{ width: '100%', height:"85vh", display:"flex", flexDirection:"column", overflow:"hidden",minHeight:0,}}>
+        <Box sx={{ width: '100%', minHeight:"85vh", display:"flex", flexDirection:"column",minHeight:0,}}>
 
             {/* ----- Leiste oben mit Button ----- */}
             <Stack
@@ -120,7 +120,7 @@ const Termine: React.FC = () => {
                 alignItems="center"
                 width="100%"
                 justifyContent="flex-end" // Button immer rechts
-                spacing={2}               // optional: Abstand, falls mehrere Buttons
+                spacing={2}               // Abstand, falls mehrere Buttons
                 sx={{flexShrink:0,}}
                 marginBottom={1}
             >
@@ -136,6 +136,8 @@ const Termine: React.FC = () => {
                 />
             </Stack>
 
+
+            {/* ----- Komponenten der Seitte ----- */}
         <Box sx={{
             display: 'flex',
             flex:"1",
@@ -143,22 +145,24 @@ const Termine: React.FC = () => {
             minHeight:0,
             gap: "1vw",
             px:3,
+            flexDirection:{xs:"column",md:"row",}
         }}>
             <Box sx={{
                 px:0,
-                flex: '0 0 40%',        // flex-grow, flex-shrink
+                width: { xs: "100%", md: "40%" },        // flex-grow, flex-shrink
+                flexShrink:0,
                 minHeight: 0,
-                overflow: "hidden",
-                minWidth: "50px"
+                minWidth: "10rem"
             }}>
                 <CalendarAllDates/>
             </Box>
             <Box sx={{
                 px:0,
                 minHeight:0,
-                overflow:"hidden",
+                overflowY:"auto",
                 display:"flex",
-                flex: "0 0 59%",
+                flex: "1",
+                maxHeight:"75vh"
             }}>
                 <Rabbit open={open} handleClose={handleClose}/>
             </Box>

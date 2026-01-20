@@ -1,5 +1,3 @@
-// https://mui.com/x/react-date-pickers/date-calendar/#basic-usage
-// https://mui.com/x/react-date-pickers/adapters-locale/
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
@@ -10,8 +8,6 @@ import { Tooltip, Paper } from "@mui/material";
 import { getLang } from "../functions/getLanguage";
 import "dayjs/locale/de";
 import "dayjs/locale/en";
-import myTheme from "../theme/theme.ts";
-
 import applicationTrackerApi from "../services/api.ts";
 import { useEffect, useState } from "react";
 import { parseDatePassed } from "../functions/parseDateFromIso";
@@ -83,7 +79,6 @@ export default function CalendarAllDates() {
         setEvents(mappedCalemndar);
       });
   }, []);
-  //
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={Lang}>
@@ -102,7 +97,7 @@ export default function CalendarAllDates() {
               display:"flex",
               flexDirection:"column",
             backgroundColor: "",
-            borderRadius: "8px", //ecken abrunden
+            borderRadius: "8px",
 
               "& .MuiDayCalendar-weekContainer": {
                   display: "flex",
