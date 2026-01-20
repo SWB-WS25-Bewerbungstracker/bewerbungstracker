@@ -151,7 +151,7 @@ const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
         try {
             if(isEdit){
                 const response = await applicationTrackerApi.put(
-                    "http://localhost:8080/joboffer/editForm", // Backend Schnittstelle
+                    "http://localhost:8080/joboffer", // Backend Schnittstelle
                     payload, // zu sendende Daten (automatisch als JSON)
                     {
                         headers: {
@@ -164,7 +164,7 @@ const JobofferForm:React.FC<AddJobofferFormProps> = ({id}) => {
                     window.close();
                 }
             } else {
-                const response = await applicationTrackerApi.post("/joboffer/inputForm", payload,
+                const response = await applicationTrackerApi.post("/joboffer", payload,
                     {
                     headers: {
                         "Content-Type": "application/json",

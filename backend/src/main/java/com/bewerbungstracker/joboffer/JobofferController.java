@@ -43,7 +43,7 @@ public class JobofferController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(path = "/inputForm", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> postJobofferInfo(@RequestBody JobofferNestedInputDTO jobofferInfo,
                                                    @AuthenticationPrincipal Jwt jwt) {
         String email = jwt.getClaimAsString(EMAIL);
@@ -53,7 +53,7 @@ public class JobofferController {
                 .body("Bewerbung erfolgreich erstellt!");
     }
 
-    @PutMapping(path = "/editForm", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> putJobofferInfo(@RequestBody JobofferNestedInputDTO jobofferInfo,
                                                    @AuthenticationPrincipal Jwt jwt) {
         String email = jwt.getClaimAsString(EMAIL);
