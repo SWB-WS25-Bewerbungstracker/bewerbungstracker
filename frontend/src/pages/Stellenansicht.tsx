@@ -254,24 +254,34 @@ const Stellenansicht: React.FC = () => {
               </Box>
               {jobofferCompleteInformation.addressId ? (
                 <Stack direction={"column"} spacing={0}>
+                  {jobofferCompleteInformation.addressStreet ? (
+                    <Stack direction={"row"}>
+                      <Typography variant="body1">
+                        {jobofferCompleteInformation.addressStreet}
+                      </Typography>
+                      {jobofferCompleteInformation.addressStreetNumber ? (
+                        <Typography variant="body1">
+                          {jobofferCompleteInformation.addressStreetNumber}
+                        </Typography>
+                      ) : null}
+                    </Stack>
+                  ) : null}
                   <Stack direction={"row"}>
-                    <Typography variant="body1">
-                      {jobofferCompleteInformation.addressStreet}
-                    </Typography>
-                    <Typography variant="body1">
-                      {jobofferCompleteInformation.addressStreetNumber}
-                    </Typography>
-                  </Stack>
-                  <Stack direction={"row"}>
-                    <Typography variant="body1">
-                      {jobofferCompleteInformation.addressZipCode}
-                    </Typography>
-                    <Typography variant="body1">
-                      {jobofferCompleteInformation.addressCity}
-                    </Typography>
-                    <Typography variant="body1">
-                      {jobofferCompleteInformation.addressCountry}
-                    </Typography>
+                    {jobofferCompleteInformation.addressCity ? (
+                      <Stack direction={"row"}>
+                        <Typography variant="body1">
+                          {jobofferCompleteInformation.addressZipCode}
+                        </Typography>
+                        <Typography variant="body1">
+                          {jobofferCompleteInformation.addressCity}
+                        </Typography>
+                      </Stack>
+                    ) : null}
+                    {jobofferCompleteInformation.addressCountry ? (
+                      <Typography variant="body1">
+                        {jobofferCompleteInformation.addressCountry}
+                      </Typography>
+                    ) : null}
                   </Stack>
                 </Stack>
               ) : (
@@ -287,17 +297,28 @@ const Stellenansicht: React.FC = () => {
               </Box>
               {jobofferCompleteInformation.contactId ? (
                 <Stack direction={"column"} spacing={0}>
-                  <Typography variant="body1">
-                    {jobofferCompleteInformation.contactFirstName +
-                      " " +
-                      jobofferCompleteInformation.contactLastName}
-                  </Typography>
-                  <Typography variant="body1">
-                    {jobofferCompleteInformation.contactPhone}
-                  </Typography>
-                  <Typography variant="body1">
-                    {jobofferCompleteInformation.contactEmail}
-                  </Typography>
+                  <Stack>
+                    {jobofferCompleteInformation.contactFirstName ? (
+                      <Typography variant="body1">
+                        {jobofferCompleteInformation.contactFirstName + " "}
+                      </Typography>
+                    ) : null}
+                    {jobofferCompleteInformation.contactLastName ? (
+                      <Typography>
+                        {jobofferCompleteInformation.contactLastName}
+                      </Typography>
+                    ) : null}
+                  </Stack>
+                  {jobofferCompleteInformation.contactPhone ? (
+                    <Typography variant="body1">
+                      {jobofferCompleteInformation.contactPhone}
+                    </Typography>
+                  ) : null}
+                  {jobofferCompleteInformation.contactEmail ? (
+                    <Typography variant="body1">
+                      {jobofferCompleteInformation.contactEmail}
+                    </Typography>
+                  ) : null}
                 </Stack>
               ) : (
                 <Typography> Noch keine Kontaktperson angegeben</Typography>
