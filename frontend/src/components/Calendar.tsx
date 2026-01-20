@@ -13,13 +13,7 @@ import { getLang } from "../functions/getLanguage";
 import "dayjs/locale/de";
 import "dayjs/locale/en";
 
-/***************************
- der Standard Kalender von MUI rendert jeden Tag die interne Komponente PickersDay.
- PickersDay bekommtProps wie z.B. select, disable etc aber auch day (das angezeigte Datum).
- dieses day ersetzen wir mit den Komponenten aus der Datenbank. dafür ersetzen wir mit slots={{day: AppointmentDate}}
- day durch unsere Komponente. in unserer Komponente rufen wir das PickersDay auf und können dort die Darstellung von jedem
- Tag individuell anpassen.
-****************************/
+
 interface CalendarDate {
   datum: string;
   terminName: string;

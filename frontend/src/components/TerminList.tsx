@@ -31,25 +31,19 @@ import {submitButtonClicked} from "../functions/sendAppointments.ts";
 import {deleteAppointment}  from "../functions/deleteAppointment.ts";
 const Lang = getLang();
 
-//*************** Zeug für Dialog ****************
-interface TerminListProps {
+interface TerminListDialogProps {
     open: boolean;
     handleClose: () => void;
     height?: string|number;
 }
-
-
-//**************** INTERFACE *************************
-export interface terminListProps {
+export interface AppointmentRow {
   id: number;
   datum: string;
   uhrzeit: string;
   firmaName?: string;
   terminName?: string;
   contact?:string;
-  todo?:string;
 }
-
 export interface BackendTermin {
   appointmentID: number;
   appointmentdate: string;
@@ -61,36 +55,21 @@ export interface BackendTermin {
 }
 
 //************ MUI Komponente mit einigen anpassungen beginnt ****************
+const TerminList: React.FC<TerminListDialogProps> = ({open, handleClose, height}) => {
 
-const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
-
-    const [errorMessage, setErrorMessage] = useState("");
-
-    // Datum Input speichern (kopie aus AddAppointment)
-    const [date, setDate] = useState<Dayjs | null>(dayjs());
-    const [time, setTime] = useState<Dayjs | null>(dayjs());
-    //************* AppointmentName ****************
-    const[appointmentName, setAppointmentName] = useState("");
-
-
-  //********** onChange Handler für popup "Hinzufügen" ************
+  const [errorMessage, setErrorMessage] = useState("");
+  const [date, setDate] = useState<Dayjs | null>(dayjs());
+  const [time, setTime] = useState<Dayjs | null>(dayjs());
+  const[appointmentName, setAppointmentName] = useState("");
   const onDateChange = (newDate: Dayjs | null) => setDate(newDate);
   const onTimeChange = (newTime: Dayjs | null) => setTime(newTime);
-
-
-  //***************** const für dropdown in Hinzufügen *************
   const [selectedJoboffer, setSelectedJoboffer] = useState<number | null>(null); //Ausgewähltes Jobangebot
-
-  //hier wird das array erstellt für Popup um alle daten anzuzeigen
   const { listOfJoboffers, loading, error } = useOverviewOfAllJoboffers();
-
-//*******************EDIT FUNCTION*********************************
-    const handleEdit = (row: terminListProps) => {
+  const handleEdit = (row: AppointmentRow) => {
         console.log("Bearbeite Termin:", row);}
 
-//*******************Delete FUNCTION*********************************
     //zusätzliches await catch, damit fehler nicht übergangen werden aus dem backend
-    const handleDelete = async (row: terminListProps) => {
+    const handleDelete = async (row: AppointmentRow) => {
         console.log("Delete Termin:", row.id)
         try{
             await deleteAppointment(row.id);
@@ -99,9 +78,9 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
             console.error("konnte nicht gelöscht werden")
             throw error;
         }
-        console.log("Delete Termin:", row);}
+    }
 
-    const [rows, setRows] = useState<terminListProps[]>([])
+    const [rows, setRows] = useState<AppointmentRow[]>([])
     const columns: GridColDef<(typeof rows)[number]>[] = [
         {   field: 'id',
             headerName: 'ID',
@@ -188,11 +167,11 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
   useEffect(() => {
     applicationTrackerApi.get("/appointments").then((response) => {
         console.log("Response from backend:", response.data);
-      const today = new Date(); //erstellt ein neues Objekt mit dem heuigen Datum.
+      const today = new Date();
 
                 const appointmentList = response.data
 
-                    .map((t: BackendTermin): terminListProps => {
+                    .map((t: BackendTermin): AppointmentRow => {
 
                         return{
                             id: t.appointmentID,
@@ -200,12 +179,11 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
                             uhrzeit: t.appointmentdate,
                             firmaName: t.companyname,
                             terminName: t.appointmentname,
-                            //oDo: t.oDo,
                             contact: t.contact
                         };
                     })
                     //Filter erstellen, damit nur Termine Heute oder in Zukunft angezeigt werden
-                    .filter((t: terminListProps) => {
+                    .filter((t: AppointmentRow) => {
                         return new Date(t.datum) >= today;
                     })
 
@@ -225,7 +203,6 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
                     flex:1,
                     padding :0,
           "& .MuiDataGrid-columnHeader": {
-            //die einzelnen überschriften
             backgroundColor: "transparent",
             cursor:"default",
           },
@@ -263,7 +240,7 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
 
       <Dialog
         open={open}
-        onClose={handleClose} //wenn man neben das Fenster klickt, schließt sich das Fenster
+        onClose={handleClose}
         PaperProps={{ sx: { minWidth: 10, minHeight: 10 } }}
       >
         <DialogTitle>Neuer Termin</DialogTitle>
@@ -294,14 +271,12 @@ const TerminList: React.FC<TerminListProps> = ({open, handleClose, height}) => {
                 </MenuItem>
               ) : (
                 (listOfJoboffers ?? []) // fix: wir schauen ob listOfJoboffers NULL/undefined ist. wenn nicht nutzen wir es. wenn doch, geben wir leeres array.
-                  .slice() //hier machen wir eine Kopie um original array nicht zu ändern... und sortieren anschließend mit .sort alphgabeetisch für die ausgabe
                   .sort((a, b) => a.companyName!.localeCompare(b.companyName!)) //sortiere dropdown alphabetisch nach company name
                   .map((offer) => (
                     <MenuItem key={offer.jobofferId} value={offer.jobofferId}>
                       {" "}
                       {/*Joboffer ID ist einzigartig also nutzzen wir ihn als key und value sagt: das ist die ID für selectedJoboffer... also welches Jobangebot wurde ausgewählt*/}
                       {offer.companyName} - {offer.jobofferName}{" "}
-                      {/*das ist, was im Feld steht*/}
                     </MenuItem>
                   ))
               )}
