@@ -1,4 +1,10 @@
-/* Reset and Base Styles */
+/*
+    KI-Nutzung in diesem File:
+    Die erste Version wurde mithilfe von CLaude Sonnet erstellt, um auf einfachem Wege die Farben aus dem bestehenden Frontend in die Keycloak Umgebung zu übertragen.
+    Einige Dopplungen und unnötige Blöcke konnten wieder entfernt werden um den Code zu verschlanken.
+    Mehrere nicht, oder falsch Formatierte Dinge mussten überarbeitet werden.
+    Die Überarbeitungen führten zu einem eigen - KI Code - Anteil von etwa 50:50, die Verwendung von KI hat gerade bei den grundlegenden Blöcken und der Farbübernahme geholfen. Die Feinheiten mussten von Hand nachgebessert
+*/
 
 * {
     margin: 0;
@@ -275,7 +281,7 @@ a, a:hover {
         color: white;
     }
 }
-
+/* Allign the requirement Stars */
 .required, .col-xs-12.col-sm-12.col-md-12.col-lg-12, .pf-c-form__label.pf-c-form__label-text {
     display: inline-block;
     vertical-align: middle;
@@ -305,6 +311,5 @@ a, a:hover {
     .pf-c-button.pf-m-control::after {
         border: 1px solid #555;
         border-radius: 16px;
-        /* background: transparent; */
     }
 }
